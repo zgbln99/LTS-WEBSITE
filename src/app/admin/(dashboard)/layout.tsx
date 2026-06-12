@@ -8,6 +8,7 @@ import {
   Mail,
   MapPin,
   Newspaper,
+  PanelBottom,
   PencilRuler,
   Quote,
   Type,
@@ -83,6 +84,12 @@ const navItems = [
     href: "/admin/seiten",
     label: "Seiten-Editor",
     icon: PencilRuler,
+    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
+  },
+  {
+    href: "/admin/fusszeile",
+    label: "Fußzeile",
+    icon: PanelBottom,
     roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
   }
 ];

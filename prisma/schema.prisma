@@ -557,6 +557,13 @@ model ServiceCity {
   isActive Boolean @default(true)
 }
 
+// Globale Website-Einstellungen (z.B. Fußzeile) als JSON je Schlüssel.
+model SiteSetting {
+  key       String   @id // z.B. "footer:de", "footer:global"
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
 // Vom Admin überschriebene Website-Texte. Schlüssel im Punktformat
 // (z.B. "home.hero.title"), Fallback sind die Texte aus messages/*.json.
 model TextOverride {

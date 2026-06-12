@@ -230,6 +230,8 @@ export interface HeadingProps {
   size?: "normal" | "large" | "xl";
   width?: "normal" | "wide" | "full";
   padding?: Padding;
+  customWidth?: number;
+  customFontSize?: number;
 }
 
 const headingSizes = {
@@ -253,8 +255,11 @@ export function HeadingBlock(props: HeadingProps) {
       className="pb-4 sm:pb-6"
     >
       <div
+        style={{
+          maxWidth: props.customWidth ? `${props.customWidth}px` : undefined
+        }}
         className={cn(
-          headingWidths[props.width ?? "normal"],
+          !props.customWidth && headingWidths[props.width ?? "normal"],
           props.align === "center" && "mx-auto text-center"
         )}
       >
@@ -271,9 +276,15 @@ export function HeadingBlock(props: HeadingProps) {
           </span>
         ) : null}
         <h2
+          style={{
+            fontSize: props.customFontSize
+              ? `${props.customFontSize}px`
+              : undefined,
+            lineHeight: props.customFontSize ? 1.15 : undefined
+          }}
           className={cn(
             "font-bold",
-            headingSizes[props.size ?? "normal"],
+            !props.customFontSize && headingSizes[props.size ?? "normal"],
             dark ? "text-white" : "text-night-900"
           )}
         >
@@ -303,6 +314,10 @@ export interface RichTextProps {
   width: "narrow" | "normal" | "wide";
   size?: TextSize;
   padding?: Padding;
+  /** manuelle Breite in px (überschreibt die Auswahl) */
+  customWidth?: number;
+  /** manuelle Schriftgröße in px */
+  customFontSize?: number;
 }
 
 export function RichTextBlock(props: RichTextProps) {
@@ -313,11 +328,24 @@ export function RichTextBlock(props: RichTextProps) {
   };
   return (
     <Section theme={props.theme} padding={props.padding ?? "normal"}>
-      <RichTextContent
-        html={props.html}
-        dark={props.theme === "dark"}
-        className={cn(widths[props.width], textSizes[props.size ?? "normal"])}
-      />
+      <div
+        style={{
+          maxWidth: props.customWidth ? `${props.customWidth}px` : undefined,
+          fontSize: props.customFontSize
+            ? `${props.customFontSize}px`
+            : undefined
+        }}
+        className={cn(!props.customWidth && widths[props.width])}
+      >
+        <RichTextContent
+          html={props.html}
+          dark={props.theme === "dark"}
+          className={cn(
+            "max-w-none",
+            !props.customFontSize && textSizes[props.size ?? "normal"]
+          )}
+        />
+      </div>
     </Section>
   );
 }

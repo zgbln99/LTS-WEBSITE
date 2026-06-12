@@ -226,7 +226,19 @@ export const builderConfig: Config = {
             { label: "Volle Breite", value: "full" }
           ]
         },
-        padding: paddingField
+        padding: paddingField,
+        customWidth: {
+          type: "number",
+          label: "Eigene Breite in px (leer = Auswahl oben)",
+          min: 200,
+          max: 1600
+        },
+        customFontSize: {
+          type: "number",
+          label: "Eigene Überschriftgröße in px (leer = Auswahl oben)",
+          min: 16,
+          max: 120
+        }
       },
       defaultProps: {
         eyebrow: "",
@@ -256,7 +268,19 @@ export const builderConfig: Config = {
           ]
         },
         size: textSizeField,
-        padding: paddingField
+        padding: paddingField,
+        customWidth: {
+          type: "number",
+          label: "Eigene Breite in px (leer = Auswahl oben)",
+          min: 200,
+          max: 1600
+        },
+        customFontSize: {
+          type: "number",
+          label: "Eigene Schriftgröße in px (leer = Auswahl oben)",
+          min: 10,
+          max: 60
+        }
       },
       defaultProps: {
         html: "<p>Ihr Text...</p>",
