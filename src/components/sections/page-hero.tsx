@@ -23,11 +23,11 @@ export function PageHero({
         <span className="inline-flex items-center rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent-400">
           {eyebrow}
         </span>
-        <h1 className="mt-5 max-w-3xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
+        <h1 className="mt-5 max-w-5xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
           {title}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-mist-300 sm:text-lg">
+          <p className="mt-5 max-w-4xl text-base leading-relaxed text-mist-300 sm:text-lg">
             {description}
           </p>
         ) : null}

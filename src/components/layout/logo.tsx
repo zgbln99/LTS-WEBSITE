@@ -13,7 +13,7 @@ export function Logo() {
         <span className="flex h-8 items-center rounded-lg bg-accent-500 px-2.5 font-display text-sm font-extrabold text-white">
           LTS
         </span>
-        <span className="font-display text-base font-bold text-night-900">
+        <span className="font-display text-base font-bold text-white">
           Logistik
         </span>
       </span>
@@ -25,7 +25,7 @@ export function Logo() {
     <img
       src="/logo.png"
       alt="LTS Logistik GmbH"
-      className="h-7 w-auto"
+      className="h-9 w-auto"
       onError={() => setFailed(true)}
     />
   );

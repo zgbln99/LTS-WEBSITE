@@ -17,9 +17,7 @@ export async function Footer({ locale }: { locale: Locale }) {
       <Container className="py-14 lg:py-20">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <span className="inline-flex items-center rounded-xl bg-white px-2.5 py-1.5">
-              <Logo />
-            </span>
+            <Logo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
               {t("footer.tagline")}
             </p>

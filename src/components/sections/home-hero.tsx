@@ -27,11 +27,11 @@ export async function HomeHero() {
           {t("badge")}
         </span>
 
-        <h1 className="mt-6 max-w-3xl text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+        <h1 className="mt-6 max-w-5xl text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
           {t("title")}
         </h1>
 
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-mist-200 sm:text-lg">
+        <p className="mt-6 max-w-4xl text-base leading-relaxed text-mist-200 sm:text-lg lg:text-xl">
           {t("subtitle")}
         </p>
 

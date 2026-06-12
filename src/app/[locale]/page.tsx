@@ -14,6 +14,7 @@ import { CtaBanner } from "@/components/sections/cta-banner";
 import { EuropeMap } from "@/components/sections/europe-map";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
+import { cn } from "@/lib/utils";
 import { getPublishedTestimonials, getServiceCities } from "@/server/content";
 
 export const revalidate = 300;
@@ -34,7 +35,7 @@ export default async function HomePage({ params }: Props) {
   const tCommon = await getTranslations("common");
   const tFleet = await getTranslations("fleetPage");
 
-  const countries = t.raw("coverage.countries") as string[];
+  const hasMap = Boolean(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 
   // Einsatzorte aus dem Admin-Panel (Fallback: statische Liste)
   const cities = await getServiceCities();
@@ -91,55 +92,109 @@ export default async function HomePage({ params }: Props) {
         </Container>
       </section>
 
-      {/* Europakarte / Abdeckung */}
+      {/* Einsatzgebiet: vollflächige Karte mit schwebenden Karten */}
       <section className="bg-night-950 py-16 sm:py-24">
         <Container>
-          <SectionHeading
-            dark
-            eyebrow={t("coverage.eyebrow")}
-            title={t("coverage.title")}
-            description={t("coverage.description")}
-          />
-          <div className="mt-10">
-            <EuropeMap markers={mapMarkers} />
-          </div>
-          <div className="mt-5 grid gap-5 lg:grid-cols-2">
-            <Reveal>
-              <div className="h-full rounded-3xl bg-night-900 p-6 sm:p-8">
-                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
+          {hasMap ? (
+            <>
+              {/* Mobil: Überschrift über der Karte */}
+              <div className="mb-6 lg:hidden">
+                <SectionHeading
+                  dark
+                  eyebrow={t("coverage.eyebrow")}
+                  title={t("coverage.title")}
+                  description={t("coverage.description")}
+                />
+              </div>
+
+              <div className="relative overflow-hidden rounded-[2rem] border border-white/10">
+                <EuropeMap
+                  markers={mapMarkers}
+                  className="h-[26rem] rounded-none sm:h-[34rem] lg:h-[40rem]"
+                />
+
+                {/* Schwebende Titel-Karte (Desktop) */}
+                <div className="pointer-events-none absolute left-6 top-6 hidden max-w-xl lg:block">
+                  <div className="pointer-events-auto rounded-3xl glass border border-white/10 p-7">
+                    <span className="inline-flex items-center rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent-400">
+                      {t("coverage.eyebrow")}
+                    </span>
+                    <h2 className="mt-3 font-display text-3xl font-extrabold text-white">
+                      {t("coverage.title")}
+                    </h2>
+                    <p className="mt-2 text-sm leading-relaxed text-mist-300">
+                      {t("coverage.description")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Schwebende Einsatzorte-Karte (Desktop) */}
+                <div className="pointer-events-none absolute bottom-6 left-6 right-6 hidden lg:block">
+                  <div className="pointer-events-auto inline-block max-w-3xl rounded-3xl glass border border-white/10 p-5">
+                    <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-mist-400">
+                      {t("coverage.locationsTitle")}
+                    </h3>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {cities.map((location) => (
+                        <span
+                          key={location.city}
+                          className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-sm text-white"
+                        >
+                          <MapPin className="h-3.5 w-3.5 text-accent-400" />
+                          {location.city}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobil: Einsatzorte unter der Karte */}
+              <div className="mt-5 rounded-3xl bg-night-900 p-5 lg:hidden">
+                <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-mist-400">
                   {t("coverage.locationsTitle")}
                 </h3>
-                <ul className="mt-5 grid grid-cols-2 gap-3">
+                <div className="mt-3 flex flex-wrap gap-2">
                   {cities.map((location) => (
-                    <li
-                      key={location.city}
-                      className="flex items-center gap-2 text-sm text-mist-200"
-                    >
-                      <MapPin className="h-4 w-4 shrink-0 text-accent-400" />
-                      {location.city}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="h-full rounded-3xl bg-night-900 p-6 sm:p-8">
-                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
-                  {t("coverage.countriesTitle")}
-                </h3>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {countries.map((country) => (
                     <span
-                      key={country}
-                      className="rounded-full border border-white/15 px-4 py-2 text-sm text-mist-200"
+                      key={location.city}
+                      className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-sm text-white"
                     >
-                      {country}
+                      <MapPin className="h-3.5 w-3.5 text-accent-400" />
+                      {location.city}
                     </span>
                   ))}
                 </div>
               </div>
-            </Reveal>
-          </div>
+            </>
+          ) : (
+            <>
+              <SectionHeading
+                dark
+                eyebrow={t("coverage.eyebrow")}
+                title={t("coverage.title")}
+                description={t("coverage.description")}
+              />
+              <Reveal>
+                <div className="mt-10 rounded-3xl bg-night-900 p-6 sm:p-8">
+                  <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
+                    {t("coverage.locationsTitle")}
+                  </h3>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {cities.map((location) => (
+                      <span
+                        key={location.city}
+                        className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm text-white"
+                      >
+                        <MapPin className="h-4 w-4 text-accent-400" />
+                        {location.city}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            </>
+          )}
         </Container>
       </section>
 
@@ -184,23 +239,56 @@ export default async function HomePage({ params }: Props) {
             eyebrow={t("testimonials.eyebrow")}
             title={t("testimonials.title")}
           />
-          <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            {testimonials.map((item, index) => (
-              <Reveal key={`${item.name}-${index}`} delay={index * 0.08}>
-                <figure className="flex h-full flex-col rounded-3xl bg-mist-50 p-6 sm:p-8">
-                  <Quote className="h-7 w-7 text-accent-500" aria-hidden />
-                  <blockquote className="mt-4 flex-1 text-base leading-relaxed text-night-800">
-                    {item.quote}
-                  </blockquote>
-                  <figcaption className="mt-6">
-                    <div className="font-display text-sm font-bold text-night-900">
-                      {item.name}
-                    </div>
-                    <div className="text-sm text-mist-500">{item.role}</div>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
+          <div className="mt-12 grid items-start gap-4 lg:grid-cols-3">
+            {testimonials.map((item, index) => {
+              const featured = index % 3 === 1;
+              return (
+                <Reveal key={`${item.name}-${index}`} delay={index * 0.08}>
+                  <figure
+                    className={cn(
+                      "flex h-full flex-col rounded-3xl p-6 sm:p-8",
+                      featured
+                        ? "bg-night-950 shadow-card-hover lg:-mt-4 lg:mb-4"
+                        : "border border-mist-200 bg-mist-50"
+                    )}
+                  >
+                    <Quote
+                      className={cn(
+                        "h-7 w-7",
+                        featured ? "text-accent-400" : "text-accent-500"
+                      )}
+                      aria-hidden
+                    />
+                    <blockquote
+                      className={cn(
+                        "mt-4 flex-1 text-base leading-relaxed",
+                        featured ? "text-mist-200" : "text-night-800"
+                      )}
+                    >
+                      {item.quote}
+                    </blockquote>
+                    <figcaption className="mt-6">
+                      <div
+                        className={cn(
+                          "font-display text-sm font-bold",
+                          featured ? "text-white" : "text-night-900"
+                        )}
+                      >
+                        {item.name}
+                      </div>
+                      <div
+                        className={cn(
+                          "text-sm",
+                          featured ? "text-mist-400" : "text-mist-500"
+                        )}
+                      >
+                        {item.role}
+                      </div>
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              );
+            })}
           </div>
         </Container>
       </section>

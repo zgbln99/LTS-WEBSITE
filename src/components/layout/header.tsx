@@ -40,9 +40,7 @@ export function Header({ locale }: { locale: Locale }) {
             className="flex items-center"
             onClick={() => setOpen(false)}
           >
-            <span className="flex items-center rounded-xl bg-white px-2.5 py-1.5">
-              <Logo />
-            </span>
+            <Logo />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">

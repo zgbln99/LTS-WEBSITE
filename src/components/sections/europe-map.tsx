@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -11,7 +12,13 @@ export interface MapMarker {
   hq?: boolean;
 }
 
-export function EuropeMap({ markers }: { markers: MapMarker[] }) {
+export function EuropeMap({
+  markers,
+  className
+}: {
+  markers: MapMarker[];
+  className?: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,7 +73,10 @@ export function EuropeMap({ markers }: { markers: MapMarker[] }) {
   return (
     <div
       ref={containerRef}
-      className="h-80 w-full overflow-hidden rounded-3xl sm:h-[28rem]"
+      className={cn(
+        "h-80 w-full overflow-hidden rounded-3xl sm:h-[28rem]",
+        className
+      )}
       aria-label="Karte der LTS Logistik Einsatzorte"
     />
   );
