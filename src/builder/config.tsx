@@ -27,6 +27,7 @@ import {
 import { RichTextField } from "@/builder/rich-text-field";
 import { ImageField } from "@/builder/fields/image-field";
 import { LinkField } from "@/builder/fields/link-field";
+import { VideoField } from "@/builder/fields/video-field";
 
 const themeField = {
   type: "select" as const,
@@ -81,6 +82,18 @@ const textSizeField = {
     { label: "Groß", value: "large" },
     { label: "Sehr groß", value: "xl" }
   ]
+};
+
+const videoField = {
+  type: "custom" as const,
+  label: "Hintergrundvideo (optional)",
+  render: ({
+    value,
+    onChange
+  }: {
+    value: string;
+    onChange: (value: string) => void;
+  }) => <VideoField value={value ?? ""} onChange={onChange} />
 };
 
 const richTextField = {
@@ -138,7 +151,8 @@ export const builderConfig: Config = {
         eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
         title: { type: "textarea", label: "Überschrift", contentEditable: true },
         subtitle: { type: "textarea", label: "Untertitel", contentEditable: true },
-        image: imageField("Hintergrundbild"),
+        image: imageField("Hintergrundbild (auch Video-Vorschau)"),
+        video: videoField,
         height: {
           type: "select",
           label: "Höhe",
@@ -166,6 +180,7 @@ export const builderConfig: Config = {
         title: "Überschrift",
         subtitle: "",
         image: "",
+        video: "",
         height: "large",
         titleSize: "normal",
         primaryLabel: "",

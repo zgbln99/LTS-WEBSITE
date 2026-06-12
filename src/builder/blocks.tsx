@@ -99,6 +99,8 @@ export interface HeroProps {
   title: string;
   subtitle: string;
   image: string;
+  /** Hintergrundvideo (MP4/WebM), Bild dient als Poster/Fallback */
+  video?: string;
   titleSize?: "normal" | "large";
   height: "full" | "large" | "medium";
   primaryLabel: string;
@@ -120,16 +122,28 @@ export function HeroBlock(props: HeroProps) {
         heights[props.height]
       )}
     >
-      {props.image ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={props.image}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-50"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/60 to-night-950/30" />
-        </>
+      {props.video ? (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={props.image || undefined}
+          className="absolute inset-0 h-full w-full object-cover opacity-50"
+        >
+          <source src={props.video} />
+        </video>
+      ) : props.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={props.image}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-50"
+        />
+      ) : null}
+      {props.video || props.image ? (
+        <div className="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/60 to-night-950/30" />
       ) : null}
       <Container className="relative">
         {props.eyebrow ? (

@@ -10,16 +10,21 @@ const ALLOWED = new Set([
   "image/png",
   "image/webp",
   "image/avif",
-  "image/svg+xml"
+  "image/svg+xml",
+  "video/mp4",
+  "video/webm"
 ]);
-const MAX_SIZE = 8 * 1024 * 1024;
+const MAX_IMAGE_SIZE = 8 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 64 * 1024 * 1024;
 
 const extensionFor: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
   "image/avif": "avif",
-  "image/svg+xml": "svg"
+  "image/svg+xml": "svg",
+  "video/mp4": "mp4",
+  "video/webm": "webm"
 };
 
 // Bild-Upload für den Seiten-Editor (Mediathek unter /uploads).
@@ -37,7 +42,10 @@ export async function POST(request: Request) {
   if (!ALLOWED.has(file.type)) {
     return NextResponse.json({ error: "type" }, { status: 415 });
   }
-  if (file.size > MAX_SIZE) {
+  const maxSize = file.type.startsWith("video/")
+    ? MAX_VIDEO_SIZE
+    : MAX_IMAGE_SIZE;
+  if (file.size > maxSize) {
     return NextResponse.json({ error: "size" }, { status: 413 });
   }
 
