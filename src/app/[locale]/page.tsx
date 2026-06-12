@@ -92,45 +92,42 @@ export default async function HomePage({ params }: Props) {
         </Container>
       </section>
 
-      {/* Einsatzgebiet: vollflächige Karte mit schwebenden Karten */}
-      <section className="bg-night-950 py-16 sm:py-24">
-        <Container>
-          {hasMap ? (
-            <>
-              {/* Mobil: Überschrift über der Karte */}
-              <div className="mb-6 lg:hidden">
-                <SectionHeading
-                  dark
-                  eyebrow={t("coverage.eyebrow")}
-                  title={t("coverage.title")}
-                  description={t("coverage.description")}
-                />
-              </div>
+      {/* Einsatzgebiet: Karte über die volle Browserbreite */}
+      <section className="bg-night-950">
+        {hasMap ? (
+          <>
+            {/* Mobil: Überschrift über der Karte */}
+            <Container className="pb-8 pt-16 lg:hidden">
+              <SectionHeading
+                dark
+                eyebrow={t("coverage.eyebrow")}
+                title={t("coverage.title")}
+                description={t("coverage.description")}
+              />
+            </Container>
 
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10">
-                <EuropeMap
-                  markers={mapMarkers}
-                  className="h-[26rem] rounded-none sm:h-[34rem] lg:h-[40rem]"
-                />
+            <div className="relative">
+              <EuropeMap
+                markers={mapMarkers}
+                className="h-[28rem] rounded-none sm:h-[36rem] lg:h-[46rem]"
+              />
 
-                {/* Schwebende Titel-Karte (Desktop) */}
-                <div className="pointer-events-none absolute left-6 top-6 hidden max-w-xl lg:block">
-                  <div className="pointer-events-auto rounded-3xl glass border border-white/10 p-7">
+              {/* Schwebende Karten, ausgerichtet am Seitenraster */}
+              <div className="pointer-events-none absolute inset-0 hidden lg:block">
+                <Container className="flex h-full flex-col items-start justify-between py-10">
+                  <div className="pointer-events-auto max-w-2xl rounded-3xl glass border border-white/10 p-8">
                     <span className="inline-flex items-center rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent-400">
                       {t("coverage.eyebrow")}
                     </span>
-                    <h2 className="mt-3 font-display text-3xl font-extrabold text-white">
+                    <h2 className="mt-3 font-display text-3xl font-extrabold text-white xl:text-4xl">
                       {t("coverage.title")}
                     </h2>
-                    <p className="mt-2 text-sm leading-relaxed text-mist-300">
+                    <p className="mt-3 text-base leading-relaxed text-mist-300">
                       {t("coverage.description")}
                     </p>
                   </div>
-                </div>
 
-                {/* Schwebende Einsatzorte-Karte (Desktop) */}
-                <div className="pointer-events-none absolute bottom-6 left-6 right-6 hidden lg:block">
-                  <div className="pointer-events-auto inline-block max-w-3xl rounded-3xl glass border border-white/10 p-5">
+                  <div className="pointer-events-auto max-w-4xl rounded-3xl glass border border-white/10 p-6">
                     <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-mist-400">
                       {t("coverage.locationsTitle")}
                     </h3>
@@ -146,11 +143,13 @@ export default async function HomePage({ params }: Props) {
                       ))}
                     </div>
                   </div>
-                </div>
+                </Container>
               </div>
+            </div>
 
-              {/* Mobil: Einsatzorte unter der Karte */}
-              <div className="mt-5 rounded-3xl bg-night-900 p-5 lg:hidden">
+            {/* Mobil: Einsatzorte unter der Karte */}
+            <Container className="py-8 lg:hidden">
+              <div className="rounded-3xl bg-night-900 p-5">
                 <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-mist-400">
                   {t("coverage.locationsTitle")}
                 </h3>
@@ -166,36 +165,36 @@ export default async function HomePage({ params }: Props) {
                   ))}
                 </div>
               </div>
-            </>
-          ) : (
-            <>
-              <SectionHeading
-                dark
-                eyebrow={t("coverage.eyebrow")}
-                title={t("coverage.title")}
-                description={t("coverage.description")}
-              />
-              <Reveal>
-                <div className="mt-10 rounded-3xl bg-night-900 p-6 sm:p-8">
-                  <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
-                    {t("coverage.locationsTitle")}
-                  </h3>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {cities.map((location) => (
-                      <span
-                        key={location.city}
-                        className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm text-white"
-                      >
-                        <MapPin className="h-4 w-4 text-accent-400" />
-                        {location.city}
-                      </span>
-                    ))}
-                  </div>
+            </Container>
+          </>
+        ) : (
+          <Container className="py-16 sm:py-24">
+            <SectionHeading
+              dark
+              eyebrow={t("coverage.eyebrow")}
+              title={t("coverage.title")}
+              description={t("coverage.description")}
+            />
+            <Reveal>
+              <div className="mt-10 rounded-3xl bg-night-900 p-6 sm:p-8">
+                <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
+                  {t("coverage.locationsTitle")}
+                </h3>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {cities.map((location) => (
+                    <span
+                      key={location.city}
+                      className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2 text-sm text-white"
+                    >
+                      <MapPin className="h-4 w-4 text-accent-400" />
+                      {location.city}
+                    </span>
+                  ))}
                 </div>
-              </Reveal>
-            </>
-          )}
-        </Container>
+              </div>
+            </Reveal>
+          </Container>
+        )}
       </section>
 
       {/* Fuhrpark Teaser */}
@@ -239,56 +238,44 @@ export default async function HomePage({ params }: Props) {
             eyebrow={t("testimonials.eyebrow")}
             title={t("testimonials.title")}
           />
-          <div className="mt-12 grid items-start gap-4 lg:grid-cols-3">
-            {testimonials.map((item, index) => {
-              const featured = index % 3 === 1;
-              return (
-                <Reveal key={`${item.name}-${index}`} delay={index * 0.08}>
-                  <figure
-                    className={cn(
-                      "flex h-full flex-col rounded-3xl p-6 sm:p-8",
-                      featured
-                        ? "bg-night-950 shadow-card-hover lg:-mt-4 lg:mb-4"
-                        : "border border-mist-200 bg-mist-50"
-                    )}
-                  >
-                    <Quote
-                      className={cn(
-                        "h-7 w-7",
-                        featured ? "text-accent-400" : "text-accent-500"
-                      )}
-                      aria-hidden
-                    />
-                    <blockquote
-                      className={cn(
-                        "mt-4 flex-1 text-base leading-relaxed",
-                        featured ? "text-mist-200" : "text-night-800"
-                      )}
-                    >
+          <div className="mt-12 grid gap-4 lg:grid-cols-5">
+            {testimonials[0] ? (
+              <Reveal className="lg:col-span-3">
+                <figure className="flex h-full flex-col rounded-3xl bg-night-950 p-8 sm:p-10">
+                  <Quote className="h-8 w-8 text-accent-400" aria-hidden />
+                  <blockquote className="mt-6 flex-1 font-display text-xl font-semibold leading-snug text-white sm:text-2xl">
+                    {testimonials[0].quote}
+                  </blockquote>
+                  <figcaption className="mt-8">
+                    <div className="font-display text-sm font-bold text-white">
+                      {testimonials[0].name}
+                    </div>
+                    <div className="text-sm text-mist-400">
+                      {testimonials[0].role}
+                    </div>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ) : null}
+
+            <div className="flex flex-col gap-4 lg:col-span-2">
+              {testimonials.slice(1).map((item, index) => (
+                <Reveal key={`${item.name}-${index}`} delay={(index + 1) * 0.08} className="flex-1">
+                  <figure className="flex h-full flex-col rounded-3xl border border-mist-200 bg-mist-50 p-6 sm:p-7">
+                    <Quote className="h-6 w-6 text-accent-500" aria-hidden />
+                    <blockquote className="mt-3 flex-1 text-base leading-relaxed text-night-800">
                       {item.quote}
                     </blockquote>
-                    <figcaption className="mt-6">
-                      <div
-                        className={cn(
-                          "font-display text-sm font-bold",
-                          featured ? "text-white" : "text-night-900"
-                        )}
-                      >
+                    <figcaption className="mt-5">
+                      <div className="font-display text-sm font-bold text-night-900">
                         {item.name}
                       </div>
-                      <div
-                        className={cn(
-                          "text-sm",
-                          featured ? "text-mist-400" : "text-mist-500"
-                        )}
-                      >
-                        {item.role}
-                      </div>
+                      <div className="text-sm text-mist-500">{item.role}</div>
                     </figcaption>
                   </figure>
                 </Reveal>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </Container>
       </section>

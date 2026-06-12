@@ -114,21 +114,23 @@ export default async function CareerPage({ params }: Props) {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <SectionHeading title={t("categoriesTitle")} />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {categories.map((category, index) => {
               const Icon = categoryIcons[index % categoryIcons.length];
               return (
-                <Reveal key={category.name} delay={(index % 3) * 0.07}>
-                  <div className="flex h-full flex-col rounded-3xl border border-mist-200 bg-white p-6 shadow-card sm:p-8">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-500/10 text-accent-600">
+                <Reveal key={category.name} delay={(index % 2) * 0.07}>
+                  <div className="flex h-full items-start gap-5 rounded-3xl border border-mist-200 bg-white p-6 shadow-card">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500/10 text-accent-600">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <h3 className="mt-4 font-display text-lg font-bold text-night-900">
-                      {category.name}
-                    </h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-mist-500">
-                      {category.text}
-                    </p>
+                    <div>
+                      <h3 className="font-display text-lg font-bold text-night-900">
+                        {category.name}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-mist-500">
+                        {category.text}
+                      </p>
+                    </div>
                   </div>
                 </Reveal>
               );
