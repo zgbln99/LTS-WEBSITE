@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, Check, Euro, Mail, Phone } from "lucide-react";
@@ -10,6 +12,8 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { ApplicationForm } from "@/components/forms/application-form";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -27,6 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DriverLandingPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Im Seiten-Editor veröffentlichte Version hat Vorrang vor dem Code-Layout
+  const builderData = await getPublishedPageData("lkw-fahrer", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("driver");
 

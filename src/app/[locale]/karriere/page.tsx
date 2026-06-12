@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { connection } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
@@ -55,6 +57,12 @@ export default async function CareerPage({ params }: Props) {
   await connection();
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Im Seiten-Editor veröffentlichte Version hat Vorrang vor dem Code-Layout
+  const builderData = await getPublishedPageData("karriere", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("career");
 

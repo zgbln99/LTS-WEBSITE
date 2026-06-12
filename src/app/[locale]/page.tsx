@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, MapPin, Quote } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -30,6 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Im Seiten-Editor veröffentlichte Version hat Vorrang vor dem Code-Layout
+  const builderData = await getPublishedPageData("home", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("home");
   const tCommon = await getTranslations("common");

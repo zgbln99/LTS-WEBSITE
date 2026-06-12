@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
@@ -19,6 +21,8 @@ const categoryImages = [
   "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=1600&auto=format&fit=crop"
 ];
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ locale: Locale }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -30,6 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FleetPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Im Seiten-Editor veröffentlichte Version hat Vorrang vor dem Code-Layout
+  const builderData = await getPublishedPageData("fuhrpark", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("fleetPage");
   const tHome = await getTranslations("home");

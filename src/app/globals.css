@@ -97,6 +97,77 @@
   }
 }
 
+/* Typografie für formatierten Text aus dem Page-Builder (Tiptap-HTML) */
+.rt-prose p {
+  margin-bottom: 1em;
+}
+.rt-prose p:last-child {
+  margin-bottom: 0;
+}
+.rt-prose h2 {
+  font-size: 1.75em;
+  font-weight: 700;
+  margin: 1.2em 0 0.5em;
+}
+.rt-prose h3 {
+  font-size: 1.35em;
+  font-weight: 700;
+  margin: 1.1em 0 0.4em;
+}
+.rt-prose h4 {
+  font-size: 1.1em;
+  font-weight: 700;
+  margin: 1em 0 0.4em;
+}
+.rt-prose ul {
+  list-style: disc;
+  padding-left: 1.4em;
+  margin-bottom: 1em;
+}
+.rt-prose ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+  margin-bottom: 1em;
+}
+.rt-prose li {
+  margin-bottom: 0.35em;
+}
+.rt-prose a {
+  color: var(--color-accent-600);
+  text-decoration: underline;
+}
+.rt-prose blockquote {
+  border-left: 3px solid var(--color-accent-500);
+  padding-left: 1em;
+  font-style: italic;
+  margin: 1em 0;
+}
+
+/* Tiptap-Editorfläche im Admin */
+.rt-content p {
+  margin-bottom: 0.6em;
+}
+.rt-content ul {
+  list-style: disc;
+  padding-left: 1.3em;
+}
+.rt-content ol {
+  list-style: decimal;
+  padding-left: 1.3em;
+}
+.rt-content h2 {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+.rt-content h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+}
+.rt-content a {
+  color: var(--color-accent-600);
+  text-decoration: underline;
+}
+
 @layer utilities {
   .glass {
     background: rgb(11 16 29 / 0.6);

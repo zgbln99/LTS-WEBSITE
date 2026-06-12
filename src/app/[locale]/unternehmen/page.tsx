@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Award, Handshake, MapPin, Timer } from "lucide-react";
 import type { Locale } from "@/i18n/routing";
@@ -25,6 +27,12 @@ const valueIcons = [Award, Timer, Handshake, MapPin];
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Im Seiten-Editor veröffentlichte Version hat Vorrang vor dem Code-Layout
+  const builderData = await getPublishedPageData("unternehmen", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("about");
   const tHome = await getTranslations("home");

@@ -92,7 +92,8 @@ model PageTranslation {
   locale         String
   title          String
   slug           String
-  content        Json // strukturierte Sektionen
+  content        Json // veröffentlichter Page-Builder-Inhalt (Puck-Daten)
+  draft          Json? // ungespeicherter Entwurf aus dem Editor
   seoTitle       String?
   seoDescription String?
   canonicalUrl   String?
