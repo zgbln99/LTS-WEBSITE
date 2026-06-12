@@ -40,6 +40,9 @@ docker run --rm \
   sh -c "set -a && . ./.env && set +a && npm ci --no-audit --no-fund && npx prisma db push && npm run db:seed"
 
 echo "==> Image bauen und Container starten (Port 2015)"
+# .env in die Shell exportieren, damit NEXT_PUBLIC_* sicher als Build-Args
+# ankommen (Karte, Analytics werden zur Buildzeit eingebettet)
+set -a; . ./.env; set +a
 docker compose build
 docker compose up -d
 

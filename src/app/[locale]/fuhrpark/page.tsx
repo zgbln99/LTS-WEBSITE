@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
@@ -7,6 +8,16 @@ import { PageHero } from "@/components/sections/page-hero";
 import { StatBar } from "@/components/sections/stat-bar";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import { pageMetadata } from "@/lib/seo";
+import { cn } from "@/lib/utils";
+
+// Bilder je Fahrzeugkategorie (Reihenfolge wie in messages fleetPage.categories)
+const categoryImages = [
+  "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1592838064575-70ed626d3a0e?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1591768793355-74d04bb6608f?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=1600&auto=format&fit=crop"
+];
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -41,24 +52,43 @@ export default async function FleetPage({ params }: Props) {
 
       <section className="bg-mist-50 py-16 sm:py-24">
         <Container>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 2+3-Raster ohne Lücken: erste zwei Karten breit, drei darunter */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             {categories.map((category, index) => (
-              <Reveal key={category.name} delay={(index % 3) * 0.07}>
-                <div className="flex h-full flex-col rounded-3xl border border-mist-200 bg-white p-6 shadow-card sm:p-8">
-                  <h2 className="font-display text-xl font-bold text-night-900">
-                    {category.name}
-                  </h2>
-                  <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent-600">
-                    {category.specs}
-                  </p>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-mist-500">
-                    {category.text}
-                  </p>
+              <Reveal
+                key={category.name}
+                delay={(index % 3) * 0.07}
+                className={cn(
+                  index < 2 ? "lg:col-span-3" : "lg:col-span-2",
+                  index === 4 && "sm:col-span-2 lg:col-span-2"
+                )}
+              >
+                <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-mist-200 bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
+                  <div className={cn("relative overflow-hidden", index < 2 ? "h-56" : "h-44")}>
+                    <Image
+                      src={categoryImages[index % categoryImages.length]}
+                      alt={category.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-night-950/60 to-transparent" />
+                    <h2 className="absolute bottom-4 left-5 font-display text-xl font-bold text-white sm:text-2xl">
+                      {category.name}
+                    </h2>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-accent-600">
+                      {category.specs}
+                    </p>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-mist-500">
+                      {category.text}
+                    </p>
+                  </div>
                 </div>
               </Reveal>
             ))}
           </div>
-          <p className="mt-8 text-sm text-mist-500">{t("note")}</p>
         </Container>
       </section>
 

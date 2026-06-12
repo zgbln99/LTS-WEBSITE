@@ -26,6 +26,7 @@ import { CallbackPanel } from "@/components/career/callback-form";
 import { getPublishedJobs } from "@/server/content";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
+import { cn } from "@/lib/utils";
 
 // Stellenangebote kommen aus der Datenbank: Seite wird bei jedem Aufruf
 // frisch gerendert, damit Änderungen aus dem Admin sofort sichtbar sind.
@@ -115,11 +116,18 @@ export default async function CareerPage({ params }: Props) {
       <section className="bg-white py-16 sm:py-24">
         <Container>
           <SectionHeading title={t("categoriesTitle")} />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             {categories.map((category, index) => {
               const Icon = categoryIcons[index % categoryIcons.length];
               return (
-                <Reveal key={category.name} delay={(index % 2) * 0.07}>
+                <Reveal
+                  key={category.name}
+                  delay={(index % 3) * 0.07}
+                  className={cn(
+                    index < 2 ? "lg:col-span-3" : "lg:col-span-2",
+                    index === 4 && "sm:col-span-2 lg:col-span-2"
+                  )}
+                >
                   <div className="flex h-full items-start gap-5 rounded-3xl border border-mist-200 bg-white p-6 shadow-card">
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent-500/10 text-accent-600">
                       <Icon className="h-5 w-5" />
