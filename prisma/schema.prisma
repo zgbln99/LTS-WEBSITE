@@ -556,6 +556,18 @@ model ServiceCity {
   isActive Boolean @default(true)
 }
 
+// Vom Admin überschriebene Website-Texte. Schlüssel im Punktformat
+// (z.B. "home.hero.title"), Fallback sind die Texte aus messages/*.json.
+model TextOverride {
+  id        String   @id @default(cuid())
+  locale    String
+  key       String
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@unique([locale, key])
+}
+
 model NewsletterSubscriber {
   id             String    @id @default(cuid())
   email          String    @unique

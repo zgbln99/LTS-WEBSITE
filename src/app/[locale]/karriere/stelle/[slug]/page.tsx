@@ -119,24 +119,56 @@ export default async function JobDetailPage({ params }: Props) {
 
       <section className="bg-mist-50 py-16 sm:py-24">
         <Container>
-          <div className="grid items-start gap-8 lg:grid-cols-2">
-            <div className="space-y-10">
+          {/* Verdienst-Banner */}
+          {salary ? (
+            <Reveal>
+              <div className="mb-8 flex flex-col gap-5 rounded-3xl bg-gradient-to-br from-accent-500 to-accent-600 p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+                <div className="flex items-center gap-5">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20">
+                    <Euro className="h-7 w-7 text-white" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-wider text-white/80">
+                      {t("board.colSalary")}
+                    </p>
+                    <p className="font-display text-3xl font-extrabold text-white sm:text-4xl">
+                      {salary}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="#bewerbung"
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-night-900 shadow-card transition-transform hover:scale-[1.02]"
+                >
+                  {t("apply.title")}
+                </a>
+              </div>
+            </Reveal>
+          ) : null}
+
+          <div className="grid items-start gap-6 lg:grid-cols-5">
+            {/* Beschreibung, Anforderungen, Benefits */}
+            <div className="space-y-6 lg:col-span-3">
               <Reveal>
-                <div className="whitespace-pre-wrap text-base leading-relaxed text-night-800">
-                  {job.translation.description}
+                <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
+                  <div className="whitespace-pre-wrap text-base leading-relaxed text-night-800 sm:text-lg">
+                    {job.translation.description}
+                  </div>
                 </div>
               </Reveal>
 
               {requirements.length > 0 ? (
                 <Reveal>
-                  <div>
+                  <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
                     <h2 className="font-display text-xl font-bold text-night-900">
                       {t("jobs.requirementsTitle")}
                     </h2>
-                    <ul className="mt-4 space-y-2.5">
+                    <ul className="mt-5 space-y-3">
                       {requirements.map((item) => (
                         <li key={item} className="flex items-start gap-3 text-base text-night-800">
-                          <Check className="mt-1 h-4 w-4 shrink-0 text-accent-500" />
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-500/10">
+                            <Check className="h-3.5 w-3.5 text-accent-600" />
+                          </span>
                           {item}
                         </li>
                       ))}
@@ -147,14 +179,16 @@ export default async function JobDetailPage({ params }: Props) {
 
               {benefits.length > 0 ? (
                 <Reveal>
-                  <div>
-                    <h2 className="font-display text-xl font-bold text-night-900">
+                  <div className="rounded-3xl bg-night-950 p-7 sm:p-10">
+                    <h2 className="font-display text-xl font-bold text-white">
                       {t("benefitsTitle")}
                     </h2>
-                    <ul className="mt-4 space-y-2.5">
+                    <ul className="mt-5 space-y-3">
                       {benefits.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-base text-night-800">
-                          <Check className="mt-1 h-4 w-4 shrink-0 text-mint-500" />
+                        <li key={item} className="flex items-start gap-3 text-base text-mist-200">
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint-400/15">
+                            <Check className="h-3.5 w-3.5 text-mint-400" />
+                          </span>
                           {item}
                         </li>
                       ))}
@@ -164,8 +198,12 @@ export default async function JobDetailPage({ params }: Props) {
               ) : null}
             </div>
 
-            <Reveal delay={0.1}>
-              <div className="rounded-3xl bg-white p-6 shadow-card sm:p-10">
+            {/* Bewerbungsformular, auf Desktop mitlaufend */}
+            <Reveal delay={0.1} className="lg:col-span-2">
+              <div
+                id="bewerbung"
+                className="rounded-3xl bg-white p-6 shadow-card sm:p-8 lg:sticky lg:top-28"
+              >
                 <h2 className="mb-6 font-display text-2xl font-bold text-night-900">
                   {t("apply.title")}
                 </h2>

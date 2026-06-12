@@ -10,6 +10,8 @@ import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
 import { revalidatePublic } from "@/server/revalidate-public";
+import { revalidateTag } from "next/cache";
+import { TEXTS_CACHE_TAG } from "@/server/text-overrides";
 
 const JOB_ROLES: Role[] = ["SUPER_ADMIN", "HR"];
 const CONTENT_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
@@ -236,6 +238,84 @@ export async function deleteServiceCity(formData: FormData) {
   });
   revalidatePath("/admin/einsatzorte");
   revalidatePublic(["", "/kontakt", "/unternehmen"]);
+}
+
+// ---------------------------------------------------------------------------
+// Website-Texte
+// ---------------------------------------------------------------------------
+
+const textOverrideSchema = z.object({
+  locale: z.string().min(2).max(5),
+  key: z.string().min(1).max(200),
+  value: z.string().max(5000)
+});
+
+function revalidateAllPublic() {
+  revalidateTag(TEXTS_CACHE_TAG);
+  revalidatePublic([
+    "",
+    "/unternehmen",
+    "/leistungen",
+    "/leistungen/[slug]",
+    "/fuhrpark",
+    "/karriere",
+    "/karriere/lkw-fahrer",
+    "/wissen",
+    "/kontakt"
+  ]);
+}
+
+export async function saveTextOverride(formData: FormData) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const parsed = textOverrideSchema.safeParse({
+    locale: formData.get("locale"),
+    key: formData.get("key"),
+    value: formData.get("value")
+  });
+  if (!parsed.success) return;
+  const data = parsed.data;
+
+  if (data.value.trim() === "") {
+    await prisma.textOverride.deleteMany({
+      where: { locale: data.locale, key: data.key }
+    });
+  } else {
+    await prisma.textOverride.upsert({
+      where: { locale_key: { locale: data.locale, key: data.key } },
+      update: { value: data.value },
+      create: { locale: data.locale, key: data.key, value: data.value }
+    });
+  }
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "TextOverride",
+    entityId: `${data.locale}:${data.key}`
+  });
+  revalidateAllPublic();
+  revalidatePath("/admin/texte");
+}
+
+export async function resetTextOverride(formData: FormData) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const locale = String(formData.get("locale") ?? "");
+  const key = String(formData.get("key") ?? "");
+  if (!locale || !key) return;
+
+  await prisma.textOverride.deleteMany({ where: { locale, key } });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "DELETE",
+    entityType: "TextOverride",
+    entityId: `${locale}:${key}`
+  });
+  revalidateAllPublic();
+  revalidatePath("/admin/texte");
 }
 
 // ---------------------------------------------------------------------------

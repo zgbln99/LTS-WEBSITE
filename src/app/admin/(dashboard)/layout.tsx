@@ -9,6 +9,7 @@ import {
   MapPin,
   Newspaper,
   Quote,
+  Type,
   Users
 } from "lucide-react";
 import { auth } from "@/auth";
@@ -69,6 +70,12 @@ const navItems = [
     href: "/admin/einsatzorte",
     label: "Einsatzorte",
     icon: MapPin,
+    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
+  },
+  {
+    href: "/admin/texte",
+    label: "Website-Texte",
+    icon: Type,
     roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
   }
 ];
