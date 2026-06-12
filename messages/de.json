@@ -1,0 +1,404 @@
+{
+  "common": {
+    "skipToContent": "Zum Inhalt springen",
+    "nav": {
+      "home": "Start",
+      "about": "Unternehmen",
+      "services": "Leistungen",
+      "fleet": "Fuhrpark",
+      "career": "Karriere",
+      "knowledge": "Wissen",
+      "contact": "Kontakt"
+    },
+    "cta": {
+      "inquiry": "Transportanfrage",
+      "callUs": "Jetzt anrufen",
+      "learnMore": "Mehr erfahren",
+      "allServices": "Alle Leistungen ansehen",
+      "apply": "Jetzt bewerben",
+      "contact": "Kontakt aufnehmen"
+    },
+    "footer": {
+      "tagline": "LTS Logistik bewegt seit 2015 Waren zuverlässig durch Deutschland und Europa. Mit über 260 eigenen Fahrzeugen und 200 Mitarbeitenden.",
+      "company": "Unternehmen",
+      "services": "Leistungen",
+      "contact": "Kontakt",
+      "legal": "Rechtliches",
+      "imprint": "Impressum",
+      "privacy": "Datenschutz",
+      "headquarters": "Hauptsitz Berlin",
+      "rights": "Alle Rechte vorbehalten."
+    },
+    "language": "Sprache",
+    "menu": "Menü",
+    "close": "Schließen"
+  },
+  "home": {
+    "hero": {
+      "badge": "Über 260 Fahrzeuge im Einsatz",
+      "title": "Logistik, die Europa bewegt.",
+      "subtitle": "LTS Logistik fährt seit 2015 für Handel, Industrie und Lebensmittellogistik. Vom Expresskurier in Berlin bis zum temperaturgeführten Sattelzug quer durch Europa.",
+      "ctaPrimary": "Transportanfrage stellen",
+      "ctaSecondary": "Leistungen entdecken",
+      "imageAlt": "Sattelzug von LTS Logistik auf der Autobahn bei Sonnenaufgang"
+    },
+    "stats": {
+      "vehicles": "Fahrzeuge in der Flotte",
+      "employees": "Mitarbeitende",
+      "locations": "Standorte in Deutschland",
+      "founded": "gegründet in Berlin"
+    },
+    "services": {
+      "eyebrow": "Leistungen",
+      "title": "Transportlösungen für jede Anforderung",
+      "description": "Von der Expressfahrt in 60 Minuten bis zur europaweiten Kühllogistik: Wir kombinieren eigene Flotte, erfahrene Fahrer und eine Disposition, die mitdenkt."
+    },
+    "coverage": {
+      "eyebrow": "Europaweit unterwegs",
+      "title": "Von Berlin aus durch ganz Europa",
+      "description": "Zehn Standorte in Deutschland und regelmäßige Verkehre in die wichtigsten Wirtschaftsräume Europas. Weitere Destinationen realisieren wir auf Anfrage.",
+      "locationsTitle": "Unsere Standorte",
+      "countriesTitle": "Regelmäßige Destinationen",
+      "countries": ["Deutschland", "Polen", "Tschechien", "Niederlande", "Belgien", "Österreich", "Frankreich", "Dänemark", "Schweden"]
+    },
+    "fleet": {
+      "eyebrow": "Fuhrpark",
+      "title": "Ein Fuhrpark für jede Aufgabe",
+      "description": "Vom wendigen Transporter bis zum Kühlauflieger: Unsere Flotte wächst seit 2015 und wird laufend modernisiert.",
+      "cta": "Fuhrpark entdecken"
+    },
+    "testimonials": {
+      "eyebrow": "Referenzen",
+      "title": "Was unsere Kunden sagen",
+      "items": [
+        {
+          "quote": "Die Disposition reagiert auch bei kurzfristigen Anfragen innerhalb von Minuten. Auf die zugesagten Zeitfenster können wir uns verlassen.",
+          "name": "Einkaufsleitung",
+          "role": "Lebensmittelgroßhandel, Berlin"
+        },
+        {
+          "quote": "Unsere Frischware fährt seit Jahren mit LTS durch Europa. Die Kühlkette stimmt, die Dokumentation stimmt, der Ton stimmt.",
+          "name": "Leitung Supply Chain",
+          "role": "Lebensmittelproduzent, Brandenburg"
+        },
+        {
+          "quote": "Vom Angebot bis zum Ablieferbeleg läuft alles digital und nachvollziehbar. So stellen wir uns einen modernen Logistikpartner vor.",
+          "name": "Geschäftsführung",
+          "role": "Handelsunternehmen, Sachsen"
+        }
+      ]
+    },
+    "career": {
+      "eyebrow": "Karriere",
+      "title": "Wir suchen Verstärkung",
+      "description": "Über 200 Kolleginnen und Kollegen halten LTS Logistik in Bewegung. Werden Sie Teil des Teams, am Steuer, in der Disposition oder im Büro.",
+      "cta": "Offene Bereiche ansehen",
+      "driverCta": "Als LKW-Fahrer bewerben"
+    },
+    "contactCta": {
+      "title": "Sprechen wir über Ihren Transportbedarf.",
+      "description": "Sie erreichen unsere Disposition Montag bis Freitag von 08:00 bis 16:00 Uhr. Anfragen beantworten wir innerhalb von 2 Arbeitsstunden.",
+      "primary": "Transportanfrage stellen",
+      "secondary": "Jetzt anrufen"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Unternehmen",
+      "title": "Seit 2015 auf Wachstumskurs",
+      "description": "LTS Logistik wurde im Januar 2015 in Berlin gegründet und ist vom Kurierdienst zu einem der modernen Transportunternehmen Deutschlands gewachsen."
+    },
+    "story": [
+      "Gestartet sind wir im Kurier-, Express- und Paketgeschäft mit wenigen Fahrzeugen und einem klaren Anspruch: pünktlich liefern, ehrlich kommunizieren, jeden Tag besser werden.",
+      "Heute disponieren wir über 260 eigene Fahrzeuge und beschäftigen mehr als 200 Mitarbeitende an zehn Standorten. Der europaweite Transport gekühlter Frischwaren gehört zu unseren Kernkompetenzen, daneben fahren wir nationale und internationale Verkehre, Express und Spezialtransporte.",
+      "Wir bleiben, was wir am ersten Tag waren: ein inhabergeführtes Unternehmen mit kurzen Wegen, in dem Entscheidungen schnell fallen und Zusagen gelten."
+    ],
+    "timeline": {
+      "eyebrow": "Meilensteine",
+      "title": "Unser Weg",
+      "items": [
+        {
+          "year": "2015",
+          "title": "Gründung in Berlin",
+          "text": "Start als Kurier-, Express- und Paketdienstleister mit den ersten eigenen Fahrzeugen."
+        },
+        {
+          "year": "2016",
+          "title": "Deutschlandweite Transporte",
+          "text": "Erweiterung des Angebots um flexible Transportlösungen in ganz Deutschland und erste europäische Verkehre."
+        },
+        {
+          "year": "Folgejahre",
+          "title": "Kühllogistik als Kernkompetenz",
+          "text": "Aufbau der temperaturgeführten Flotte. Der europaweite Transport gekühlter Frischwaren wird zur Spezialität."
+        },
+        {
+          "year": "Heute",
+          "title": "Über 260 Fahrzeuge, 10 Standorte",
+          "text": "Mehr als 200 Mitarbeitende, Standorte von Berlin bis München und eine Flotte, die laufend modernisiert wird."
+        }
+      ]
+    },
+    "values": {
+      "eyebrow": "Werte",
+      "title": "Wofür wir stehen",
+      "items": [
+        {
+          "title": "Zuverlässigkeit",
+          "text": "Zugesagte Zeitfenster werden gehalten. Wenn etwas dazwischenkommt, erfahren Sie es von uns zuerst."
+        },
+        {
+          "title": "Tempo",
+          "text": "Kurze Entscheidungswege im Unternehmen bedeuten schnelle Antworten für unsere Kunden."
+        },
+        {
+          "title": "Verantwortung",
+          "text": "Geschulte Fahrer, gepflegte Fahrzeuge und ein sorgsamer Umgang mit Ware, Mensch und Umwelt."
+        },
+        {
+          "title": "Partnerschaft",
+          "text": "Wir denken in langfristigen Beziehungen, nicht in einzelnen Aufträgen."
+        }
+      ]
+    },
+    "locations": {
+      "eyebrow": "Standorte",
+      "title": "Zehn Standorte in Deutschland",
+      "description": "Vom Hauptsitz in Berlin steuern wir ein wachsendes Netz regionaler Stützpunkte.",
+      "hqBadge": "Hauptsitz"
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "eyebrow": "Leistungen",
+      "title": "Unsere Transportlösungen",
+      "description": "Acht Leistungsbereiche, eine Flotte von über 260 Fahrzeugen und eine Disposition, die Ihre Anforderungen versteht."
+    },
+    "benefitsTitle": "Ihre Vorteile",
+    "processTitle": "So läuft Ihr Auftrag ab",
+    "faqTitle": "Häufige Fragen",
+    "cta": {
+      "title": "Bereit für Ihr Angebot?",
+      "description": "Senden Sie uns die Eckdaten Ihres Transports. Sie erhalten innerhalb von 2 Arbeitsstunden eine Rückmeldung.",
+      "primary": "Transportanfrage stellen",
+      "secondary": "Jetzt anrufen"
+    },
+    "moreServices": "Weitere Leistungen"
+  },
+  "fleetPage": {
+    "hero": {
+      "eyebrow": "Fuhrpark",
+      "title": "Über 260 Fahrzeuge im Einsatz",
+      "description": "Unsere Flotte wächst seit 2015 und deckt vom Kurierfahrzeug bis zum Kühlauflieger jede Transportaufgabe ab. Alle Fahrzeuge werden regelmäßig gewartet und laufend modernisiert."
+    },
+    "categories": [
+      {
+        "name": "Transporter",
+        "specs": "Bis 3,5 t zulässiges Gesamtgewicht",
+        "text": "Wendig und schnell: ideal für Kurier- und Expressfahrten sowie städtische Belieferung."
+      },
+      {
+        "name": "12-Tonner",
+        "specs": "Bis ca. 6 t Nutzlast, Hebebühne verfügbar",
+        "text": "Das Arbeitstier für regionale Verteilerverkehre und Stückgut."
+      },
+      {
+        "name": "Sattelzüge",
+        "specs": "Bis 25 t Nutzlast, bis 33 Europaletten",
+        "text": "Komplettladungen national und international, planbar und wirtschaftlich."
+      },
+      {
+        "name": "Kühlfahrzeuge",
+        "specs": "Plus 25 bis minus 25 Grad, Mehrkammersysteme",
+        "text": "Temperaturgeführte Logistik für Frischwaren und Tiefkühlware, europaweit."
+      },
+      {
+        "name": "Spezialfahrzeuge",
+        "specs": "Müllfahrzeuge, Absetzkipper, Abrollkipper",
+        "text": "Entsorgungslogistik und Sondertransporte im Raum Berlin."
+      }
+    ],
+    "note": "Detaillierte Fahrzeuggalerien und Filter folgen mit dem nächsten Ausbau dieser Seite."
+  },
+  "career": {
+    "hero": {
+      "eyebrow": "Karriere",
+      "title": "Arbeiten bei LTS Logistik",
+      "description": "Über 200 Kolleginnen und Kollegen halten unsere Flotte in Bewegung. Wir wachsen weiter und suchen Menschen, die anpacken und mitdenken."
+    },
+    "categoriesTitle": "Unsere Bereiche",
+    "categories": [
+      {
+        "name": "LKW-Fahrer (m/w/d)",
+        "text": "C1, C und CE: feste Touren, moderne Fahrzeuge, faire Bezahlung."
+      },
+      {
+        "name": "Disposition",
+        "text": "Sie steuern Touren und Teams und behalten den Überblick, wenn es schnell gehen muss."
+      },
+      {
+        "name": "Büro und Verwaltung",
+        "text": "Auftragsabwicklung, Buchhaltung und Kundenbetreuung am Hauptsitz Berlin."
+      },
+      {
+        "name": "Logistikspezialisten",
+        "text": "Planung, Qualität und Prozesse für eine wachsende Flotte."
+      },
+      {
+        "name": "Lager und Umschlag",
+        "text": "Warenumschlag und Kommissionierung an unseren Standorten."
+      }
+    ],
+    "benefitsTitle": "Was wir bieten",
+    "benefits": [
+      "Unbefristete Anstellung mit pünktlicher Bezahlung",
+      "Moderne, gepflegte Fahrzeuge und Arbeitsmittel",
+      "Feste Ansprechpartner und kurze Entscheidungswege",
+      "Weiterbildung und Entwicklungsmöglichkeiten",
+      "Ein Team, in dem man sich aufeinander verlassen kann"
+    ],
+    "apply": {
+      "title": "In zwei Minuten bewerben",
+      "description": "Senden Sie uns Ihren Lebenslauf per E-Mail oder rufen Sie uns direkt an. Sie erhalten innerhalb von zwei Arbeitstagen eine Rückmeldung.",
+      "emailCta": "Bewerbung per E-Mail senden",
+      "phoneCta": "Direkt anrufen",
+      "driverTeaser": "Sie sind LKW-Fahrer? Hier geht es zu Ihrer Seite mit allen Details.",
+      "driverCta": "Infos für LKW-Fahrer"
+    }
+  },
+  "driver": {
+    "hero": {
+      "eyebrow": "LKW-Fahrer (m/w/d)",
+      "title": "Fahren Sie mit uns. Ab sofort, unbefristet.",
+      "description": "LTS Logistik sucht Fahrerinnen und Fahrer der Klassen C1, C und CE in Berlin und an neun weiteren Standorten. Feste Touren, moderne Fahrzeuge und ein Team, das Wort hält.",
+      "cta": "Jetzt in 2 Minuten bewerben"
+    },
+    "salary": {
+      "title": "Verdienst",
+      "value": "3.000 bis 3.600 EUR brutto",
+      "note": "je nach Erfahrung, Führerscheinklasse und Einsatzgebiet, plus Spesen"
+    },
+    "facts": [
+      { "title": "Feste Touren", "text": "Planbare Einsätze statt wochenlanger Fernfahrten. Viele Touren mit täglicher Heimkehr." },
+      { "title": "Moderne Flotte", "text": "Über 260 gepflegte Fahrzeuge, regelmäßig gewartet und laufend erneuert." },
+      { "title": "Pünktliche Bezahlung", "text": "Ihr Gehalt ist zuverlässig am Monatsende auf dem Konto. Ohne Diskussionen." },
+      { "title": "Echtes Team", "text": "Disposition, die Fahrer respektiert, und Kollegen, die einspringen, wenn es klemmt." }
+    ],
+    "requirementsTitle": "Das bringen Sie mit",
+    "requirements": [
+      "Führerschein der Klasse C1, C oder CE mit Eintrag 95",
+      "Fahrerkarte",
+      "Zuverlässigkeit und freundliches Auftreten",
+      "Deutschkenntnisse oder Englisch, Polnisch, Türkisch oder Ukrainisch"
+    ],
+    "applyTitle": "So einfach geht es",
+    "applySteps": [
+      "Rufen Sie an oder senden Sie eine kurze E-Mail mit Name und Telefonnummer.",
+      "Wir melden uns innerhalb von zwei Arbeitstagen für ein kurzes Gespräch.",
+      "Probefahrt, Vertrag, los geht es."
+    ],
+    "ctaEmail": "Bewerbung per E-Mail",
+    "ctaPhone": "Jetzt anrufen"
+  },
+  "knowledge": {
+    "hero": {
+      "eyebrow": "Wissenszentrum",
+      "title": "Wissen aus der Praxis",
+      "description": "Fachbeiträge aus Transport, Kühllogistik und Fuhrparkmanagement, geschrieben von Menschen, die täglich damit arbeiten."
+    },
+    "categoriesTitle": "Themenbereiche",
+    "categories": [
+      { "name": "Kühllogistik", "text": "Kühlkette, Temperaturführung und Lebensmitteltransport." },
+      { "name": "Transport und Recht", "text": "Frachtdokumente, Lenkzeiten und Vorschriften verständlich erklärt." },
+      { "name": "Karriere als Fahrer", "text": "Einstieg, Weiterbildung und Alltag hinter dem Steuer." },
+      { "name": "Aus dem Unternehmen", "text": "Neue Standorte, Fahrzeuge und Projekte bei LTS Logistik." }
+    ],
+    "comingSoon": "Die ersten Fachbeiträge erscheinen in Kürze. Schauen Sie bald wieder vorbei oder folgen Sie uns auf LinkedIn."
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Kontakt",
+      "title": "Wir sind für Sie erreichbar",
+      "description": "Ob Transportanfrage, Bewerbung oder allgemeines Anliegen: Sie erreichen uns telefonisch, per E-Mail oder direkt am Hauptsitz in Berlin."
+    },
+    "cards": {
+      "phone": "Telefon",
+      "phoneNote": "Mo bis Fr 08:00 bis 16:00 Uhr",
+      "email": "E-Mail",
+      "emailNote": "Antwort innerhalb von 2 Arbeitsstunden",
+      "address": "Hauptsitz",
+      "addressNote": "Attilastraße 26, 12105 Berlin"
+    },
+    "departmentsTitle": "Direkt zum richtigen Team",
+    "departments": [
+      { "name": "Disposition und Transportanfragen", "text": "Angebote, laufende Transporte und Expressfahrten." },
+      { "name": "Bewerbungen", "text": "Fragen zu offenen Stellen und Ihrem Einstieg bei LTS Logistik." },
+      { "name": "Verwaltung und Buchhaltung", "text": "Rechnungen, Verträge und allgemeine Anliegen." }
+    ],
+    "locationsTitle": "Unsere Standorte"
+  },
+  "inquiry": {
+    "hero": {
+      "eyebrow": "Transportanfrage",
+      "title": "Ihr Angebot in 2 Arbeitsstunden",
+      "description": "Senden Sie uns die Eckdaten Ihres Transports. Unsere Disposition prüft Kapazitäten und meldet sich mit einem verbindlichen Angebot."
+    },
+    "checklistTitle": "Diese Angaben helfen uns",
+    "checklist": [
+      "Abholort und Zielort mit Postleitzahl",
+      "Gewünschter Abhol- oder Liefertermin",
+      "Art der Ware",
+      "Anzahl Paletten oder Packstücke",
+      "Gewicht und Maße",
+      "Temperaturanforderungen, falls vorhanden"
+    ],
+    "channelsTitle": "So erreichen Sie uns",
+    "emailCta": "Anfrage per E-Mail senden",
+    "phoneCta": "Disposition anrufen",
+    "responseNote": "Anfragen, die uns Montag bis Freitag zwischen 08:00 und 16:00 Uhr erreichen, beantworten wir innerhalb von 2 Arbeitsstunden.",
+    "emailSubject": "Transportanfrage"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die angeforderte Seite existiert nicht oder wurde verschoben.",
+    "cta": "Zur Startseite"
+  },
+  "meta": {
+    "home": {
+      "title": "Transportunternehmen und Spedition Berlin",
+      "description": "LTS Logistik bewegt seit 2015 Waren durch Deutschland und Europa: über 260 Fahrzeuge, Kühltransporte, Express und Spedition. Angebot in 2 Stunden."
+    },
+    "about": {
+      "title": "Über uns",
+      "description": "Vom Berliner Kurierdienst zum Transportunternehmen mit über 260 Fahrzeugen und 10 Standorten. Die Geschichte von LTS Logistik."
+    },
+    "services": {
+      "title": "Leistungen",
+      "description": "Nationale und internationale Transporte, Express, Kühllogistik, Spedition, dedizierte Transporte und Kontraktlogistik. LTS Logistik Berlin."
+    },
+    "fleet": {
+      "title": "Fuhrpark",
+      "description": "Über 260 Fahrzeuge: Transporter, 12-Tonner, Sattelzüge, Kühlfahrzeuge und Spezialfahrzeuge. Der Fuhrpark von LTS Logistik."
+    },
+    "career": {
+      "title": "Karriere",
+      "description": "Jobs bei LTS Logistik in Berlin und an 9 weiteren Standorten: LKW-Fahrer, Disposition, Büro, Lager. Jetzt bewerben."
+    },
+    "driver": {
+      "title": "LKW-Fahrer Jobs (m/w/d)",
+      "description": "LKW-Fahrer Jobs bei LTS Logistik: 3.000 bis 3.600 EUR brutto, feste Touren, moderne Flotte. C1, C und CE. Bewerbung in 2 Minuten."
+    },
+    "knowledge": {
+      "title": "Wissenszentrum",
+      "description": "Fachwissen zu Transport, Kühllogistik und Karriere im Fuhrpark. Das Wissenszentrum von LTS Logistik."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "description": "Kontakt zu LTS Logistik: Telefon +49 30 81 72 20 10, info@ltslogistik.de, Attilastraße 26, 12105 Berlin. Mo bis Fr 08:00 bis 16:00 Uhr."
+    },
+    "inquiry": {
+      "title": "Transportanfrage",
+      "description": "Transportanfrage an LTS Logistik senden: Angebot innerhalb von 2 Arbeitsstunden. Express, Kühltransport, national und international."
+    }
+  }
+}

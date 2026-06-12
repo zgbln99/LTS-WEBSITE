@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme {
+  /* Farbsystem LTS Logistik */
+  --color-night-950: #070b14;
+  --color-night-900: #0b101d;
+  --color-night-800: #121a2b;
+  --color-night-700: #1c2536;
+  --color-night-600: #2a3548;
+
+  --color-mist-50: #f7f8fa;
+  --color-mist-100: #eef0f4;
+  --color-mist-200: #e2e5eb;
+  --color-mist-300: #ccd2dc;
+  --color-mist-400: #9aa3b2;
+  --color-mist-500: #6b7585;
+
+  --color-accent-400: #ff6a3d;
+  --color-accent-500: #ff4d1c;
+  --color-accent-600: #e83c0d;
+
+  --color-mint-300: #5cf0bd;
+  --color-mint-400: #2ee6a8;
+  --color-mint-500: #17c98c;
+
+  /* Typografie */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+
+  /* Radius */
+  --radius-card: 1.25rem;
+  --radius-section: 2rem;
+
+  /* Schatten */
+  --shadow-card: 0 1px 2px rgb(11 16 29 / 0.04), 0 8px 24px rgb(11 16 29 / 0.06);
+  --shadow-card-hover: 0 2px 4px rgb(11 16 29 / 0.06),
+    0 16px 40px rgb(11 16 29 / 0.12);
+  --shadow-glow: 0 0 0 1px rgb(255 77 28 / 0.25),
+    0 8px 32px rgb(255 77 28 / 0.25);
+
+  /* Easing */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-mist-50 font-sans text-night-900 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-accent-500 text-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+    text-wrap: balance;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgb(11 16 29 / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glass-light {
+    background: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(
+      120deg,
+      var(--color-accent-400),
+      var(--color-accent-600)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}

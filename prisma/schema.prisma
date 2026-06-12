@@ -1,0 +1,593 @@
+// LTS Logistik GmbH - Datenbankschema
+// Übersetzungsmuster: Basisentität + *Translation-Tabelle mit (entityId, locale)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Benutzer, Rollen, Audit
+// ---------------------------------------------------------------------------
+
+enum Role {
+  SUPER_ADMIN
+  HR
+  MARKETING
+  EDITOR
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         Role      @default(EDITOR)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  auditLogs        AuditLog[]
+  mediaAssets      MediaAsset[]
+  applicationNotes ApplicationNote[]
+  blogPosts        BlogPost[]
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String // CREATE | UPDATE | DELETE | STATUS_CHANGE | LOGIN | EXPORT
+  entityType String
+  entityId   String?
+  payload    Json?
+  ipHash     String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Sprachen
+// ---------------------------------------------------------------------------
+
+model Language {
+  code      String  @id // de, en, pl, tr, uk
+  name      String
+  isDefault Boolean @default(false)
+  isActive  Boolean @default(true)
+  order     Int     @default(0)
+}
+
+// ---------------------------------------------------------------------------
+// Seiten (CMS)
+// ---------------------------------------------------------------------------
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Page {
+  id        String        @id @default(cuid())
+  key       String        @unique // home, about, contact ...
+  status    PublishStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  translations PageTranslation[]
+}
+
+model PageTranslation {
+  id             String  @id @default(cuid())
+  pageId         String
+  page           Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  locale         String
+  title          String
+  slug           String
+  content        Json // strukturierte Sektionen
+  seoTitle       String?
+  seoDescription String?
+  canonicalUrl   String?
+  ogImageId      String?
+
+  @@unique([pageId, locale])
+  @@unique([locale, slug])
+}
+
+// ---------------------------------------------------------------------------
+// Leistungen
+// ---------------------------------------------------------------------------
+
+model Service {
+  id          String        @id @default(cuid())
+  key         String        @unique // national, international, express, refrigerated ...
+  icon        String?
+  order       Int           @default(0)
+  status      PublishStatus @default(PUBLISHED)
+  heroImageId String?
+  heroImage   MediaAsset?   @relation(fields: [heroImageId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  translations ServiceTranslation[]
+  faqs         Faq[]
+}
+
+model ServiceTranslation {
+  id             String  @id @default(cuid())
+  serviceId      String
+  service        Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  locale         String
+  name           String
+  slug           String
+  excerpt        String
+  description    String
+  benefits       Json // [{title, text}]
+  processSteps   Json // [{title, text}]
+  seoTitle       String?
+  seoDescription String?
+
+  @@unique([serviceId, locale])
+  @@unique([locale, slug])
+}
+
+// ---------------------------------------------------------------------------
+// Fuhrpark
+// ---------------------------------------------------------------------------
+
+model VehicleCategory {
+  id    String @id @default(cuid())
+  key   String @unique // transporter, lkw12t, sattelzug, kuehlfahrzeug, spezial
+  order Int    @default(0)
+
+  translations VehicleCategoryTranslation[]
+  vehicles     Vehicle[]
+}
+
+model VehicleCategoryTranslation {
+  id          String          @id @default(cuid())
+  categoryId  String
+  category    VehicleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  locale      String
+  name        String
+  description String?
+
+  @@unique([categoryId, locale])
+}
+
+model Vehicle {
+  id                    String          @id @default(cuid())
+  categoryId            String
+  category              VehicleCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  model                 String
+  payloadKg             Int?
+  volumeM3              Float?
+  lengthM               Float?
+  palletCapacity        Int?
+  temperatureControlled Boolean         @default(false)
+  features              Json? // ["Hebebühne", "ADR", ...]
+  isPublished           Boolean         @default(true)
+  order                 Int             @default(0)
+
+  images VehicleImage[]
+}
+
+model VehicleImage {
+  id        String     @id @default(cuid())
+  vehicleId String
+  vehicle   Vehicle    @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  assetId   String
+  asset     MediaAsset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  order     Int        @default(0)
+
+  @@unique([vehicleId, assetId])
+}
+
+// ---------------------------------------------------------------------------
+// Karriere / Recruiting
+// ---------------------------------------------------------------------------
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  MINI_JOB
+  APPRENTICESHIP
+}
+
+model JobCategory {
+  id    String @id @default(cuid())
+  key   String @unique // drivers, dispatchers, office, logistics, warehouse
+  order Int    @default(0)
+
+  translations JobCategoryTranslation[]
+  jobPostings  JobPosting[]
+}
+
+model JobCategoryTranslation {
+  id         String      @id @default(cuid())
+  categoryId String
+  category   JobCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  locale     String
+  name       String
+
+  @@unique([categoryId, locale])
+}
+
+model JobPosting {
+  id             String         @id @default(cuid())
+  categoryId     String
+  category       JobCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  locationCity   String
+  locationRegion String?
+  employmentType EmploymentType @default(FULL_TIME)
+  salaryMin      Int?
+  salaryMax      Int?
+  salaryCurrency String         @default("EUR")
+  salaryPeriod   String         @default("MONTH")
+  status         PublishStatus  @default(DRAFT)
+  publishedAt    DateTime?
+  validThrough   DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  translations JobPostingTranslation[]
+  applications Application[]
+}
+
+model JobPostingTranslation {
+  id             String     @id @default(cuid())
+  jobPostingId   String
+  jobPosting     JobPosting @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  locale         String
+  title          String
+  slug           String
+  description    String
+  requirements   Json // string[]
+  benefits       Json // string[]
+  seoTitle       String?
+  seoDescription String?
+
+  @@unique([jobPostingId, locale])
+  @@unique([locale, slug])
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWED
+  INTERVIEW
+  REJECTED
+  HIRED
+}
+
+model Application {
+  id            String            @id @default(cuid())
+  jobPostingId  String?
+  jobPosting    JobPosting?       @relation(fields: [jobPostingId], references: [id], onDelete: SetNull)
+  firstName     String
+  lastName      String
+  email         String
+  phone         String
+  message       String?
+  licenseClass  String? // C, CE, C1 ...
+  status        ApplicationStatus @default(NEW)
+  source        String? // website, driver-landing, referral
+  locale        String            @default("de")
+  gdprConsentAt DateTime
+  anonymizedAt  DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  files      ApplicationFile[]
+  notes      ApplicationNote[]
+  activities ApplicationActivity[]
+
+  @@index([status, createdAt])
+}
+
+enum ApplicationFileType {
+  CV
+  LICENSE
+  CERTIFICATE
+  OTHER
+}
+
+model ApplicationFile {
+  id              String              @id @default(cuid())
+  applicationId   String
+  application     Application         @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type            ApplicationFileType
+  s3Key           String
+  fileName        String
+  mimeType        String
+  sizeBytes       Int
+  virusScanStatus String              @default("PENDING") // PENDING | CLEAN | INFECTED
+  createdAt       DateTime            @default(now())
+}
+
+model ApplicationNote {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  authorId      String?
+  author        User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body          String
+  createdAt     DateTime    @default(now())
+}
+
+model ApplicationActivity {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          String // STATUS_CHANGE | EMAIL_SENT | NOTE_ADDED | FILE_VIEWED
+  payload       Json?
+  createdAt     DateTime    @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Wissenszentrum
+// ---------------------------------------------------------------------------
+
+model Author {
+  id       String  @id @default(cuid())
+  name     String
+  jobTitle String?
+  bio      String?
+  avatarId String?
+
+  blogPosts BlogPost[]
+}
+
+model BlogCategory {
+  id    String @id @default(cuid())
+  key   String @unique
+  order Int    @default(0)
+
+  translations BlogCategoryTranslation[]
+  blogPosts    BlogPost[]
+}
+
+model BlogCategoryTranslation {
+  id         String       @id @default(cuid())
+  categoryId String
+  category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  locale     String
+  name       String
+  slug       String
+
+  @@unique([categoryId, locale])
+  @@unique([locale, slug])
+}
+
+model Tag {
+  id  String @id @default(cuid())
+  key String @unique
+
+  translations TagTranslation[]
+  blogPosts    BlogPostTag[]
+}
+
+model TagTranslation {
+  id     String @id @default(cuid())
+  tagId  String
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  locale String
+  name   String
+  slug   String
+
+  @@unique([tagId, locale])
+}
+
+model BlogPost {
+  id          String        @id @default(cuid())
+  authorId    String?
+  author      Author?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdById String?
+  createdBy   User?         @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  categoryId  String?
+  category    BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  heroImageId String?
+  heroImage   MediaAsset?   @relation(fields: [heroImageId], references: [id], onDelete: SetNull)
+  status      PublishStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  translations BlogPostTranslation[]
+  tags         BlogPostTag[]
+}
+
+model BlogPostTranslation {
+  id             String   @id @default(cuid())
+  blogPostId     String
+  blogPost       BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  locale         String
+  title          String
+  slug           String
+  excerpt        String
+  content        Json // Tiptap/strukturierter Inhalt
+  readingTimeMin Int?
+  seoTitle       String?
+  seoDescription String?
+
+  @@unique([blogPostId, locale])
+  @@unique([locale, slug])
+}
+
+model BlogPostTag {
+  blogPostId String
+  blogPost   BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  tagId      String
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([blogPostId, tagId])
+}
+
+// ---------------------------------------------------------------------------
+// Testimonials und FAQ
+// ---------------------------------------------------------------------------
+
+model Testimonial {
+  id            String   @id @default(cuid())
+  authorName    String
+  authorCompany String?
+  authorRole    String?
+  rating        Int?
+  order         Int      @default(0)
+  isPublished   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  translations TestimonialTranslation[]
+}
+
+model TestimonialTranslation {
+  id            String      @id @default(cuid())
+  testimonialId String
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+  locale        String
+  quote         String
+
+  @@unique([testimonialId, locale])
+}
+
+model Faq {
+  id          String   @id @default(cuid())
+  serviceId   String?
+  service     Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  categoryKey String? // general, transport, career, billing
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+
+  translations FaqTranslation[]
+}
+
+model FaqTranslation {
+  id       String @id @default(cuid())
+  faqId    String
+  faq      Faq    @relation(fields: [faqId], references: [id], onDelete: Cascade)
+  locale   String
+  question String
+  answer   String
+
+  @@unique([faqId, locale])
+}
+
+// ---------------------------------------------------------------------------
+// Eingehende Anfragen
+// ---------------------------------------------------------------------------
+
+enum RequestStatus {
+  NEW
+  IN_PROGRESS
+  QUOTED
+  WON
+  LOST
+  CLOSED
+}
+
+model ContactRequest {
+  id         String        @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  company    String?
+  department String? // dispo, hr, billing, general
+  message    String
+  locale     String        @default("de")
+  status     RequestStatus @default(NEW)
+  consentAt  DateTime
+  ipHash     String?
+  createdAt  DateTime      @default(now())
+
+  @@index([status, createdAt])
+}
+
+model TransportRequest {
+  id              String        @id @default(cuid())
+  referenceNumber String        @unique
+  company         String
+  contactName     String
+  email           String
+  phone           String
+  pickupAddress   String
+  pickupCountry   String
+  deliveryAddress String
+  deliveryCountry String
+  requestedDate   DateTime?
+  cargoType       String
+  palletCount     Int?
+  weightKg        Int?
+  lengthM         Float?
+  widthM          Float?
+  heightM         Float?
+  temperatureMin  Float?
+  temperatureMax  Float?
+  message         String?
+  locale          String        @default("de")
+  status          RequestStatus @default(NEW)
+  consentAt       DateTime
+  ipHash          String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model NewsletterSubscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  locale         String    @default("de")
+  token          String    @unique @default(cuid())
+  confirmedAt    DateTime?
+  unsubscribedAt DateTime?
+  createdAt      DateTime  @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Medien und SEO
+// ---------------------------------------------------------------------------
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  s3Key        String   @unique
+  fileName     String
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  alt          Json? // {de: "...", en: "..."}
+  folder       String   @default("/")
+  uploadedById String?
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+
+  services      Service[]
+  blogPosts     BlogPost[]
+  vehicleImages VehicleImage[]
+
+  @@index([folder])
+}
+
+model SeoDefault {
+  id            String  @id @default(cuid())
+  locale        String  @unique
+  siteTitle     String
+  titleTemplate String // "%s | LTS Logistik"
+  description   String
+  ogImageId     String?
+}
+
+model Redirect {
+  id         String   @id @default(cuid())
+  fromPath   String   @unique
+  toPath     String
+  statusCode Int      @default(301)
+  createdAt  DateTime @default(now())
+}

@@ -1,0 +1,404 @@
+{
+  "common": {
+    "skipToContent": "İçeriğe geç",
+    "nav": {
+      "home": "Ana sayfa",
+      "about": "Hakkımızda",
+      "services": "Hizmetler",
+      "fleet": "Filo",
+      "career": "Kariyer",
+      "knowledge": "Bilgi",
+      "contact": "İletişim"
+    },
+    "cta": {
+      "inquiry": "Nakliye talebi",
+      "callUs": "Bizi arayın",
+      "learnMore": "Daha fazla bilgi",
+      "allServices": "Tüm hizmetleri görün",
+      "apply": "Şimdi başvur",
+      "contact": "İletişime geçin"
+    },
+    "footer": {
+      "tagline": "LTS Logistik 2015'ten beri Almanya ve Avrupa genelinde malları güvenilir şekilde taşıyor. 260'tan fazla araç ve 200 çalışanla.",
+      "company": "Şirket",
+      "services": "Hizmetler",
+      "contact": "İletişim",
+      "legal": "Yasal",
+      "imprint": "Künye",
+      "privacy": "Gizlilik",
+      "headquarters": "Merkez Berlin",
+      "rights": "Tüm hakları saklıdır."
+    },
+    "language": "Dil",
+    "menu": "Menü",
+    "close": "Kapat"
+  },
+  "home": {
+    "hero": {
+      "badge": "260'tan fazla araç yollarda",
+      "title": "Avrupa'yı hareket ettiren lojistik.",
+      "subtitle": "LTS Logistik 2015'ten beri ticaret, sanayi ve gıda lojistiği için yollarda. Berlin'deki ekspres kuryeden Avrupa'yı kateden soğutmalı çekicilere kadar.",
+      "ctaPrimary": "Nakliye talebi gönder",
+      "ctaSecondary": "Hizmetleri keşfet",
+      "imageAlt": "Gün doğumunda otoyolda LTS Logistik çekicisi"
+    },
+    "stats": {
+      "vehicles": "filodaki araç",
+      "employees": "çalışan",
+      "locations": "Almanya'da lokasyon",
+      "founded": "Berlin'de kuruluş"
+    },
+    "services": {
+      "eyebrow": "Hizmetler",
+      "title": "Her ihtiyaca uygun taşıma çözümleri",
+      "description": "60 dakikada ekspres seferden Avrupa geneli soğutmalı lojistiğe: kendi filomuzu, deneyimli şoförleri ve ileriyi düşünen bir sevkiyat ekibini birleştiriyoruz."
+    },
+    "coverage": {
+      "eyebrow": "Avrupa genelinde",
+      "title": "Berlin'den tüm Avrupa'ya",
+      "description": "Almanya'da on lokasyon ve Avrupa'nın önemli ekonomik bölgelerine düzenli seferler. Diğer destinasyonlar talep üzerine.",
+      "locationsTitle": "Lokasyonlarımız",
+      "countriesTitle": "Düzenli destinasyonlar",
+      "countries": ["Almanya", "Polonya", "Çekya", "Hollanda", "Belçika", "Avusturya", "Fransa", "Danimarka", "İsveç"]
+    },
+    "fleet": {
+      "eyebrow": "Filo",
+      "title": "Her görev için bir filo",
+      "description": "Çevik panelvandan frigorifik dorseye: filomuz 2015'ten beri büyüyor ve sürekli yenileniyor.",
+      "cta": "Filoyu keşfet"
+    },
+    "testimonials": {
+      "eyebrow": "Referanslar",
+      "title": "Müşterilerimiz ne diyor",
+      "items": [
+        {
+          "quote": "Sevkiyat ekibi acil taleplere bile dakikalar içinde yanıt veriyor. Kararlaştırılan zaman aralıklarına güvenebiliyoruz.",
+          "name": "Satın Alma Müdürü",
+          "role": "Gıda toptancısı, Berlin"
+        },
+        {
+          "quote": "Taze ürünlerimiz yıllardır LTS ile Avrupa'da yolculuk ediyor. Soğuk zincir doğru, dokümantasyon doğru, iletişim doğru.",
+          "name": "Tedarik Zinciri Müdürü",
+          "role": "Gıda üreticisi, Brandenburg"
+        },
+        {
+          "quote": "Tekliften teslimat belgesine kadar her şey dijital ve izlenebilir. Modern bir lojistik ortağı böyle olmalı.",
+          "name": "Genel Müdür",
+          "role": "Ticaret şirketi, Saksonya"
+        }
+      ]
+    },
+    "career": {
+      "eyebrow": "Kariyer",
+      "title": "Ekibimizi büyütüyoruz",
+      "description": "200'den fazla çalışan LTS Logistik'i hareket halinde tutuyor. Direksiyonda, sevkiyatta veya ofiste ekibe katılın.",
+      "cta": "Açık alanları görün",
+      "driverCta": "Tır şoförü olarak başvur"
+    },
+    "contactCta": {
+      "title": "Taşıma ihtiyaçlarınızı konuşalım.",
+      "description": "Sevkiyat ekibimize pazartesiden cumaya 08:00 ile 16:00 arasında ulaşabilirsiniz. Talepleri 2 iş saati içinde yanıtlıyoruz.",
+      "primary": "Nakliye talebi gönder",
+      "secondary": "Hemen arayın"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Şirket",
+      "title": "2015'ten beri büyüme yolunda",
+      "description": "LTS Logistik Ocak 2015'te Berlin'de kuruldu ve bir kurye hizmetinden Almanya'nın modern taşımacılık şirketlerinden birine dönüştü."
+    },
+    "story": [
+      "Kurye, ekspres ve paket sektöründe birkaç araçla ve net bir ilkeyle başladık: zamanında teslim et, dürüst iletişim kur, her gün daha iyi ol.",
+      "Bugün 260'tan fazla kendi aracımızı yönetiyor ve on lokasyonda 200'den fazla kişiyi istihdam ediyoruz. Soğutulmuş taze gıdanın Avrupa genelinde taşınması, ulusal ve uluslararası seferler, ekspres ve özel taşımaların yanında temel uzmanlık alanlarımızdan biri.",
+      "İlk günkü gibi kalıyoruz: kararların hızlı alındığı ve sözlerin tutulduğu, kısa yolları olan sahibi tarafından yönetilen bir şirket."
+    ],
+    "timeline": {
+      "eyebrow": "Kilometre taşları",
+      "title": "Yolculuğumuz",
+      "items": [
+        {
+          "year": "2015",
+          "title": "Berlin'de kuruluş",
+          "text": "İlk kendi araçlarımızla kurye, ekspres ve paket hizmeti olarak başlangıç."
+        },
+        {
+          "year": "2016",
+          "title": "Almanya geneli taşımacılık",
+          "text": "Almanya genelinde esnek taşıma çözümleri ve ilk Avrupa seferleriyle hizmet genişlemesi."
+        },
+        {
+          "year": "Sonraki yıllar",
+          "title": "Temel uzmanlık olarak soğutmalı lojistik",
+          "text": "Sıcaklık kontrollü filonun kurulması. Soğutulmuş taze gıdanın Avrupa geneli taşınması uzmanlığımız haline geldi."
+        },
+        {
+          "year": "Bugün",
+          "title": "260'tan fazla araç, 10 lokasyon",
+          "text": "200'den fazla çalışan, Berlin'den Münih'e lokasyonlar ve sürekli yenilenen bir filo."
+        }
+      ]
+    },
+    "values": {
+      "eyebrow": "Değerler",
+      "title": "Neyi temsil ediyoruz",
+      "items": [
+        {
+          "title": "Güvenilirlik",
+          "text": "Kararlaştırılan zaman aralıklarına uyulur. Bir aksilik olursa önce bizden duyarsınız."
+        },
+        {
+          "title": "Hız",
+          "text": "Şirket içindeki kısa karar yolları müşterilerimiz için hızlı yanıtlar demektir."
+        },
+        {
+          "title": "Sorumluluk",
+          "text": "Eğitimli şoförler, bakımlı araçlar ve mala, insana ve çevreye özenli yaklaşım."
+        },
+        {
+          "title": "Ortaklık",
+          "text": "Tek tek siparişlerle değil, uzun vadeli ilişkilerle düşünürüz."
+        }
+      ]
+    },
+    "locations": {
+      "eyebrow": "Lokasyonlar",
+      "title": "Almanya'da on lokasyon",
+      "description": "Berlin'deki merkezimizden büyüyen bir bölgesel şube ağını yönetiyoruz.",
+      "hqBadge": "Merkez"
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "eyebrow": "Hizmetler",
+      "title": "Taşıma çözümlerimiz",
+      "description": "Sekiz hizmet alanı, 260'tan fazla araçlık bir filo ve ihtiyaçlarınızı anlayan bir sevkiyat ekibi."
+    },
+    "benefitsTitle": "Avantajlarınız",
+    "processTitle": "Siparişiniz nasıl ilerler",
+    "faqTitle": "Sık sorulan sorular",
+    "cta": {
+      "title": "Teklifinize hazır mısınız?",
+      "description": "Taşımanızın temel bilgilerini bize gönderin. 2 iş saati içinde dönüş alırsınız.",
+      "primary": "Nakliye talebi gönder",
+      "secondary": "Hemen arayın"
+    },
+    "moreServices": "Diğer hizmetler"
+  },
+  "fleetPage": {
+    "hero": {
+      "eyebrow": "Filo",
+      "title": "260'tan fazla araç yollarda",
+      "description": "Filomuz 2015'ten beri büyüyor ve kurye araçlarından frigorifik dorselere kadar her taşıma görevini karşılıyor. Tüm araçlar düzenli bakımdan geçiyor ve sürekli yenileniyor."
+    },
+    "categories": [
+      {
+        "name": "Panelvanlar",
+        "specs": "3,5 tona kadar azami yüklü ağırlık",
+        "text": "Çevik ve hızlı: kurye, ekspres seferler ve şehir içi dağıtım için ideal."
+      },
+      {
+        "name": "12 tonluk kamyonlar",
+        "specs": "Yaklaşık 6 tona kadar yük kapasitesi, lift mevcut",
+        "text": "Bölgesel dağıtım ve parsiyel yükün iş atı."
+      },
+      {
+        "name": "Çekiciler",
+        "specs": "25 tona kadar yük, 33 euro palete kadar",
+        "text": "Yurtiçi ve uluslararası komple yükler, planlı ve ekonomik."
+      },
+      {
+        "name": "Soğutmalı araçlar",
+        "specs": "Artı 25 ile eksi 25 derece, çok bölmeli sistemler",
+        "text": "Avrupa genelinde taze ve donmuş gıda için sıcaklık kontrollü lojistik."
+      },
+      {
+        "name": "Özel araçlar",
+        "specs": "Çöp araçları, damperli ve halatlı konteyner araçları",
+        "text": "Berlin bölgesinde atık lojistiği ve özel taşımalar."
+      }
+    ],
+    "note": "Detaylı araç galerileri ve filtreler bu sayfanın bir sonraki genişlemesiyle gelecek."
+  },
+  "career": {
+    "hero": {
+      "eyebrow": "Kariyer",
+      "title": "LTS Logistik'te çalışmak",
+      "description": "200'den fazla çalışan filomuzu hareket halinde tutuyor. Büyümeye devam ediyoruz ve işini sahiplenen, ileriyi düşünen insanlar arıyoruz."
+    },
+    "categoriesTitle": "Alanlarımız",
+    "categories": [
+      {
+        "name": "Tır şoförleri (k/e)",
+        "text": "C1, C ve CE: sabit turlar, modern araçlar, adil ücret."
+      },
+      {
+        "name": "Sevkiyat",
+        "text": "Turları ve ekipleri yönetir, işler hızlandığında genel görünümü korursunuz."
+      },
+      {
+        "name": "Ofis ve yönetim",
+        "text": "Berlin merkezde sipariş işleme, muhasebe ve müşteri hizmetleri."
+      },
+      {
+        "name": "Lojistik uzmanları",
+        "text": "Büyüyen bir filo için planlama, kalite ve süreçler."
+      },
+      {
+        "name": "Depo ve elleçleme",
+        "text": "Lokasyonlarımızda mal elleçleme ve toplama."
+      }
+    ],
+    "benefitsTitle": "Ne sunuyoruz",
+    "benefits": [
+      "Zamanında ödeme ile süresiz iş sözleşmesi",
+      "Modern, bakımlı araçlar ve ekipman",
+      "Sabit iletişim kişileri ve kısa karar yolları",
+      "Eğitim ve gelişim fırsatları",
+      "Güvenebileceğiniz bir ekip"
+    ],
+    "apply": {
+      "title": "İki dakikada başvurun",
+      "description": "Özgeçmişinizi e-postayla gönderin veya doğrudan arayın. İki iş günü içinde dönüş alırsınız.",
+      "emailCta": "E-posta ile başvur",
+      "phoneCta": "Doğrudan ara",
+      "driverTeaser": "Tır şoförü müsünüz? Tüm detayların olduğu sayfanız burada.",
+      "driverCta": "Şoförler için bilgi"
+    }
+  },
+  "driver": {
+    "hero": {
+      "eyebrow": "Tır şoförleri (k/e)",
+      "title": "Bizimle sürün. Hemen, süresiz.",
+      "description": "LTS Logistik, Berlin'de ve dokuz başka lokasyonda C1, C ve CE sınıfı şoförler arıyor. Sabit turlar, modern araçlar ve sözünü tutan bir ekip.",
+      "cta": "2 dakikada başvur"
+    },
+    "salary": {
+      "title": "Kazanç",
+      "value": "3.000 ile 3.600 EUR brüt",
+      "note": "deneyime, ehliyet sınıfına ve çalışma bölgesine göre, harcırah hariç"
+    },
+    "facts": [
+      { "title": "Sabit turlar", "text": "Haftalarca yolda kalmak yerine planlanabilir görevler. Birçok turda her gün eve dönüş." },
+      { "title": "Modern filo", "text": "260'tan fazla bakımlı araç, düzenli servis ve sürekli yenileme." },
+      { "title": "Zamanında ödeme", "text": "Maaşınız ay sonunda güvenilir şekilde hesabınızda. Tartışmasız." },
+      { "title": "Gerçek bir ekip", "text": "Şoförlere saygı duyan sevkiyatçılar ve gerektiğinde devreye giren meslektaşlar." }
+    ],
+    "requirementsTitle": "Sizden beklediklerimiz",
+    "requirements": [
+      "Kod 95 ile C1, C veya CE sınıfı ehliyet",
+      "Şoför kartı",
+      "Güvenilirlik ve güler yüz",
+      "Almanca, İngilizce, Lehçe, Türkçe veya Ukraynaca"
+    ],
+    "applyTitle": "Bu kadar basit",
+    "applySteps": [
+      "Arayın veya adınız ve telefon numaranızla kısa bir e-posta gönderin.",
+      "Kısa bir görüşme için iki iş günü içinde size dönüyoruz.",
+      "Deneme sürüşü, sözleşme ve yola çıkış."
+    ],
+    "ctaEmail": "E-posta ile başvuru",
+    "ctaPhone": "Hemen ara"
+  },
+  "knowledge": {
+    "hero": {
+      "eyebrow": "Bilgi merkezi",
+      "title": "Pratikten gelen bilgi",
+      "description": "Taşımacılık, soğutmalı lojistik ve filo yönetimi üzerine, her gün bu işle uğraşan insanların yazdığı makaleler."
+    },
+    "categoriesTitle": "Konu alanları",
+    "categories": [
+      { "name": "Soğutmalı lojistik", "text": "Soğuk zincir, sıcaklık kontrolü ve gıda taşımacılığı." },
+      { "name": "Taşımacılık ve hukuk", "text": "Taşıma belgeleri, sürüş süreleri ve mevzuat anlaşılır şekilde." },
+      { "name": "Şoför kariyeri", "text": "Başlangıç, eğitim ve direksiyon başında günlük yaşam." },
+      { "name": "Şirketten haberler", "text": "LTS Logistik'te yeni lokasyonlar, araçlar ve projeler." }
+    ],
+    "comingSoon": "İlk makaleler yakında yayınlanacak. Tekrar uğrayın veya bizi LinkedIn'de takip edin."
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "İletişim",
+      "title": "Size hizmet için buradayız",
+      "description": "Nakliye talebi, başvuru veya genel bir konu: bize telefonla, e-postayla veya doğrudan Berlin merkezimizden ulaşabilirsiniz."
+    },
+    "cards": {
+      "phone": "Telefon",
+      "phoneNote": "Pzt ile Cum arası 08:00 ile 16:00",
+      "email": "E-posta",
+      "emailNote": "2 iş saati içinde yanıt",
+      "address": "Merkez",
+      "addressNote": "Attilastraße 26, 12105 Berlin"
+    },
+    "departmentsTitle": "Doğrudan doğru ekibe",
+    "departments": [
+      { "name": "Sevkiyat ve nakliye talepleri", "text": "Teklifler, devam eden taşımalar ve ekspres seferler." },
+      { "name": "Başvurular", "text": "Açık pozisyonlar ve LTS Logistik'e katılım hakkında sorular." },
+      { "name": "Yönetim ve muhasebe", "text": "Faturalar, sözleşmeler ve genel konular." }
+    ],
+    "locationsTitle": "Lokasyonlarımız"
+  },
+  "inquiry": {
+    "hero": {
+      "eyebrow": "Nakliye talebi",
+      "title": "Teklifiniz 2 iş saati içinde",
+      "description": "Taşımanızın temel bilgilerini bize gönderin. Sevkiyat ekibimiz kapasiteyi kontrol eder ve bağlayıcı bir teklifle döner."
+    },
+    "checklistTitle": "Bu bilgiler bize yardımcı olur",
+    "checklist": [
+      "Posta koduyla alım ve teslimat yeri",
+      "Tercih edilen alım veya teslimat tarihi",
+      "Mal türü",
+      "Palet veya koli sayısı",
+      "Ağırlık ve ölçüler",
+      "Varsa sıcaklık gereksinimleri"
+    ],
+    "channelsTitle": "Bize nasıl ulaşırsınız",
+    "emailCta": "Talebi e-posta ile gönder",
+    "phoneCta": "Sevkiyatı ara",
+    "responseNote": "Pazartesiden cumaya 08:00 ile 16:00 arasında ulaşan talepler 2 iş saati içinde yanıtlanır.",
+    "emailSubject": "Nakliye talebi"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "İstenen sayfa mevcut değil veya taşındı.",
+    "cta": "Ana sayfaya dön"
+  },
+  "meta": {
+    "home": {
+      "title": "Taşımacılık Şirketi ve Nakliye Berlin",
+      "description": "LTS Logistik 2015'ten beri Almanya ve Avrupa'da mal taşıyor: 260'tan fazla araç, soğutmalı taşıma, ekspres ve nakliye organizasyonu. 2 saatte teklif."
+    },
+    "about": {
+      "title": "Hakkımızda",
+      "description": "Berlin kurye hizmetinden 260'tan fazla araç ve 10 lokasyonlu taşımacılık şirketine. LTS Logistik'in hikayesi."
+    },
+    "services": {
+      "title": "Hizmetler",
+      "description": "Yurtiçi ve uluslararası taşımacılık, ekspres, soğutmalı lojistik, nakliye organizasyonu, özel tahsisli taşıma ve kontrat lojistiği. LTS Logistik Berlin."
+    },
+    "fleet": {
+      "title": "Filo",
+      "description": "260'tan fazla araç: panelvanlar, 12 tonluk kamyonlar, çekiciler, soğutmalı ve özel araçlar. LTS Logistik filosu."
+    },
+    "career": {
+      "title": "Kariyer",
+      "description": "Berlin'de ve 9 başka lokasyonda LTS Logistik'te işler: tır şoförleri, sevkiyat, ofis, depo. Şimdi başvurun."
+    },
+    "driver": {
+      "title": "Tır Şoförü İş İlanları",
+      "description": "LTS Logistik'te tır şoförü işleri: 3.000 ile 3.600 EUR brüt, sabit turlar, modern filo. C1, C ve CE. 2 dakikada başvuru."
+    },
+    "knowledge": {
+      "title": "Bilgi Merkezi",
+      "description": "Taşımacılık, soğutmalı lojistik ve filo kariyeri hakkında uzmanlık. LTS Logistik bilgi merkezi."
+    },
+    "contact": {
+      "title": "İletişim",
+      "description": "LTS Logistik iletişim: telefon +49 30 81 72 20 10, info@ltslogistik.de, Attilastraße 26, 12105 Berlin. Pzt ile Cum arası 08:00 ile 16:00."
+    },
+    "inquiry": {
+      "title": "Nakliye Talebi",
+      "description": "LTS Logistik'e nakliye talebi gönderin: 2 iş saati içinde teklif. Ekspres, soğutmalı, yurtiçi ve uluslararası."
+    }
+  }
+}

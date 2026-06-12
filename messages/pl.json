@@ -1,0 +1,404 @@
+{
+  "common": {
+    "skipToContent": "Przejdź do treści",
+    "nav": {
+      "home": "Start",
+      "about": "O firmie",
+      "services": "Usługi",
+      "fleet": "Flota",
+      "career": "Kariera",
+      "knowledge": "Wiedza",
+      "contact": "Kontakt"
+    },
+    "cta": {
+      "inquiry": "Zapytanie transportowe",
+      "callUs": "Zadzwoń",
+      "learnMore": "Dowiedz się więcej",
+      "allServices": "Zobacz wszystkie usługi",
+      "apply": "Aplikuj teraz",
+      "contact": "Skontaktuj się"
+    },
+    "footer": {
+      "tagline": "LTS Logistik od 2015 roku niezawodnie przewozi towary przez Niemcy i Europę. Ponad 260 pojazdów i 200 pracowników.",
+      "company": "Firma",
+      "services": "Usługi",
+      "contact": "Kontakt",
+      "legal": "Informacje prawne",
+      "imprint": "Impressum",
+      "privacy": "Polityka prywatności",
+      "headquarters": "Centrala Berlin",
+      "rights": "Wszelkie prawa zastrzeżone."
+    },
+    "language": "Język",
+    "menu": "Menu",
+    "close": "Zamknij"
+  },
+  "home": {
+    "hero": {
+      "badge": "Ponad 260 pojazdów w trasie",
+      "title": "Logistyka, która porusza Europę.",
+      "subtitle": "LTS Logistik od 2015 roku jeździ dla handlu, przemysłu i logistyki spożywczej. Od kuriera ekspresowego w Berlinie po chłodnie przemierzające całą Europę.",
+      "ctaPrimary": "Wyślij zapytanie transportowe",
+      "ctaSecondary": "Poznaj usługi",
+      "imageAlt": "Ciągnik siodłowy LTS Logistik na autostradzie o wschodzie słońca"
+    },
+    "stats": {
+      "vehicles": "pojazdów we flocie",
+      "employees": "pracowników",
+      "locations": "oddziałów w Niemczech",
+      "founded": "rok założenia w Berlinie"
+    },
+    "services": {
+      "eyebrow": "Usługi",
+      "title": "Rozwiązania transportowe na każdą potrzebę",
+      "description": "Od przejazdu ekspresowego w 60 minut po europejską logistykę chłodniczą: łączymy własną flotę, doświadczonych kierowców i dyspozycję, która myśli z wyprzedzeniem."
+    },
+    "coverage": {
+      "eyebrow": "W całej Europie",
+      "title": "Z Berlina przez całą Europę",
+      "description": "Dziesięć oddziałów w Niemczech i regularne połączenia z kluczowymi rynkami Europy. Pozostałe kierunki na zapytanie.",
+      "locationsTitle": "Nasze oddziały",
+      "countriesTitle": "Regularne kierunki",
+      "countries": ["Niemcy", "Polska", "Czechy", "Holandia", "Belgia", "Austria", "Francja", "Dania", "Szwecja"]
+    },
+    "fleet": {
+      "eyebrow": "Flota",
+      "title": "Flota do każdego zadania",
+      "description": "Od zwinnego busa po naczepę chłodnię: nasza flota rośnie od 2015 roku i jest stale modernizowana.",
+      "cta": "Poznaj flotę"
+    },
+    "testimonials": {
+      "eyebrow": "Referencje",
+      "title": "Co mówią nasi klienci",
+      "items": [
+        {
+          "quote": "Dyspozycja reaguje w ciągu minut, nawet przy pilnych zapytaniach. Na uzgodnione okna czasowe możemy liczyć.",
+          "name": "Dział zakupów",
+          "role": "Hurtownia spożywcza, Berlin"
+        },
+        {
+          "quote": "Nasze świeże towary od lat jeżdżą z LTS po Europie. Łańcuch chłodniczy się zgadza, dokumentacja się zgadza, współpraca się zgadza.",
+          "name": "Kierownik łańcucha dostaw",
+          "role": "Producent żywności, Brandenburgia"
+        },
+        {
+          "quote": "Od oferty po potwierdzenie dostawy wszystko działa cyfrowo i przejrzyście. Tak wyobrażamy sobie nowoczesnego partnera logistycznego.",
+          "name": "Zarząd",
+          "role": "Firma handlowa, Saksonia"
+        }
+      ]
+    },
+    "career": {
+      "eyebrow": "Kariera",
+      "title": "Szukamy wzmocnienia",
+      "description": "Ponad 200 koleżanek i kolegów utrzymuje LTS Logistik w ruchu. Dołącz do zespołu, za kierownicą, w dyspozycji lub w biurze.",
+      "cta": "Zobacz obszary pracy",
+      "driverCta": "Aplikuj jako kierowca"
+    },
+    "contactCta": {
+      "title": "Porozmawiajmy o Twoich potrzebach transportowych.",
+      "description": "Nasza dyspozycja jest dostępna od poniedziałku do piątku w godzinach 08:00 do 16:00. Na zapytania odpowiadamy w ciągu 2 godzin roboczych.",
+      "primary": "Wyślij zapytanie transportowe",
+      "secondary": "Zadzwoń teraz"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Firma",
+      "title": "Na kursie wzrostu od 2015 roku",
+      "description": "LTS Logistik powstał w Berlinie w styczniu 2015 roku i z firmy kurierskiej wyrósł na jedno z nowoczesnych przedsiębiorstw transportowych w Niemczech."
+    },
+    "story": [
+      "Zaczynaliśmy w branży kurierskiej i ekspresowej z kilkoma pojazdami i jasną zasadą: dostarczać na czas, komunikować się uczciwie, każdego dnia być lepszym.",
+      "Dziś dysponujemy ponad 260 własnymi pojazdami i zatrudniamy ponad 200 osób w dziesięciu lokalizacjach. Europejski transport chłodniczy świeżej żywności to jedna z naszych kluczowych kompetencji, obok przewozów krajowych i międzynarodowych, ekspresów i transportów specjalnych.",
+      "Pozostajemy tym, czym byliśmy pierwszego dnia: firmą zarządzaną przez właścicieli, z krótkimi ścieżkami decyzyjnymi, w której obietnice mają wagę."
+    ],
+    "timeline": {
+      "eyebrow": "Kamienie milowe",
+      "title": "Nasza droga",
+      "items": [
+        {
+          "year": "2015",
+          "title": "Założenie w Berlinie",
+          "text": "Start jako firma kurierska i ekspresowa z pierwszymi własnymi pojazdami."
+        },
+        {
+          "year": "2016",
+          "title": "Transporty po całych Niemczech",
+          "text": "Rozszerzenie oferty o elastyczne rozwiązania transportowe w całych Niemczech i pierwsze trasy europejskie."
+        },
+        {
+          "year": "Kolejne lata",
+          "title": "Logistyka chłodnicza jako specjalizacja",
+          "text": "Budowa floty chłodniczej. Europejski transport świeżej żywności staje się naszą specjalnością."
+        },
+        {
+          "year": "Dziś",
+          "title": "Ponad 260 pojazdów, 10 oddziałów",
+          "text": "Ponad 200 pracowników, oddziały od Berlina po Monachium i stale modernizowana flota."
+        }
+      ]
+    },
+    "values": {
+      "eyebrow": "Wartości",
+      "title": "Co nas wyróżnia",
+      "items": [
+        {
+          "title": "Niezawodność",
+          "text": "Uzgodnione okna czasowe są dotrzymywane. Jeśli coś staje na przeszkodzie, dowiesz się od nas pierwszy."
+        },
+        {
+          "title": "Tempo",
+          "text": "Krótkie ścieżki decyzyjne w firmie oznaczają szybkie odpowiedzi dla klientów."
+        },
+        {
+          "title": "Odpowiedzialność",
+          "text": "Przeszkoleni kierowcy, zadbane pojazdy i staranne podejście do towaru, ludzi i środowiska."
+        },
+        {
+          "title": "Partnerstwo",
+          "text": "Myślimy w kategoriach długoterminowych relacji, a nie pojedynczych zleceń."
+        }
+      ]
+    },
+    "locations": {
+      "eyebrow": "Oddziały",
+      "title": "Dziesięć lokalizacji w Niemczech",
+      "description": "Z centrali w Berlinie zarządzamy rosnącą siecią regionalnych oddziałów.",
+      "hqBadge": "Centrala"
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "eyebrow": "Usługi",
+      "title": "Nasze rozwiązania transportowe",
+      "description": "Osiem obszarów usług, flota ponad 260 pojazdów i dyspozycja, która rozumie Twoje wymagania."
+    },
+    "benefitsTitle": "Twoje korzyści",
+    "processTitle": "Jak przebiega zlecenie",
+    "faqTitle": "Częste pytania",
+    "cta": {
+      "title": "Gotowy na ofertę?",
+      "description": "Prześlij nam podstawowe dane transportu. Odpowiemy w ciągu 2 godzin roboczych.",
+      "primary": "Wyślij zapytanie transportowe",
+      "secondary": "Zadzwoń teraz"
+    },
+    "moreServices": "Pozostałe usługi"
+  },
+  "fleetPage": {
+    "hero": {
+      "eyebrow": "Flota",
+      "title": "Ponad 260 pojazdów w trasie",
+      "description": "Nasza flota rośnie od 2015 roku i obejmuje każde zadanie transportowe, od pojazdów kurierskich po naczepy chłodnie. Wszystkie pojazdy są regularnie serwisowane i stale modernizowane."
+    },
+    "categories": [
+      {
+        "name": "Busy",
+        "specs": "Do 3,5 t dopuszczalnej masy całkowitej",
+        "text": "Zwinne i szybkie: idealne do przewozów kurierskich, ekspresowych i dostaw miejskich."
+      },
+      {
+        "name": "Pojazdy 12-tonowe",
+        "specs": "Do ok. 6 t ładowności, dostępna winda",
+        "text": "Koń roboczy regionalnej dystrybucji i drobnicy."
+      },
+      {
+        "name": "Zestawy naczepowe",
+        "specs": "Do 25 t ładowności, do 33 europalet",
+        "text": "Pełne ładunki w kraju i za granicą, przewidywalnie i ekonomicznie."
+      },
+      {
+        "name": "Chłodnie",
+        "specs": "Od plus 25 do minus 25 stopni, systemy wielokomorowe",
+        "text": "Logistyka w kontrolowanej temperaturze dla towarów świeżych i mrożonych, w całej Europie."
+      },
+      {
+        "name": "Pojazdy specjalistyczne",
+        "specs": "Śmieciarki, bramowce, hakowce",
+        "text": "Logistyka odpadów i transporty specjalne w rejonie Berlina."
+      }
+    ],
+    "note": "Szczegółowe galerie pojazdów i filtry pojawią się wraz z kolejną rozbudową tej strony."
+  },
+  "career": {
+    "hero": {
+      "eyebrow": "Kariera",
+      "title": "Praca w LTS Logistik",
+      "description": "Ponad 200 koleżanek i kolegów utrzymuje naszą flotę w ruchu. Rośniemy dalej i szukamy ludzi, którzy działają i myślą z wyprzedzeniem."
+    },
+    "categoriesTitle": "Nasze obszary",
+    "categories": [
+      {
+        "name": "Kierowcy (m/k)",
+        "text": "C1, C i CE: stałe trasy, nowoczesne pojazdy, uczciwe wynagrodzenie."
+      },
+      {
+        "name": "Dyspozycja",
+        "text": "Sterujesz trasami i zespołami i panujesz nad sytuacją, gdy liczy się czas."
+      },
+      {
+        "name": "Biuro i administracja",
+        "text": "Obsługa zleceń, księgowość i opieka nad klientem w centrali w Berlinie."
+      },
+      {
+        "name": "Specjaliści ds. logistyki",
+        "text": "Planowanie, jakość i procesy dla rosnącej floty."
+      },
+      {
+        "name": "Magazyn i przeładunek",
+        "text": "Przeładunek towarów i kompletacja w naszych oddziałach."
+      }
+    ],
+    "benefitsTitle": "Co oferujemy",
+    "benefits": [
+      "Umowa na czas nieokreślony i terminowa wypłata",
+      "Nowoczesne, zadbane pojazdy i sprzęt",
+      "Stali opiekunowie i krótkie ścieżki decyzyjne",
+      "Szkolenia i możliwości rozwoju",
+      "Zespół, na którym można polegać"
+    ],
+    "apply": {
+      "title": "Aplikuj w dwie minuty",
+      "description": "Wyślij nam CV mailem lub zadzwoń bezpośrednio. Odpowiemy w ciągu dwóch dni roboczych.",
+      "emailCta": "Wyślij aplikację mailem",
+      "phoneCta": "Zadzwoń bezpośrednio",
+      "driverTeaser": "Jesteś kierowcą? Tu znajdziesz stronę ze wszystkimi szczegółami.",
+      "driverCta": "Informacje dla kierowców"
+    }
+  },
+  "driver": {
+    "hero": {
+      "eyebrow": "Kierowcy (m/k)",
+      "title": "Jedź z nami. Od zaraz, na stałe.",
+      "description": "LTS Logistik szuka kierowców kategorii C1, C i CE w Berlinie i dziewięciu innych lokalizacjach. Stałe trasy, nowoczesne pojazdy i zespół, który dotrzymuje słowa.",
+      "cta": "Aplikuj w 2 minuty"
+    },
+    "salary": {
+      "title": "Wynagrodzenie",
+      "value": "3000 do 3600 EUR brutto",
+      "note": "w zależności od doświadczenia, kategorii prawa jazdy i rejonu pracy, plus diety"
+    },
+    "facts": [
+      { "title": "Stałe trasy", "text": "Przewidywalna praca zamiast tygodni w trasie. Wiele tras z codziennym powrotem do domu." },
+      { "title": "Nowoczesna flota", "text": "Ponad 260 zadbanych pojazdów, regularnie serwisowanych i odnawianych." },
+      { "title": "Terminowa wypłata", "text": "Wynagrodzenie jest niezawodnie na koncie na koniec miesiąca. Bez dyskusji." },
+      { "title": "Prawdziwy zespół", "text": "Dyspozycja, która szanuje kierowców, i koledzy, którzy pomagają, gdy trzeba." }
+    ],
+    "requirementsTitle": "Czego oczekujemy",
+    "requirements": [
+      "Prawo jazdy kategorii C1, C lub CE z kodem 95",
+      "Karta kierowcy",
+      "Niezawodność i kultura osobista",
+      "Język niemiecki, angielski, polski, turecki lub ukraiński"
+    ],
+    "applyTitle": "To naprawdę proste",
+    "applySteps": [
+      "Zadzwoń lub wyślij krótkiego maila z imieniem i numerem telefonu.",
+      "Odezwiemy się w ciągu dwóch dni roboczych na krótką rozmowę.",
+      "Jazda próbna, umowa i ruszamy."
+    ],
+    "ctaEmail": "Aplikacja mailem",
+    "ctaPhone": "Zadzwoń teraz"
+  },
+  "knowledge": {
+    "hero": {
+      "eyebrow": "Baza wiedzy",
+      "title": "Wiedza z praktyki",
+      "description": "Artykuły o transporcie, logistyce chłodniczej i zarządzaniu flotą, pisane przez ludzi, którzy pracują z tym na co dzień."
+    },
+    "categoriesTitle": "Obszary tematyczne",
+    "categories": [
+      { "name": "Logistyka chłodnicza", "text": "Łańcuch chłodniczy, kontrola temperatury i transport żywności." },
+      { "name": "Transport i prawo", "text": "Dokumenty przewozowe, czasy jazdy i przepisy wyjaśnione przystępnie." },
+      { "name": "Kariera kierowcy", "text": "Start, szkolenia i codzienność za kierownicą." },
+      { "name": "Z życia firmy", "text": "Nowe oddziały, pojazdy i projekty w LTS Logistik." }
+    ],
+    "comingSoon": "Pierwsze artykuły pojawią się wkrótce. Zajrzyj ponownie lub obserwuj nas na LinkedIn."
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Kontakt",
+      "title": "Jesteśmy do Twojej dyspozycji",
+      "description": "Zapytanie transportowe, aplikacja czy inna sprawa: złapiesz nas telefonicznie, mailowo lub bezpośrednio w centrali w Berlinie."
+    },
+    "cards": {
+      "phone": "Telefon",
+      "phoneNote": "Pon do pt 08:00 do 16:00",
+      "email": "E-mail",
+      "emailNote": "Odpowiedź w ciągu 2 godzin roboczych",
+      "address": "Centrala",
+      "addressNote": "Attilastraße 26, 12105 Berlin"
+    },
+    "departmentsTitle": "Prosto do właściwego zespołu",
+    "departments": [
+      { "name": "Dyspozycja i zapytania transportowe", "text": "Oferty, bieżące transporty i przejazdy ekspresowe." },
+      { "name": "Rekrutacja", "text": "Pytania o wolne stanowiska i start w LTS Logistik." },
+      { "name": "Administracja i księgowość", "text": "Faktury, umowy i sprawy ogólne." }
+    ],
+    "locationsTitle": "Nasze oddziały"
+  },
+  "inquiry": {
+    "hero": {
+      "eyebrow": "Zapytanie transportowe",
+      "title": "Oferta w 2 godziny robocze",
+      "description": "Prześlij nam podstawowe dane transportu. Nasza dyspozycja sprawdzi dostępność i wróci z wiążącą ofertą."
+    },
+    "checklistTitle": "Te informacje nam pomogą",
+    "checklist": [
+      "Miejsce odbioru i dostawy z kodem pocztowym",
+      "Preferowany termin odbioru lub dostawy",
+      "Rodzaj towaru",
+      "Liczba palet lub opakowań",
+      "Waga i wymiary",
+      "Wymagania temperaturowe, jeśli dotyczy"
+    ],
+    "channelsTitle": "Jak się z nami skontaktować",
+    "emailCta": "Wyślij zapytanie mailem",
+    "phoneCta": "Zadzwoń do dyspozycji",
+    "responseNote": "Na zapytania otrzymane od poniedziałku do piątku w godzinach 08:00 do 16:00 odpowiadamy w ciągu 2 godzin roboczych.",
+    "emailSubject": "Zapytanie transportowe"
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "description": "Żądana strona nie istnieje lub została przeniesiona.",
+    "cta": "Wróć na stronę główną"
+  },
+  "meta": {
+    "home": {
+      "title": "Firma transportowa i spedycja Berlin",
+      "description": "LTS Logistik od 2015 roku przewozi towary przez Niemcy i Europę: ponad 260 pojazdów, transport chłodniczy, ekspres i spedycja. Oferta w 2 godziny."
+    },
+    "about": {
+      "title": "O firmie",
+      "description": "Od berlińskiej firmy kurierskiej do przedsiębiorstwa transportowego z ponad 260 pojazdami i 10 oddziałami. Historia LTS Logistik."
+    },
+    "services": {
+      "title": "Usługi",
+      "description": "Transport krajowy i międzynarodowy, ekspres, logistyka chłodnicza, spedycja, transport dedykowany i logistyka kontraktowa. LTS Logistik Berlin."
+    },
+    "fleet": {
+      "title": "Flota",
+      "description": "Ponad 260 pojazdów: busy, pojazdy 12-tonowe, zestawy naczepowe, chłodnie i pojazdy specjalistyczne. Flota LTS Logistik."
+    },
+    "career": {
+      "title": "Kariera",
+      "description": "Praca w LTS Logistik w Berlinie i 9 innych lokalizacjach: kierowcy, dyspozycja, biuro, magazyn. Aplikuj teraz."
+    },
+    "driver": {
+      "title": "Praca dla kierowców C+E",
+      "description": "Praca dla kierowców w LTS Logistik: 3000 do 3600 EUR brutto, stałe trasy, nowoczesna flota. C1, C i CE. Aplikacja w 2 minuty."
+    },
+    "knowledge": {
+      "title": "Baza wiedzy",
+      "description": "Wiedza o transporcie, logistyce chłodniczej i karierze we flocie. Baza wiedzy LTS Logistik."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "description": "Kontakt z LTS Logistik: telefon +49 30 81 72 20 10, info@ltslogistik.de, Attilastraße 26, 12105 Berlin. Pon do pt 08:00 do 16:00."
+    },
+    "inquiry": {
+      "title": "Zapytanie transportowe",
+      "description": "Wyślij zapytanie transportowe do LTS Logistik: oferta w ciągu 2 godzin roboczych. Ekspres, chłodnia, kraj i zagranica."
+    }
+  }
+}

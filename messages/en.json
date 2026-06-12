@@ -1,0 +1,404 @@
+{
+  "common": {
+    "skipToContent": "Skip to content",
+    "nav": {
+      "home": "Home",
+      "about": "About us",
+      "services": "Services",
+      "fleet": "Fleet",
+      "career": "Careers",
+      "knowledge": "Knowledge",
+      "contact": "Contact"
+    },
+    "cta": {
+      "inquiry": "Transport inquiry",
+      "callUs": "Call us",
+      "learnMore": "Learn more",
+      "allServices": "View all services",
+      "apply": "Apply now",
+      "contact": "Get in touch"
+    },
+    "footer": {
+      "tagline": "LTS Logistik has been moving goods reliably across Germany and Europe since 2015. With more than 260 vehicles and 200 employees.",
+      "company": "Company",
+      "services": "Services",
+      "contact": "Contact",
+      "legal": "Legal",
+      "imprint": "Imprint",
+      "privacy": "Privacy",
+      "headquarters": "Headquarters Berlin",
+      "rights": "All rights reserved."
+    },
+    "language": "Language",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "home": {
+    "hero": {
+      "badge": "More than 260 vehicles on the road",
+      "title": "Logistics that moves Europe.",
+      "subtitle": "LTS Logistik has been driving for retail, industry and food logistics since 2015. From express couriers in Berlin to temperature-controlled semi-trailers across Europe.",
+      "ctaPrimary": "Send transport inquiry",
+      "ctaSecondary": "Explore services",
+      "imageAlt": "LTS Logistik semi-trailer on the motorway at sunrise"
+    },
+    "stats": {
+      "vehicles": "vehicles in the fleet",
+      "employees": "employees",
+      "locations": "locations in Germany",
+      "founded": "founded in Berlin"
+    },
+    "services": {
+      "eyebrow": "Services",
+      "title": "Transport solutions for every requirement",
+      "description": "From express runs in 60 minutes to Europe-wide refrigerated logistics: we combine our own fleet, experienced drivers and a dispatch team that thinks ahead."
+    },
+    "coverage": {
+      "eyebrow": "Across Europe",
+      "title": "From Berlin to all of Europe",
+      "description": "Ten locations in Germany and regular routes to Europe's key economic regions. Further destinations on request.",
+      "locationsTitle": "Our locations",
+      "countriesTitle": "Regular destinations",
+      "countries": ["Germany", "Poland", "Czechia", "Netherlands", "Belgium", "Austria", "France", "Denmark", "Sweden"]
+    },
+    "fleet": {
+      "eyebrow": "Fleet",
+      "title": "A fleet for every task",
+      "description": "From agile vans to reefer trailers: our fleet has been growing since 2015 and is modernised continuously.",
+      "cta": "Explore the fleet"
+    },
+    "testimonials": {
+      "eyebrow": "References",
+      "title": "What our customers say",
+      "items": [
+        {
+          "quote": "Dispatch responds within minutes, even to short-notice requests. We can rely on the agreed time slots.",
+          "name": "Head of Purchasing",
+          "role": "Food wholesale, Berlin"
+        },
+        {
+          "quote": "Our fresh goods have been travelling across Europe with LTS for years. The cold chain is right, the documentation is right, the tone is right.",
+          "name": "Head of Supply Chain",
+          "role": "Food producer, Brandenburg"
+        },
+        {
+          "quote": "From quote to proof of delivery everything is digital and traceable. That is what a modern logistics partner looks like.",
+          "name": "Managing Director",
+          "role": "Trading company, Saxony"
+        }
+      ]
+    },
+    "career": {
+      "eyebrow": "Careers",
+      "title": "We are hiring",
+      "description": "More than 200 colleagues keep LTS Logistik moving. Join the team, behind the wheel, in dispatch or in the office.",
+      "cta": "View open areas",
+      "driverCta": "Apply as a truck driver"
+    },
+    "contactCta": {
+      "title": "Let's talk about your transport needs.",
+      "description": "Our dispatch team is available Monday to Friday from 08:00 to 16:00. We answer inquiries within 2 working hours.",
+      "primary": "Send transport inquiry",
+      "secondary": "Call us now"
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Company",
+      "title": "Growing since 2015",
+      "description": "LTS Logistik was founded in Berlin in January 2015 and has grown from a courier service into one of Germany's modern transport companies."
+    },
+    "story": [
+      "We started in the courier, express and parcel business with a handful of vehicles and a clear principle: deliver on time, communicate honestly, get better every day.",
+      "Today we dispatch more than 260 of our own vehicles and employ over 200 people at ten locations. Europe-wide transport of chilled fresh goods is one of our core competences, alongside national and international routes, express and special transport.",
+      "We remain what we were on day one: an owner-managed company with short paths, where decisions are made quickly and commitments are kept."
+    ],
+    "timeline": {
+      "eyebrow": "Milestones",
+      "title": "Our journey",
+      "items": [
+        {
+          "year": "2015",
+          "title": "Founded in Berlin",
+          "text": "Started as a courier, express and parcel service with the first vehicles of our own."
+        },
+        {
+          "year": "2016",
+          "title": "Germany-wide transport",
+          "text": "Expanded into flexible transport solutions across Germany and first European routes."
+        },
+        {
+          "year": "Following years",
+          "title": "Refrigerated logistics as core competence",
+          "text": "Built up the temperature-controlled fleet. Europe-wide transport of chilled fresh goods became our speciality."
+        },
+        {
+          "year": "Today",
+          "title": "260+ vehicles, 10 locations",
+          "text": "More than 200 employees, locations from Berlin to Munich and a fleet that is modernised continuously."
+        }
+      ]
+    },
+    "values": {
+      "eyebrow": "Values",
+      "title": "What we stand for",
+      "items": [
+        {
+          "title": "Reliability",
+          "text": "Agreed time slots are kept. If something gets in the way, you hear it from us first."
+        },
+        {
+          "title": "Speed",
+          "text": "Short decision paths inside the company mean fast answers for our customers."
+        },
+        {
+          "title": "Responsibility",
+          "text": "Trained drivers, well-maintained vehicles and careful handling of goods, people and the environment."
+        },
+        {
+          "title": "Partnership",
+          "text": "We think in long-term relationships, not individual orders."
+        }
+      ]
+    },
+    "locations": {
+      "eyebrow": "Locations",
+      "title": "Ten locations in Germany",
+      "description": "From our Berlin headquarters we manage a growing network of regional hubs.",
+      "hqBadge": "Headquarters"
+    }
+  },
+  "servicesPage": {
+    "hero": {
+      "eyebrow": "Services",
+      "title": "Our transport solutions",
+      "description": "Eight service areas, a fleet of more than 260 vehicles and a dispatch team that understands your requirements."
+    },
+    "benefitsTitle": "Your benefits",
+    "processTitle": "How your order works",
+    "faqTitle": "Frequently asked questions",
+    "cta": {
+      "title": "Ready for your quote?",
+      "description": "Send us the key facts of your transport. You will hear back within 2 working hours.",
+      "primary": "Send transport inquiry",
+      "secondary": "Call us now"
+    },
+    "moreServices": "More services"
+  },
+  "fleetPage": {
+    "hero": {
+      "eyebrow": "Fleet",
+      "title": "More than 260 vehicles on the road",
+      "description": "Our fleet has been growing since 2015 and covers every transport task, from courier vehicles to reefer trailers. All vehicles are serviced regularly and modernised continuously."
+    },
+    "categories": [
+      {
+        "name": "Vans",
+        "specs": "Up to 3.5 t gross vehicle weight",
+        "text": "Agile and fast: ideal for courier and express runs and urban delivery."
+      },
+      {
+        "name": "12-tonne trucks",
+        "specs": "Up to approx. 6 t payload, tail lift available",
+        "text": "The workhorse for regional distribution and general cargo."
+      },
+      {
+        "name": "Semi-trailers",
+        "specs": "Up to 25 t payload, up to 33 euro pallets",
+        "text": "Full truckloads, national and international, predictable and economical."
+      },
+      {
+        "name": "Refrigerated vehicles",
+        "specs": "Plus 25 to minus 25 degrees, multi-chamber systems",
+        "text": "Temperature-controlled logistics for fresh and frozen goods across Europe."
+      },
+      {
+        "name": "Special vehicles",
+        "specs": "Waste collection vehicles, skip loaders, roll-off tippers",
+        "text": "Disposal logistics and special transport in the Berlin area."
+      }
+    ],
+    "note": "Detailed vehicle galleries and filters will follow with the next expansion of this page."
+  },
+  "career": {
+    "hero": {
+      "eyebrow": "Careers",
+      "title": "Working at LTS Logistik",
+      "description": "More than 200 colleagues keep our fleet moving. We keep growing and are looking for people who get things done and think ahead."
+    },
+    "categoriesTitle": "Our areas",
+    "categories": [
+      {
+        "name": "Truck drivers (m/f/d)",
+        "text": "C1, C and CE: fixed routes, modern vehicles, fair pay."
+      },
+      {
+        "name": "Dispatch",
+        "text": "You manage routes and teams and keep the overview when things move fast."
+      },
+      {
+        "name": "Office and administration",
+        "text": "Order processing, accounting and customer care at our Berlin headquarters."
+      },
+      {
+        "name": "Logistics specialists",
+        "text": "Planning, quality and processes for a growing fleet."
+      },
+      {
+        "name": "Warehouse and handling",
+        "text": "Goods handling and picking at our locations."
+      }
+    ],
+    "benefitsTitle": "What we offer",
+    "benefits": [
+      "Permanent employment with punctual pay",
+      "Modern, well-maintained vehicles and equipment",
+      "Dedicated contacts and short decision paths",
+      "Training and development opportunities",
+      "A team you can rely on"
+    ],
+    "apply": {
+      "title": "Apply in two minutes",
+      "description": "Send us your CV by email or call us directly. You will hear back within two working days.",
+      "emailCta": "Apply by email",
+      "phoneCta": "Call directly",
+      "driverTeaser": "You are a truck driver? Here is your page with all the details.",
+      "driverCta": "Info for truck drivers"
+    }
+  },
+  "driver": {
+    "hero": {
+      "eyebrow": "Truck drivers (m/f/d)",
+      "title": "Drive with us. Starting now, permanent.",
+      "description": "LTS Logistik is looking for drivers of classes C1, C and CE in Berlin and at nine further locations. Fixed routes, modern vehicles and a team that keeps its word.",
+      "cta": "Apply in 2 minutes"
+    },
+    "salary": {
+      "title": "Salary",
+      "value": "3,000 to 3,600 EUR gross",
+      "note": "depending on experience, licence class and area of deployment, plus expenses"
+    },
+    "facts": [
+      { "title": "Fixed routes", "text": "Predictable shifts instead of weeks on the road. Many routes with daily return home." },
+      { "title": "Modern fleet", "text": "More than 260 well-maintained vehicles, serviced regularly and renewed continuously." },
+      { "title": "Punctual pay", "text": "Your salary is reliably in your account at the end of the month. No discussions." },
+      { "title": "A real team", "text": "Dispatchers who respect drivers and colleagues who step in when needed." }
+    ],
+    "requirementsTitle": "What you bring",
+    "requirements": [
+      "Driving licence class C1, C or CE with code 95",
+      "Driver card",
+      "Reliability and a friendly manner",
+      "German, English, Polish, Turkish or Ukrainian language skills"
+    ],
+    "applyTitle": "It's that simple",
+    "applySteps": [
+      "Call us or send a short email with your name and phone number.",
+      "We get back to you within two working days for a short conversation.",
+      "Test drive, contract, off you go."
+    ],
+    "ctaEmail": "Apply by email",
+    "ctaPhone": "Call now"
+  },
+  "knowledge": {
+    "hero": {
+      "eyebrow": "Knowledge center",
+      "title": "Knowledge from practice",
+      "description": "Articles on transport, refrigerated logistics and fleet management, written by people who work with it every day."
+    },
+    "categoriesTitle": "Topics",
+    "categories": [
+      { "name": "Refrigerated logistics", "text": "Cold chain, temperature control and food transport." },
+      { "name": "Transport and law", "text": "Freight documents, driving times and regulations explained clearly." },
+      { "name": "Driver careers", "text": "Getting started, training and everyday life behind the wheel." },
+      { "name": "From the company", "text": "New locations, vehicles and projects at LTS Logistik." }
+    ],
+    "comingSoon": "The first articles will be published shortly. Check back soon or follow us on LinkedIn."
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "We are here for you",
+      "description": "Transport inquiry, application or general request: reach us by phone, email or directly at our Berlin headquarters."
+    },
+    "cards": {
+      "phone": "Phone",
+      "phoneNote": "Mon to Fri 08:00 to 16:00",
+      "email": "Email",
+      "emailNote": "Reply within 2 working hours",
+      "address": "Headquarters",
+      "addressNote": "Attilastraße 26, 12105 Berlin"
+    },
+    "departmentsTitle": "Straight to the right team",
+    "departments": [
+      { "name": "Dispatch and transport inquiries", "text": "Quotes, ongoing transports and express runs." },
+      { "name": "Applications", "text": "Questions about open positions and joining LTS Logistik." },
+      { "name": "Administration and accounting", "text": "Invoices, contracts and general requests." }
+    ],
+    "locationsTitle": "Our locations"
+  },
+  "inquiry": {
+    "hero": {
+      "eyebrow": "Transport inquiry",
+      "title": "Your quote within 2 working hours",
+      "description": "Send us the key facts of your transport. Our dispatch team checks capacity and gets back to you with a binding quote."
+    },
+    "checklistTitle": "These details help us",
+    "checklist": [
+      "Pickup and delivery location with postcode",
+      "Preferred pickup or delivery date",
+      "Type of goods",
+      "Number of pallets or packages",
+      "Weight and dimensions",
+      "Temperature requirements, if any"
+    ],
+    "channelsTitle": "How to reach us",
+    "emailCta": "Send inquiry by email",
+    "phoneCta": "Call dispatch",
+    "responseNote": "Inquiries reaching us Monday to Friday between 08:00 and 16:00 are answered within 2 working hours.",
+    "emailSubject": "Transport inquiry"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested page does not exist or has been moved.",
+    "cta": "Back to home"
+  },
+  "meta": {
+    "home": {
+      "title": "Transport Company and Freight Forwarder Berlin",
+      "description": "LTS Logistik has been moving goods across Germany and Europe since 2015: 260+ vehicles, refrigerated transport, express and forwarding. Quote in 2 hours."
+    },
+    "about": {
+      "title": "About us",
+      "description": "From Berlin courier service to a transport company with 260+ vehicles and 10 locations. The story of LTS Logistik."
+    },
+    "services": {
+      "title": "Services",
+      "description": "National and international transport, express, refrigerated logistics, forwarding, dedicated transport and contract logistics. LTS Logistik Berlin."
+    },
+    "fleet": {
+      "title": "Fleet",
+      "description": "More than 260 vehicles: vans, 12-tonne trucks, semi-trailers, refrigerated and special vehicles. The LTS Logistik fleet."
+    },
+    "career": {
+      "title": "Careers",
+      "description": "Jobs at LTS Logistik in Berlin and 9 further locations: truck drivers, dispatch, office, warehouse. Apply now."
+    },
+    "driver": {
+      "title": "Truck Driver Jobs (m/f/d)",
+      "description": "Truck driver jobs at LTS Logistik: 3,000 to 3,600 EUR gross, fixed routes, modern fleet. C1, C and CE. Apply in 2 minutes."
+    },
+    "knowledge": {
+      "title": "Knowledge Center",
+      "description": "Expertise on transport, refrigerated logistics and fleet careers. The LTS Logistik knowledge center."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Contact LTS Logistik: phone +49 30 81 72 20 10, info@ltslogistik.de, Attilastraße 26, 12105 Berlin. Mon to Fri 08:00 to 16:00."
+    },
+    "inquiry": {
+      "title": "Transport Inquiry",
+      "description": "Send a transport inquiry to LTS Logistik: quote within 2 working hours. Express, refrigerated, national and international."
+    }
+  }
+}
