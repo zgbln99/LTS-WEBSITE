@@ -36,16 +36,16 @@
   "home": {
     "hero": {
       "badge": "More than 260 vehicles on the road",
-      "title": "Logistics that moves Europe.",
-      "subtitle": "LTS Logistik has been driving for retail, industry and food logistics since 2015. From express couriers in Berlin to temperature-controlled semi-trailers across Europe.",
-      "ctaPrimary": "Send transport inquiry",
+      "title": "We drive. Every day. For the big names in logistics.",
+      "subtitle": "Since 2015 LTS Logistik has been a permanent subcontractor for major logistics networks in Germany. More than 260 vehicles, over 200 colleagues behind the wheel. And we are hiring.",
+      "ctaPrimary": "View open positions",
       "ctaSecondary": "Explore services",
       "imageAlt": "LTS Logistik semi-trailer on the motorway at sunrise"
     },
     "stats": {
       "vehicles": "vehicles in the fleet",
       "employees": "employees",
-      "locations": "locations in Germany",
+      "locations": "cities served daily",
       "founded": "founded in Berlin"
     },
     "services": {
@@ -55,9 +55,9 @@
     },
     "coverage": {
       "eyebrow": "Across Europe",
-      "title": "From Berlin to all of Europe",
-      "description": "Ten locations in Germany and regular routes to Europe's key economic regions. Further destinations on request.",
-      "locationsTitle": "Our locations",
+      "title": "Where we are on the road every day",
+      "description": "Our routes start in and around these cities. Headquarters are in Nuthe-Urstromtal near Berlin, the trucks run across Germany and Europe.",
+      "locationsTitle": "Service areas",
       "countriesTitle": "Regular destinations",
       "countries": [
         "Germany",
@@ -106,9 +106,9 @@
       "driverCta": "Apply as a truck driver"
     },
     "contactCta": {
-      "title": "Let's talk about your transport needs.",
-      "description": "Our dispatch team is available Monday to Friday from 08:00 to 16:00. We answer inquiries within 2 working hours.",
-      "primary": "Send transport inquiry",
+      "title": "Get in. We are hiring.",
+      "description": "Fixed routes, punctual pay and dispatchers who answer the phone. Check the open positions or call us directly.",
+      "primary": "View open positions",
       "secondary": "Call us now"
     }
   },
@@ -173,8 +173,8 @@
     },
     "locations": {
       "eyebrow": "Locations",
-      "title": "Ten locations in Germany",
-      "description": "From our Berlin headquarters we manage a growing network of regional hubs.",
+      "title": "Our service areas",
+      "description": "No branch offices, just daily routes: our vehicles run regularly in and around these cities. Headquarters are in Nuthe-Urstromtal near Berlin.",
       "hqBadge": "Headquarters"
     }
   },
@@ -188,9 +188,9 @@
     "processTitle": "How your order works",
     "faqTitle": "Frequently asked questions",
     "cta": {
-      "title": "Ready for your quote?",
-      "description": "Send us the key facts of your transport. You will hear back within 2 working hours.",
-      "primary": "Send transport inquiry",
+      "title": "Looking for a reliable subcontractor?",
+      "description": "We run fixed routes for forwarders and logistics networks with our own fleet and our own drivers. Talk to us.",
+      "primary": "Get in touch",
       "secondary": "Call us now"
     },
     "moreServices": "More services"
@@ -285,7 +285,31 @@
         "PART_TIME": "Part-time",
         "MINI_JOB": "Mini job",
         "APPRENTICESHIP": "Apprenticeship"
-      }
+      },
+      "eyebrow": "Job offers"
+    },
+    "board": {
+      "searchPlaceholder": "Search: C+E, ADR, day routes...",
+      "filterCategory": "Category",
+      "filterCountry": "Country",
+      "count": "{count} offers for professional drivers",
+      "colPosition": "Position",
+      "colLocation": "Location",
+      "colSystem": "System",
+      "colSalary": "Salary",
+      "categoryPrefix": "Cat.",
+      "noResults": "No matching offers. Use the quick contact below and we will get back to you."
+    },
+    "callback": {
+      "eyebrow": "Quick contact",
+      "title": "No offer that fits?",
+      "text": "Leave your number. We call back and match a route to your licences, experience and expectations. No strings attached.",
+      "namePlaceholder": "Name (optional)",
+      "phonePlaceholder": "+49 160 1234567",
+      "consent": "I agree to be contacted by phone and to the processing of my data for recruiting purposes (GDPR).",
+      "submit": "Request a call",
+      "successTitle": "Thanks, we got your number.",
+      "successText": "We will get back to you within one working day."
     }
   },
   "driver": {
@@ -393,7 +417,7 @@
         "text": "Invoices, contracts and general requests."
       }
     ],
-    "locationsTitle": "Our locations",
+    "locationsTitle": "Our service areas",
     "formTitle": "Write to us",
     "formDescription": "Send us your message via the form. We reply within 2 working hours."
   },

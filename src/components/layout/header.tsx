@@ -36,14 +36,17 @@ export function Header({ locale }: { locale: Locale }) {
         <Container className="flex h-16 items-center justify-between gap-4 lg:h-20">
           <Link
             href="/"
-            className="flex items-center gap-2 text-white"
+            className="flex items-center"
             onClick={() => setOpen(false)}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-500 font-display text-sm font-extrabold text-white">
-              LTS
-            </span>
-            <span className="font-display text-lg font-bold tracking-tight">
-              Logistik
+            <span className="flex items-center rounded-xl bg-white px-2.5 py-1.5">
+              {/* Firmenlogo, wird beim Deployment nach public/logo.png geladen */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="LTS Logistik GmbH"
+                className="h-7 w-auto"
+              />
             </span>
           </Link>
 
@@ -62,7 +65,7 @@ export function Header({ locale }: { locale: Locale }) {
           <div className="hidden items-center gap-3 lg:flex">
             <LanguageSwitcher locale={locale} />
             <Button asChild size="sm">
-              <Link href="/transportanfrage">{t("cta.inquiry")}</Link>
+              <Link href="/karriere">{t("cta.apply")}</Link>
             </Button>
           </div>
 
@@ -98,8 +101,8 @@ export function Header({ locale }: { locale: Locale }) {
           <div className="mt-3 flex flex-col gap-3 border-t border-white/10 pt-4">
             <LanguageSwitcher locale={locale} />
             <Button asChild className="w-full">
-              <Link href="/transportanfrage" onClick={() => setOpen(false)}>
-                {t("cta.inquiry")}
+              <Link href="/karriere" onClick={() => setOpen(false)}>
+                {t("cta.apply")}
               </Link>
             </Button>
             <a

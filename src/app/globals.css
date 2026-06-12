@@ -15,9 +15,9 @@
   --color-mist-400: #9aa3b2;
   --color-mist-500: #6b7585;
 
-  --color-accent-400: #ff6a3d;
-  --color-accent-500: #ff4d1c;
-  --color-accent-600: #e83c0d;
+  --color-accent-400: #f0484e;
+  --color-accent-500: #e11d24;
+  --color-accent-600: #c0151b;
 
   --color-mint-300: #5cf0bd;
   --color-mint-400: #2ee6a8;
@@ -36,8 +36,8 @@
   --shadow-card: 0 1px 2px rgb(11 16 29 / 0.04), 0 8px 24px rgb(11 16 29 / 0.06);
   --shadow-card-hover: 0 2px 4px rgb(11 16 29 / 0.06),
     0 16px 40px rgb(11 16 29 / 0.12);
-  --shadow-glow: 0 0 0 1px rgb(255 77 28 / 0.25),
-    0 8px 32px rgb(255 77 28 / 0.25);
+  --shadow-glow: 0 0 0 1px rgb(225 29 36 / 0.25),
+    0 8px 32px rgb(225 29 36 / 0.25);
 
   /* Easing */
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);

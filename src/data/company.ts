@@ -6,10 +6,11 @@ export interface CompanyLocation {
   isHeadquarters?: boolean;
 }
 
-// Zentrale Standortliste: speist die Standort-Listen auf der Website UND die
-// Kartenmarkierungen. Neue Standorte nur hier ergänzen.
+// Statische Fallback-Liste der Einsatzorte. Die produktive Liste wird im
+// Admin-Panel gepflegt (Tabelle ServiceCity); diese Daten greifen nur,
+// solange die Datenbank leer oder nicht erreichbar ist.
 const locations: CompanyLocation[] = [
-  { city: "Berlin", region: "Berlin/Brandenburg", lngLat: [13.405, 52.52], isHeadquarters: true },
+  { city: "Berlin", region: "Berlin/Brandenburg", lngLat: [13.405, 52.52] },
   { city: "Stavenhagen", region: "Mecklenburg-Vorpommern", lngLat: [12.911, 53.703] },
   { city: "Neustrelitz", region: "Mecklenburg-Vorpommern", lngLat: [13.072, 53.361] },
   { city: "Magdeburg", region: "Sachsen-Anhalt", lngLat: [11.627, 52.131] },
@@ -25,11 +26,14 @@ export const company = {
   legalName: "LTS Logistik GmbH",
   foundedYear: 2015,
   address: {
-    street: "Attilastraße 26",
-    zip: "12105",
-    city: "Berlin",
+    street: "Hennickendorfer Str. 1",
+    zip: "14947",
+    city: "Nuthe-Urstromtal",
+    district: "OT Berkenbrück",
     country: "DE"
   },
+  /** Firmensitz für die Kartenmarkierung (Nuthe-Urstromtal, OT Berkenbrück) */
+  hqLngLat: [13.297, 52.062] as [number, number],
   phone: "+49 30 81 72 20 10",
   phoneHref: "tel:+493081722010",
   email: "info@ltslogistik.de",
@@ -46,3 +50,7 @@ export const company = {
     linkedin: "https://de.linkedin.com/in/lts-logistik-gmbh-74063a25b"
   }
 } as const;
+
+export function fullAddress() {
+  return `${company.address.street}, ${company.address.zip} ${company.address.city}, ${company.address.district}`;
+}

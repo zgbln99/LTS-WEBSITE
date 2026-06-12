@@ -10,13 +10,15 @@ interface CtaBannerProps {
   description: string;
   primaryLabel: string;
   secondaryLabel: string;
+  primaryHref?: "/karriere" | "/kontakt" | "/leistungen";
 }
 
 export function CtaBanner({
   title,
   description,
   primaryLabel,
-  secondaryLabel
+  secondaryLabel,
+  primaryHref = "/karriere"
 }: CtaBannerProps) {
   return (
     <section className="bg-mist-50 py-16 sm:py-24">
@@ -36,7 +38,7 @@ export function CtaBanner({
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg">
-                  <Link href="/transportanfrage">
+                  <Link href={primaryHref}>
                     {primaryLabel}
                     <ArrowRight className="h-4 w-4" />
                   </Link>

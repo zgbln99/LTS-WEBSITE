@@ -34,6 +34,10 @@ const jobSchema = z.object({
   id: z.string().optional(),
   categoryKey: z.string().min(1),
   locationCity: z.string().trim().min(2).max(120),
+  country: z.string().trim().max(80).optional(),
+  licenseCategory: z.string().trim().max(40).optional(),
+  workSystem: z.string().trim().max(160).optional(),
+  salaryNote: z.enum(["Netto", "Brutto"]).optional(),
   employmentType: z.nativeEnum(EmploymentType),
   status: z.nativeEnum(PublishStatus),
   title: z.string().trim().min(3).max(180),
@@ -49,6 +53,10 @@ export async function saveJobPosting(formData: FormData) {
     id: formData.get("id") || undefined,
     categoryKey: formData.get("categoryKey"),
     locationCity: formData.get("locationCity"),
+    country: formData.get("country") || undefined,
+    licenseCategory: formData.get("licenseCategory") || undefined,
+    workSystem: formData.get("workSystem") || undefined,
+    salaryNote: formData.get("salaryNote") || undefined,
     employmentType: formData.get("employmentType"),
     status: formData.get("status"),
     title: formData.get("title"),
@@ -73,6 +81,10 @@ export async function saveJobPosting(formData: FormData) {
   const base = {
     categoryId: category.id,
     locationCity: data.locationCity,
+    country: data.country ?? "Deutschland",
+    licenseCategory: data.licenseCategory ?? null,
+    workSystem: data.workSystem ?? null,
+    salaryNote: data.salaryNote ?? "Netto",
     employmentType: data.employmentType,
     salaryMin,
     salaryMax,
@@ -147,6 +159,78 @@ export async function deleteJobPosting(formData: FormData) {
     entityId: id
   });
   revalidatePath("/admin/stellen");
+}
+
+// ---------------------------------------------------------------------------
+// Einsatzorte
+// ---------------------------------------------------------------------------
+
+const citySchema = z.object({
+  id: z.string().optional(),
+  name: z.string().trim().min(2).max(120),
+  region: z.string().trim().max(120).optional(),
+  lng: z.coerce.number().min(-30).max(60),
+  lat: z.coerce.number().min(30).max(75),
+  order: z.coerce.number().int().min(0).max(999).optional()
+});
+
+export async function saveServiceCity(formData: FormData) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const parsed = citySchema.safeParse({
+    id: formData.get("id") || undefined,
+    name: formData.get("name"),
+    region: formData.get("region") || undefined,
+    lng: formData.get("lng"),
+    lat: formData.get("lat"),
+    order: formData.get("order") || undefined
+  });
+  if (!parsed.success) redirect("/admin/einsatzorte?fehler=validierung");
+
+  const data = parsed.data;
+  const payload = {
+    name: data.name,
+    region: data.region ?? null,
+    lng: data.lng,
+    lat: data.lat,
+    order: data.order ?? 0
+  };
+
+  if (data.id) {
+    await prisma.serviceCity.update({ where: { id: data.id }, data: payload });
+  } else {
+    await prisma.serviceCity.upsert({
+      where: { name: data.name },
+      update: payload,
+      create: payload
+    });
+  }
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: data.id ? "UPDATE" : "CREATE",
+    entityType: "ServiceCity",
+    entityId: data.id
+  });
+  revalidatePath("/admin/einsatzorte");
+  redirect("/admin/einsatzorte");
+}
+
+export async function deleteServiceCity(formData: FormData) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await prisma.serviceCity.delete({ where: { id } });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "DELETE",
+    entityType: "ServiceCity",
+    entityId: id
+  });
+  revalidatePath("/admin/einsatzorte");
 }
 
 // ---------------------------------------------------------------------------

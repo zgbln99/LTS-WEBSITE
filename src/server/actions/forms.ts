@@ -15,6 +15,7 @@ import {
   MAX_FILE_SIZE,
   MAX_TOTAL_SIZE,
   applicationSchema,
+  callbackRequestSchema,
   contactRequestSchema,
   transportRequestSchema,
   type FormActionState
@@ -238,6 +239,71 @@ export async function submitContactRequest(
     name: data.name
   });
 
+  return { status: "success" };
+}
+
+// Rückrufbitte aus dem Recruiting-Bereich ("Kein passendes Angebot dabei?")
+export async function submitCallbackRequest(
+  _prev: FormActionState,
+  formData: FormData
+): Promise<FormActionState> {
+  if (isHoneypotFilled(formData)) {
+    return { status: "success" };
+  }
+
+  const ipHash = await getClientIpHash();
+  if (isRateLimited("callback", ipHash)) {
+    return { status: "error", code: "rateLimit" };
+  }
+
+  const parsed = callbackRequestSchema.safeParse(
+    Object.fromEntries(formData.entries())
+  );
+  if (!parsed.success) {
+    return { status: "error", code: "validation" };
+  }
+  const data = parsed.data;
+
+  let stored = false;
+  try {
+    await prisma.contactRequest.create({
+      data: {
+        name: data.name ?? "Rückrufbitte",
+        email: null,
+        phone: data.phone,
+        department: "callback",
+        message: `Rückrufbitte an ${data.phone}`,
+        locale: data.locale,
+        consentAt: new Date(),
+        ipHash
+      }
+    });
+    stored = true;
+  } catch (error) {
+    console.error("Rückrufbitte konnte nicht gespeichert werden:", error);
+  }
+
+  const rows: [string, string][] = [
+    ["Name", data.name ?? ""],
+    ["Telefon", data.phone],
+    ["Sprache", data.locale]
+  ];
+
+  let mailed = false;
+  try {
+    mailed = await sendMail({
+      to: INTERNAL_HR,
+      subject: `Neue Rückrufbitte: ${data.phone}`,
+      text: notificationText("Neue Rückrufbitte von der Karriereseite", rows),
+      html: notificationHtml("Neue Rückrufbitte von der Karriereseite", rows)
+    });
+  } catch (error) {
+    console.error("Benachrichtigung fehlgeschlagen:", error);
+  }
+
+  if (!stored && !mailed) {
+    return { status: "error", code: "generic" };
+  }
   return { status: "success" };
 }
 

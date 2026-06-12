@@ -14,7 +14,7 @@ import { CtaBanner } from "@/components/sections/cta-banner";
 import { EuropeMap } from "@/components/sections/europe-map";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
-import { getPublishedTestimonials } from "@/server/content";
+import { getPublishedTestimonials, getServiceCities } from "@/server/content";
 
 export const revalidate = 300;
 
@@ -35,6 +35,13 @@ export default async function HomePage({ params }: Props) {
   const tFleet = await getTranslations("fleetPage");
 
   const countries = t.raw("coverage.countries") as string[];
+
+  // Einsatzorte aus dem Admin-Panel (Fallback: statische Liste)
+  const cities = await getServiceCities();
+  const mapMarkers = [
+    ...cities.map((city) => ({ city: city.city, lngLat: city.lngLat })),
+    { city: "Nuthe-Urstromtal (Zentrale)", lngLat: company.hqLngLat, hq: true }
+  ];
 
   // Testimonials aus der Datenbank, mit Fallback auf die Beispieltexte
   const dbTestimonials = await getPublishedTestimonials(locale);
@@ -94,7 +101,7 @@ export default async function HomePage({ params }: Props) {
             description={t("coverage.description")}
           />
           <div className="mt-10">
-            <EuropeMap />
+            <EuropeMap markers={mapMarkers} />
           </div>
           <div className="mt-5 grid gap-5 lg:grid-cols-2">
             <Reveal>
@@ -103,14 +110,12 @@ export default async function HomePage({ params }: Props) {
                   {t("coverage.locationsTitle")}
                 </h3>
                 <ul className="mt-5 grid grid-cols-2 gap-3">
-                  {company.locations.map((location) => (
+                  {cities.map((location) => (
                     <li
                       key={location.city}
                       className="flex items-center gap-2 text-sm text-mist-200"
                     >
-                      <MapPin
-                        className={`h-4 w-4 shrink-0 ${location.isHeadquarters ? "text-accent-400" : "text-mist-500"}`}
-                      />
+                      <MapPin className="h-4 w-4 shrink-0 text-accent-400" />
                       {location.city}
                     </li>
                   ))}

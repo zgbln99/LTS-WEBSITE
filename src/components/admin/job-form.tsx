@@ -73,8 +73,42 @@ export function JobForm({ job }: JobFormProps) {
             name="locationCity"
             required
             defaultValue={job?.locationCity}
-            placeholder="Berlin"
+            placeholder="Schönefeld (Berlin)"
           />
+        </Field>
+        <Field label="Land" htmlFor="job-country">
+          <Input
+            id="job-country"
+            name="country"
+            defaultValue={job?.country ?? "Deutschland"}
+          />
+        </Field>
+        <Field label="Führerscheinkategorie (z.B. C+E)" htmlFor="job-license">
+          <Input
+            id="job-license"
+            name="licenseCategory"
+            defaultValue={job?.licenseCategory ?? "C+E"}
+          />
+        </Field>
+        <Field
+          label="Arbeitssystem (z.B. 2/1, tägliche Heimkehr)"
+          htmlFor="job-system"
+        >
+          <Input
+            id="job-system"
+            name="workSystem"
+            defaultValue={job?.workSystem ?? ""}
+          />
+        </Field>
+        <Field label="Gehaltsangabe" htmlFor="job-salary-note">
+          <Select
+            id="job-salary-note"
+            name="salaryNote"
+            defaultValue={job?.salaryNote ?? "Netto"}
+          >
+            <option value="Netto">Netto</option>
+            <option value="Brutto">Brutto</option>
+          </Select>
         </Field>
         <Field label="Anstellungsart" htmlFor="job-employment" required>
           <Select

@@ -11,7 +11,6 @@ const staticPages: { pathname: AppPathname; priority: number }[] = [
   { pathname: "/karriere", priority: 0.8 },
   { pathname: "/karriere/lkw-fahrer", priority: 0.9 },
   { pathname: "/wissen", priority: 0.6 },
-  { pathname: "/transportanfrage", priority: 0.9 },
   { pathname: "/kontakt", priority: 0.7 }
 ];
 

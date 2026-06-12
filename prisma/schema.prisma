@@ -222,16 +222,20 @@ model JobCategoryTranslation {
 }
 
 model JobPosting {
-  id             String         @id @default(cuid())
-  categoryId     String
-  category       JobCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  locationCity   String
-  locationRegion String?
-  employmentType EmploymentType @default(FULL_TIME)
-  salaryMin      Int?
-  salaryMax      Int?
-  salaryCurrency String         @default("EUR")
-  salaryPeriod   String         @default("MONTH")
+  id              String         @id @default(cuid())
+  categoryId      String
+  category        JobCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  locationCity    String
+  locationRegion  String?
+  country         String         @default("Deutschland")
+  workSystem      String? // z.B. "2/1 oder ohne System", "Tägliche Heimkehr"
+  licenseCategory String? // z.B. "C+E", "C1", "ADR"
+  employmentType  EmploymentType @default(FULL_TIME)
+  salaryMin       Int?
+  salaryMax       Int?
+  salaryCurrency  String         @default("EUR")
+  salaryPeriod    String         @default("MONTH")
+  salaryNote      String         @default("Netto") // Netto | Brutto
   status         PublishStatus  @default(DRAFT)
   publishedAt    DateTime?
   validThrough   DateTime?
@@ -495,7 +499,7 @@ enum RequestStatus {
 model ContactRequest {
   id         String        @id @default(cuid())
   name       String
-  email      String
+  email      String? // leer bei reinen Rückrufbitten
   phone      String?
   company    String?
   department String? // dispo, hr, billing, general
@@ -538,6 +542,18 @@ model TransportRequest {
   updatedAt       DateTime      @updatedAt
 
   @@index([status, createdAt])
+}
+
+// Städte, in denen LTS Logistik täglich im Einsatz ist (keine Niederlassungen).
+// Wird im Admin-Panel gepflegt und speist Karten und Listen auf der Website.
+model ServiceCity {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  region   String?
+  lng      Float
+  lat      Float
+  order    Int     @default(0)
+  isActive Boolean @default(true)
 }
 
 model NewsletterSubscriber {

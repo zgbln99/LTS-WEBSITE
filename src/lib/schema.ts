@@ -13,7 +13,7 @@ export function organizationSchema() {
     foundingDate: String(company.foundedYear),
     address: {
       "@type": "PostalAddress",
-      streetAddress: company.address.street,
+      streetAddress: `${company.address.street}, ${company.address.district}`,
       postalCode: company.address.zip,
       addressLocality: company.address.city,
       addressCountry: company.address.country

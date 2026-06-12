@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MapPin,
   Newspaper,
   Quote,
   Users
@@ -62,6 +63,12 @@ const navItems = [
     href: "/admin/testimonials",
     label: "Testimonials",
     icon: Quote,
+    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
+  },
+  {
+    href: "/admin/einsatzorte",
+    label: "Einsatzorte",
+    icon: MapPin,
     roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
   }
 ];

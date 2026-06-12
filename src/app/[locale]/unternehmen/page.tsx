@@ -8,7 +8,9 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import { pageMetadata } from "@/lib/seo";
-import { company } from "@/data/company";
+import { getServiceCities } from "@/server/content";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -34,6 +36,7 @@ export default async function AboutPage({ params }: Props) {
     text: string;
   }[];
   const values = t.raw("values.items") as { title: string; text: string }[];
+  const cities = await getServiceCities();
 
   return (
     <>
@@ -128,21 +131,14 @@ export default async function AboutPage({ params }: Props) {
             description={t("locations.description")}
           />
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {company.locations.map((location, index) => (
+            {cities.map((location, index) => (
               <Reveal key={location.city} delay={(index % 5) * 0.05}>
                 <div className="h-full rounded-3xl border border-mist-200 bg-white p-5 shadow-card">
-                  <MapPin
-                    className={`h-5 w-5 ${location.isHeadquarters ? "text-accent-500" : "text-mist-400"}`}
-                  />
+                  <MapPin className="h-5 w-5 text-accent-500" />
                   <h3 className="mt-3 font-display text-base font-bold text-night-900">
                     {location.city}
                   </h3>
                   <p className="mt-1 text-xs text-mist-500">{location.region}</p>
-                  {location.isHeadquarters ? (
-                    <span className="mt-2 inline-block rounded-full bg-accent-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-600">
-                      {t("locations.hqBadge")}
-                    </span>
-                  ) : null}
                 </div>
               </Reveal>
             ))}

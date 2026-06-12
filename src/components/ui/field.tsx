@@ -76,7 +76,7 @@ export function ConsentCheckbox({
         type="checkbox"
         name={name}
         required
-        className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-mist-300 accent-[#ff4d1c]"
+        className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-mist-300 accent-[#e11d24]"
       />
       <span>{label}</span>
     </label>

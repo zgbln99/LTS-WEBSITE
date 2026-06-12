@@ -13,6 +13,14 @@ fi
 echo "==> Code aktualisieren"
 git pull --ff-only
 
+# Firmenlogo einmalig von der alten Website laden
+if [ ! -s public/logo.png ]; then
+  echo "==> Logo herunterladen"
+  curl -fsSL -A "Mozilla/5.0" -o public/logo.png \
+    "https://ltslogistik.de/wp-content/uploads/2025/03/lts-duze.png" \
+    || echo "WARNUNG: Logo konnte nicht geladen werden, bitte public/logo.png manuell ablegen."
+fi
+
 echo "==> Datenbankschema anwenden und Seed ausführen"
 # .env wird in der Shell des Containers geladen (entfernt Anführungszeichen korrekt,
 # im Gegensatz zu docker --env-file)

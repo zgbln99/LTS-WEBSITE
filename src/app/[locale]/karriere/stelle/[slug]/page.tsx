@@ -45,8 +45,12 @@ export default async function JobDetailPage({ params }: Props) {
   const requirements = (job.translation.requirements as string[]) ?? [];
   const benefits = (job.translation.benefits as string[]) ?? [];
   const salary =
-    job.salaryMin && job.salaryMax
-      ? `${job.salaryMin.toLocaleString("de-DE")} ${t("jobs.salaryTo")} ${job.salaryMax.toLocaleString("de-DE")} EUR`
+    job.salaryMin || job.salaryMax
+      ? `${
+          job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
+            ? `${job.salaryMin.toLocaleString("de-DE")}-${job.salaryMax.toLocaleString("de-DE")}`
+            : ((job.salaryMin ?? job.salaryMax) as number).toLocaleString("de-DE")
+        } EUR ${job.salaryNote}`
       : null;
 
   const jsonLd = {
@@ -95,13 +99,18 @@ export default async function JobDetailPage({ params }: Props) {
 
       <PageHero eyebrow={t("hero.eyebrow")} title={job.translation.title}>
         <div className="mt-6 flex flex-wrap gap-3 text-sm text-mist-300">
+          {job.licenseCategory ? (
+            <span className="flex items-center gap-1.5 rounded-full bg-accent-500 px-3.5 py-1.5 font-bold text-white">
+              {t("board.categoryPrefix")} {job.licenseCategory}
+            </span>
+          ) : null}
           <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5">
             <MapPin className="h-4 w-4 text-accent-400" />
-            {job.locationCity}
+            {job.locationCity}, {job.country}
           </span>
           <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5">
             <Clock className="h-4 w-4 text-accent-400" />
-            {employmentLabel}
+            {job.workSystem ?? employmentLabel}
           </span>
           {salary ? (
             <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5">

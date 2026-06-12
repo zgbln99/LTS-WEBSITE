@@ -36,16 +36,16 @@
   "home": {
     "hero": {
       "badge": "260'tan fazla araç yollarda",
-      "title": "Avrupa'yı hareket ettiren lojistik.",
-      "subtitle": "LTS Logistik 2015'ten beri ticaret, sanayi ve gıda lojistiği için yollarda. Berlin'deki ekspres kuryeden Avrupa'yı kateden soğutmalı çekicilere kadar.",
-      "ctaPrimary": "Nakliye talebi gönder",
+      "title": "Her gün yoldayız. Sektörün büyükleri için.",
+      "subtitle": "LTS Logistik 2015'ten beri Almanya'daki büyük lojistik ağlarının sabit alt yüklenicisi olarak çalışıyor. 260'tan fazla kendi aracımız, direksiyonda 200'den fazla meslektaşımız var. Ve ekibimizi büyütüyoruz.",
+      "ctaPrimary": "Açık pozisyonları gör",
       "ctaSecondary": "Hizmetleri keşfet",
       "imageAlt": "Gün doğumunda otoyolda LTS Logistik çekicisi"
     },
     "stats": {
       "vehicles": "filodaki araç",
       "employees": "çalışan",
-      "locations": "Almanya'da lokasyon",
+      "locations": "her gün hizmet verilen şehir",
       "founded": "Berlin'de kuruluş"
     },
     "services": {
@@ -55,9 +55,9 @@
     },
     "coverage": {
       "eyebrow": "Avrupa genelinde",
-      "title": "Berlin'den tüm Avrupa'ya",
-      "description": "Almanya'da on lokasyon ve Avrupa'nın önemli ekonomik bölgelerine düzenli seferler. Diğer destinasyonlar talep üzerine.",
-      "locationsTitle": "Lokasyonlarımız",
+      "title": "Her gün buralarda yoldayız",
+      "description": "Turlarımız bu şehirlerin çevresinden başlar. Merkezimiz Berlin yakınındaki Nuthe-Urstromtal'da, araçlarımız tüm Almanya ve Avrupa'da çalışıyor.",
+      "locationsTitle": "Hizmet bölgeleri",
       "countriesTitle": "Düzenli destinasyonlar",
       "countries": [
         "Almanya",
@@ -106,9 +106,9 @@
       "driverCta": "Tır şoförü olarak başvur"
     },
     "contactCta": {
-      "title": "Taşıma ihtiyaçlarınızı konuşalım.",
-      "description": "Sevkiyat ekibimize pazartesiden cumaya 08:00 ile 16:00 arasında ulaşabilirsiniz. Talepleri 2 iş saati içinde yanıtlıyoruz.",
-      "primary": "Nakliye talebi gönder",
+      "title": "Katıl bize. İşe alıyoruz.",
+      "description": "Sabit turlar, zamanında ödeme ve telefona cevap veren bir sevkiyat ekibi. Açık pozisyonlara bakın veya doğrudan arayın.",
+      "primary": "Açık pozisyonları gör",
       "secondary": "Hemen arayın"
     }
   },
@@ -173,8 +173,8 @@
     },
     "locations": {
       "eyebrow": "Lokasyonlar",
-      "title": "Almanya'da on lokasyon",
-      "description": "Berlin'deki merkezimizden büyüyen bir bölgesel şube ağını yönetiyoruz.",
+      "title": "Hizmet bölgelerimiz",
+      "description": "Şubelerimiz yok, günlük turlarımız var: araçlarımız bu şehirlerin çevresinde düzenli olarak çalışıyor. Merkezimiz Berlin yakınındaki Nuthe-Urstromtal'da.",
       "hqBadge": "Merkez"
     }
   },
@@ -188,9 +188,9 @@
     "processTitle": "Siparişiniz nasıl ilerler",
     "faqTitle": "Sık sorulan sorular",
     "cta": {
-      "title": "Teklifinize hazır mısınız?",
-      "description": "Taşımanızın temel bilgilerini bize gönderin. 2 iş saati içinde dönüş alırsınız.",
-      "primary": "Nakliye talebi gönder",
+      "title": "Güvenilir bir alt yüklenici mi arıyorsunuz?",
+      "description": "Nakliye firmaları ve lojistik ağları için kendi filomuz ve kendi şoförlerimizle sabit turlar yapıyoruz. Bizimle konuşun.",
+      "primary": "İletişime geçin",
       "secondary": "Hemen arayın"
     },
     "moreServices": "Diğer hizmetler"
@@ -285,7 +285,31 @@
         "PART_TIME": "Yarı zamanlı",
         "MINI_JOB": "Mini iş",
         "APPRENTICESHIP": "Çıraklık"
-      }
+      },
+      "eyebrow": "İş ilanları"
+    },
+    "board": {
+      "searchPlaceholder": "Ara: C+E, ADR, günlük turlar...",
+      "filterCategory": "Kategori",
+      "filterCountry": "Ülke",
+      "count": "Profesyonel şoförler için {count} ilan",
+      "colPosition": "Pozisyon",
+      "colLocation": "Lokasyon",
+      "colSystem": "Sistem",
+      "colSalary": "Kazanç",
+      "categoryPrefix": "Kat.",
+      "noResults": "Uygun ilan bulunamadı. Aşağıdaki hızlı iletişimi kullanın, size dönelim."
+    },
+    "callback": {
+      "eyebrow": "Hızlı iletişim",
+      "title": "Size uygun ilan yok mu?",
+      "text": "Numaranızı bırakın. Sizi arayalım ve ehliyetlerinize, deneyiminize ve beklentilerinize uygun turu bulalım. Bağlayıcı değildir.",
+      "namePlaceholder": "Ad (isteğe bağlı)",
+      "phonePlaceholder": "+49 160 1234567",
+      "consent": "Telefonla iletişime geçilmesini ve verilerimin işe alım amacıyla işlenmesini kabul ediyorum (KVKK/GDPR).",
+      "submit": "Aranma talep et",
+      "successTitle": "Teşekkürler, numaranız bize ulaştı.",
+      "successText": "Bir iş günü içinde size döneceğiz."
     }
   },
   "driver": {
@@ -393,7 +417,7 @@
         "text": "Faturalar, sözleşmeler ve genel konular."
       }
     ],
-    "locationsTitle": "Lokasyonlarımız",
+    "locationsTitle": "Hizmet bölgelerimiz",
     "formTitle": "Bize yazın",
     "formDescription": "Mesajınızı form üzerinden gönderin. 2 iş saati içinde yanıtlıyoruz."
   },

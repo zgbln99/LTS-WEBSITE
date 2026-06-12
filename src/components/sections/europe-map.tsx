@@ -1,19 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { company } from "@/data/company";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-// Standorte kommen zentral aus src/data/company.ts
-const locations = company.locations.map((location) => ({
-  city: location.city,
-  lngLat: location.lngLat,
-  hq: location.isHeadquarters
-}));
+export interface MapMarker {
+  city: string;
+  lngLat: [number, number];
+  hq?: boolean;
+}
 
-export function EuropeMap() {
+export function EuropeMap({ markers }: { markers: MapMarker[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,15 +40,15 @@ export function EuropeMap() {
         "top-right"
       );
 
-      for (const location of locations) {
+      for (const marker of markers) {
         const el = document.createElement("div");
-        el.style.cssText = `width:${location.hq ? 18 : 12}px;height:${location.hq ? 18 : 12}px;border-radius:9999px;background:#ff4d1c;border:2px solid #ffffff;box-shadow:0 0 0 4px rgb(255 77 28 / 0.3);cursor:pointer;`;
+        el.style.cssText = `width:${marker.hq ? 18 : 12}px;height:${marker.hq ? 18 : 12}px;border-radius:9999px;background:#e11d24;border:2px solid #ffffff;box-shadow:0 0 0 4px rgb(225 29 36 / 0.3);cursor:pointer;`;
 
         new mapboxgl.default.Marker({ element: el })
-          .setLngLat(location.lngLat)
+          .setLngLat(marker.lngLat)
           .setPopup(
             new mapboxgl.default.Popup({ offset: 14, closeButton: false }).setHTML(
-              `<strong style="font-size:13px">${location.city}</strong>`
+              `<strong style="font-size:13px">${marker.city}</strong>`
             )
           )
           .addTo(map!);
@@ -61,7 +59,7 @@ export function EuropeMap() {
       cancelled = true;
       map?.remove();
     };
-  }, []);
+  }, [markers]);
 
   if (!TOKEN) return null;
 
@@ -69,7 +67,7 @@ export function EuropeMap() {
     <div
       ref={containerRef}
       className="h-80 w-full overflow-hidden rounded-3xl sm:h-[28rem]"
-      aria-label="Karte der LTS Logistik Standorte"
+      aria-label="Karte der LTS Logistik Einsatzorte"
     />
   );
 }

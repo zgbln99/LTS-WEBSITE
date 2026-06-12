@@ -9,7 +9,10 @@ import { PageHero } from "@/components/sections/page-hero";
 import { ContactForm } from "@/components/forms/contact-form";
 import { pageMetadata } from "@/lib/seo";
 import { JsonLdScript, organizationSchema } from "@/lib/schema";
-import { company } from "@/data/company";
+import { company, fullAddress } from "@/data/company";
+import { getServiceCities } from "@/server/content";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -25,6 +28,7 @@ export default async function ContactPage({ params }: Props) {
 
   const t = await getTranslations("contact");
   const departments = t.raw("departments") as { name: string; text: string }[];
+  const cities = await getServiceCities();
 
   const cards = [
     {
@@ -44,9 +48,9 @@ export default async function ContactPage({ params }: Props) {
     {
       icon: MapPin,
       title: t("cards.address"),
-      value: t("cards.addressNote"),
+      value: fullAddress(),
       note: null,
-      href: "https://maps.google.com/?q=Attilastra%C3%9Fe+26,+12105+Berlin"
+      href: "https://maps.google.com/?q=Hennickendorfer+Str.+1,+14947+Nuthe-Urstromtal"
     }
   ];
 
@@ -146,14 +150,12 @@ export default async function ContactPage({ params }: Props) {
         <Container>
           <SectionHeading dark title={t("locationsTitle")} />
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-            {company.locations.map((location) => (
+            {cities.map((location) => (
               <div
                 key={location.city}
                 className="rounded-3xl bg-night-900 p-5"
               >
-                <MapPin
-                  className={`h-5 w-5 ${location.isHeadquarters ? "text-accent-400" : "text-mist-500"}`}
-                />
+                <MapPin className="h-5 w-5 text-accent-400" />
                 <h3 className="mt-3 font-display text-base font-bold text-white">
                   {location.city}
                 </h3>

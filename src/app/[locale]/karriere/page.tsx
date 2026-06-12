@@ -20,6 +20,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { ApplicationForm } from "@/components/forms/application-form";
+import { JobBoard } from "@/components/career/job-board";
+import { CallbackPanel } from "@/components/career/callback-form";
 import { getPublishedJobs } from "@/server/content";
 
 export const revalidate = 120;
@@ -52,6 +54,27 @@ export default async function CareerPage({ params }: Props) {
   const benefits = t.raw("benefits") as string[];
   const jobs = await getPublishedJobs(locale);
 
+  const formatSalary = (min: number | null, max: number | null) => {
+    if (min && max && min !== max) {
+      return `${min.toLocaleString("de-DE")}-${max.toLocaleString("de-DE")} EUR`;
+    }
+    if (min || max) return `${(min ?? max)!.toLocaleString("de-DE")} EUR`;
+    return "";
+  };
+
+  const boardJobs = jobs.map((job) => ({
+    id: job.id,
+    slug: job.translation.slug,
+    title: job.translation.title,
+    location: job.locationCity,
+    country: job.country,
+    system:
+      job.workSystem ?? t(`jobs.employmentTypes.${job.employmentType}`),
+    salary: formatSalary(job.salaryMin, job.salaryMax),
+    salaryNote: job.salaryNote,
+    licenseCategory: job.licenseCategory ?? ""
+  }));
+
   return (
     <>
       <PageHero
@@ -60,45 +83,28 @@ export default async function CareerPage({ params }: Props) {
         description={t("hero.description")}
       />
 
-      {/* Offene Stellen aus der Datenbank */}
-      {jobs.length > 0 ? (
-        <section className="bg-white py-16 sm:py-24">
-          <Container>
-            <SectionHeading title={t("jobs.title")} />
-            <div className="mt-10 grid gap-4 lg:grid-cols-2">
-              {jobs.map((job, index) => (
-                <Reveal key={job.id} delay={(index % 2) * 0.07}>
-                  <Link
-                    href={{
-                      pathname: "/karriere/stelle/[slug]",
-                      params: { slug: job.translation.slug }
-                    }}
-                    className="group flex h-full flex-col rounded-3xl border border-mist-200 bg-mist-50 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-500/40 hover:bg-white hover:shadow-card sm:p-8"
-                  >
-                    <h3 className="font-display text-lg font-bold text-night-900">
-                      {job.translation.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-mist-500">
-                      {job.locationCity} ·{" "}
-                      {t(`jobs.employmentTypes.${job.employmentType}`)}
-                      {job.salaryMin && job.salaryMax
-                        ? ` · ${job.salaryMin.toLocaleString("de-DE")} ${t("jobs.salaryTo")} ${job.salaryMax.toLocaleString("de-DE")} EUR`
-                        : ""}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
-                      {t("jobs.cta")}
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-          </Container>
-        </section>
-      ) : null}
+      {/* Jobbörse: Suche, Filter, Angebote */}
+      <section className="bg-mist-50 py-16 sm:py-24">
+        <Container>
+          <SectionHeading
+            eyebrow={t("jobs.eyebrow")}
+            title={t("jobs.title")}
+          />
+          <div className="mt-8">
+            <JobBoard jobs={boardJobs} />
+          </div>
+        </Container>
+      </section>
+
+      {/* Schneller Kontakt: Rückruf anfordern */}
+      <section className="bg-mist-50 pb-16 sm:pb-24">
+        <Container>
+          <CallbackPanel />
+        </Container>
+      </section>
 
       {/* Bereiche */}
-      <section className="bg-mist-50 py-16 sm:py-24">
+      <section className="bg-white py-16 sm:py-24">
         <Container>
           <SectionHeading title={t("categoriesTitle")} />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -179,6 +179,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       </section>
 
       <CtaBanner
+        primaryHref="/kontakt"
         title={t("cta.title")}
         description={t("cta.description")}
         primaryLabel={t("cta.primary")}

@@ -35,6 +35,7 @@ export default async function ServicesPage({ params }: Props) {
         </Container>
       </section>
       <CtaBanner
+        primaryHref="/kontakt"
         title={t("cta.title")}
         description={t("cta.description")}
         primaryLabel={t("cta.primary")}

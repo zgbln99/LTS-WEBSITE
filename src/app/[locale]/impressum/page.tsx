@@ -37,6 +37,8 @@ export default async function ImprintPage({ params }: Props) {
               {company.address.street}
               <br />
               {company.address.zip} {company.address.city}
+              <br />
+              {company.address.district}
             </p>
           </div>
           <div>
@@ -66,6 +68,8 @@ export default async function ImprintPage({ params }: Props) {
             <p className="mt-3">
               {company.legalName}, {company.address.street},{" "}
               {company.address.zip} {company.address.city}
+              <br />
+              {company.address.district}
             </p>
           </div>
           <div>

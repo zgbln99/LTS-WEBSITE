@@ -20,7 +20,8 @@ const departmentLabels: Record<string, string> = {
   general: "Allgemein",
   dispo: "Disposition",
   hr: "Personal",
-  billing: "Buchhaltung"
+  billing: "Buchhaltung",
+  callback: "Rückrufbitte"
 };
 
 const statusOptions = Object.values(RequestStatus).map((status) => ({
@@ -82,12 +83,14 @@ export default async function ContactRequestsPage() {
                 {request.message}
               </p>
               <div className="mt-3 flex flex-wrap gap-4 text-sm">
-                <a
-                  href={`mailto:${request.email}`}
-                  className="font-medium text-accent-600 hover:underline"
-                >
-                  {request.email}
-                </a>
+                {request.email ? (
+                  <a
+                    href={`mailto:${request.email}`}
+                    className="font-medium text-accent-600 hover:underline"
+                  >
+                    {request.email}
+                  </a>
+                ) : null}
                 {request.phone ? (
                   <a
                     href={`tel:${request.phone.replace(/\s/g, "")}`}

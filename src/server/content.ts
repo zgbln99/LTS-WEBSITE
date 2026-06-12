@@ -1,5 +1,35 @@
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
+import { company } from "@/data/company";
+
+export interface MapLocation {
+  city: string;
+  region: string | null;
+  lngLat: [number, number];
+  hq?: boolean;
+}
+
+// Einsatzorte aus der Datenbank, Fallback auf die statische Liste.
+export async function getServiceCities(): Promise<MapLocation[]> {
+  const cities = await safeQuery(() =>
+    prisma.serviceCity.findMany({
+      where: { isActive: true },
+      orderBy: { order: "asc" }
+    })
+  );
+  if (cities && cities.length > 0) {
+    return cities.map((city) => ({
+      city: city.name,
+      region: city.region,
+      lngLat: [city.lng, city.lat] as [number, number]
+    }));
+  }
+  return company.locations.map((location) => ({
+    city: location.city,
+    region: location.region,
+    lngLat: location.lngLat
+  }));
+}
 
 // Öffentliche Inhalte mit Fallback auf Deutsch, wenn eine Übersetzung fehlt.
 

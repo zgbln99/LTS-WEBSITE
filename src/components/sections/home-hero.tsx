@@ -37,7 +37,7 @@ export async function HomeHero() {
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           <Button asChild size="lg">
-            <Link href="/transportanfrage">
+            <Link href="/karriere">
               {t("ctaPrimary")}
               <ArrowRight className="h-4 w-4" />
             </Link>

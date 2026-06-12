@@ -36,16 +36,16 @@
   "home": {
     "hero": {
       "badge": "Ponad 260 pojazdów w trasie",
-      "title": "Logistyka, która porusza Europę.",
-      "subtitle": "LTS Logistik od 2015 roku jeździ dla handlu, przemysłu i logistyki spożywczej. Od kuriera ekspresowego w Berlinie po chłodnie przemierzające całą Europę.",
-      "ctaPrimary": "Wyślij zapytanie transportowe",
+      "title": "Jeździmy. Codziennie. Dla największych w branży.",
+      "subtitle": "LTS Logistik od 2015 roku jeździ jako stały podwykonawca dużych sieci logistycznych w Niemczech. Ponad 260 własnych pojazdów, ponad 200 osób za kierownicą. I szukamy wzmocnienia.",
+      "ctaPrimary": "Zobacz oferty pracy",
       "ctaSecondary": "Poznaj usługi",
       "imageAlt": "Ciągnik siodłowy LTS Logistik na autostradzie o wschodzie słońca"
     },
     "stats": {
       "vehicles": "pojazdów we flocie",
       "employees": "pracowników",
-      "locations": "oddziałów w Niemczech",
+      "locations": "miast w codziennej obsłudze",
       "founded": "rok założenia w Berlinie"
     },
     "services": {
@@ -55,9 +55,9 @@
     },
     "coverage": {
       "eyebrow": "W całej Europie",
-      "title": "Z Berlina przez całą Europę",
-      "description": "Dziesięć oddziałów w Niemczech i regularne połączenia z kluczowymi rynkami Europy. Pozostałe kierunki na zapytanie.",
-      "locationsTitle": "Nasze oddziały",
+      "title": "Tu jeździmy każdego dnia",
+      "description": "Nasze trasy zaczynają się w okolicach tych miast. Siedziba firmy znajduje się w Nuthe-Urstromtal pod Berlinem, a ciężarówki jeżdżą po całych Niemczech i Europie.",
+      "locationsTitle": "Obszary działania",
       "countriesTitle": "Regularne kierunki",
       "countries": [
         "Niemcy",
@@ -106,9 +106,9 @@
       "driverCta": "Aplikuj jako kierowca"
     },
     "contactCta": {
-      "title": "Porozmawiajmy o Twoich potrzebach transportowych.",
-      "description": "Nasza dyspozycja jest dostępna od poniedziałku do piątku w godzinach 08:00 do 16:00. Na zapytania odpowiadamy w ciągu 2 godzin roboczych.",
-      "primary": "Wyślij zapytanie transportowe",
+      "title": "Wsiadaj. Zatrudniamy.",
+      "description": "Stałe trasy, terminowa wypłata i dyspozycja, która odbiera telefon. Sprawdź oferty albo zadzwoń od razu.",
+      "primary": "Zobacz oferty pracy",
       "secondary": "Zadzwoń teraz"
     }
   },
@@ -173,8 +173,8 @@
     },
     "locations": {
       "eyebrow": "Oddziały",
-      "title": "Dziesięć lokalizacji w Niemczech",
-      "description": "Z centrali w Berlinie zarządzamy rosnącą siecią regionalnych oddziałów.",
+      "title": "Nasze obszary działania",
+      "description": "Nie mamy oddziałów, mamy codzienne trasy: w okolicach tych miast nasze pojazdy jeżdżą regularnie. Siedziba firmy znajduje się w Nuthe-Urstromtal pod Berlinem.",
       "hqBadge": "Centrala"
     }
   },
@@ -188,9 +188,9 @@
     "processTitle": "Jak przebiega zlecenie",
     "faqTitle": "Częste pytania",
     "cta": {
-      "title": "Gotowy na ofertę?",
-      "description": "Prześlij nam podstawowe dane transportu. Odpowiemy w ciągu 2 godzin roboczych.",
-      "primary": "Wyślij zapytanie transportowe",
+      "title": "Szukasz zgranego podwykonawcy?",
+      "description": "Jeździmy stałe trasy dla spedycji i sieci logistycznych, własną flotą i własnymi kierowcami. Porozmawiajmy.",
+      "primary": "Skontaktuj się",
       "secondary": "Zadzwoń teraz"
     },
     "moreServices": "Pozostałe usługi"
@@ -285,7 +285,31 @@
         "PART_TIME": "Część etatu",
         "MINI_JOB": "Minijob",
         "APPRENTICESHIP": "Praktyka zawodowa"
-      }
+      },
+      "eyebrow": "Oferty pracy"
+    },
+    "board": {
+      "searchPlaceholder": "Szukaj: C+E, Niemcy, ADR, tandem...",
+      "filterCategory": "Kategoria",
+      "filterCountry": "Kraj",
+      "count": "{count} ofert dla kierowców zawodowych",
+      "colPosition": "Stanowisko",
+      "colLocation": "Lokalizacja",
+      "colSystem": "System",
+      "colSalary": "Wynagrodzenie",
+      "categoryPrefix": "Kat.",
+      "noResults": "Brak pasujących ofert. Skorzystaj z szybkiego kontaktu poniżej, odezwiemy się."
+    },
+    "callback": {
+      "eyebrow": "Szybki kontakt",
+      "title": "Nie znalazłeś oferty dla siebie?",
+      "text": "Zostaw numer. Oddzwonimy i dopasujemy pracę do Twoich uprawnień, doświadczenia i oczekiwań. Bez zobowiązań.",
+      "namePlaceholder": "Imię (opcjonalnie)",
+      "phonePlaceholder": "+48 600 100 200",
+      "consent": "Wyrażam zgodę na kontakt telefoniczny i przetwarzanie danych w celach rekrutacyjnych (RODO).",
+      "submit": "Poproś o telefon",
+      "successTitle": "Dzięki, mamy Twój numer.",
+      "successText": "Odezwiemy się w ciągu jednego dnia roboczego."
     }
   },
   "driver": {
@@ -393,7 +417,7 @@
         "text": "Faktury, umowy i sprawy ogólne."
       }
     ],
-    "locationsTitle": "Nasze oddziały",
+    "locationsTitle": "Nasze obszary działania",
     "formTitle": "Napisz do nas",
     "formDescription": "Wyślij wiadomość przez formularz. Odpowiadamy w ciągu 2 godzin roboczych."
   },

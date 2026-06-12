@@ -35,8 +35,7 @@ export default async function PrivacyPage({ params }: Props) {
             <p className="mt-3">
               Verantwortlich für die Verarbeitung personenbezogener Daten auf
               dieser Website ist die {company.legalName},{" "}
-              {company.address.street}, {company.address.zip}{" "}
-              {company.address.city}, E-Mail: {company.email}, Telefon:{" "}
+              {company.address.street}, {company.address.zip} {company.address.city}, {company.address.district}, E-Mail: {company.email}, Telefon:{" "}
               {company.phone}.
             </p>
           </div>

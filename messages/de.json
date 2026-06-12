@@ -36,16 +36,16 @@
   "home": {
     "hero": {
       "badge": "Über 260 Fahrzeuge im Einsatz",
-      "title": "Logistik, die Europa bewegt.",
-      "subtitle": "LTS Logistik fährt seit 2015 für Handel, Industrie und Lebensmittellogistik. Vom Expresskurier in Berlin bis zum temperaturgeführten Sattelzug quer durch Europa.",
-      "ctaPrimary": "Transportanfrage stellen",
+      "title": "Wir fahren. Jeden Tag. Für die Großen der Branche.",
+      "subtitle": "LTS Logistik fährt seit 2015 als fester Subunternehmer für große Logistiknetzwerke in Deutschland. Über 260 eigene Fahrzeuge, mehr als 200 Kolleginnen und Kollegen am Steuer. Und wir suchen Verstärkung.",
+      "ctaPrimary": "Offene Stellen ansehen",
       "ctaSecondary": "Leistungen entdecken",
       "imageAlt": "Sattelzug von LTS Logistik auf der Autobahn bei Sonnenaufgang"
     },
     "stats": {
       "vehicles": "Fahrzeuge in der Flotte",
       "employees": "Mitarbeitende",
-      "locations": "Standorte in Deutschland",
+      "locations": "Städte im täglichen Einsatz",
       "founded": "gegründet in Berlin"
     },
     "services": {
@@ -55,9 +55,9 @@
     },
     "coverage": {
       "eyebrow": "Europaweit unterwegs",
-      "title": "Von Berlin aus durch ganz Europa",
-      "description": "Zehn Standorte in Deutschland und regelmäßige Verkehre in die wichtigsten Wirtschaftsräume Europas. Weitere Destinationen realisieren wir auf Anfrage.",
-      "locationsTitle": "Unsere Standorte",
+      "title": "Hier sind wir jeden Tag unterwegs",
+      "description": "Unsere Touren starten rund um diese Städte. Der Firmensitz liegt in Nuthe-Urstromtal bei Berlin, gefahren wird in ganz Deutschland und Europa.",
+      "locationsTitle": "Einsatzorte",
       "countriesTitle": "Regelmäßige Destinationen",
       "countries": [
         "Deutschland",
@@ -106,9 +106,9 @@
       "driverCta": "Als LKW-Fahrer bewerben"
     },
     "contactCta": {
-      "title": "Sprechen wir über Ihren Transportbedarf.",
-      "description": "Sie erreichen unsere Disposition Montag bis Freitag von 08:00 bis 16:00 Uhr. Anfragen beantworten wir innerhalb von 2 Arbeitsstunden.",
-      "primary": "Transportanfrage stellen",
+      "title": "Steig ein. Wir stellen ein.",
+      "description": "Feste Touren, pünktliche Bezahlung und eine Disposition, die ans Telefon geht. Schau dir die offenen Stellen an oder ruf direkt an.",
+      "primary": "Offene Stellen ansehen",
       "secondary": "Jetzt anrufen"
     }
   },
@@ -173,8 +173,8 @@
     },
     "locations": {
       "eyebrow": "Standorte",
-      "title": "Zehn Standorte in Deutschland",
-      "description": "Vom Hauptsitz in Berlin steuern wir ein wachsendes Netz regionaler Stützpunkte.",
+      "title": "Unsere Einsatzgebiete",
+      "description": "Keine Niederlassungen, sondern tägliche Touren: In und um diese Städte sind unsere Fahrzeuge regelmäßig unterwegs. Der Firmensitz liegt in Nuthe-Urstromtal bei Berlin.",
       "hqBadge": "Hauptsitz"
     }
   },
@@ -188,9 +188,9 @@
     "processTitle": "So läuft Ihr Auftrag ab",
     "faqTitle": "Häufige Fragen",
     "cta": {
-      "title": "Bereit für Ihr Angebot?",
-      "description": "Senden Sie uns die Eckdaten Ihres Transports. Sie erhalten innerhalb von 2 Arbeitsstunden eine Rückmeldung.",
-      "primary": "Transportanfrage stellen",
+      "title": "Sie suchen einen eingespielten Subunternehmer?",
+      "description": "Wir fahren feste Touren für Speditionen und Logistiknetzwerke, mit eigener Flotte und eigenen Fahrern. Sprechen Sie mit uns.",
+      "primary": "Kontakt aufnehmen",
       "secondary": "Jetzt anrufen"
     },
     "moreServices": "Weitere Leistungen"
@@ -285,7 +285,31 @@
         "PART_TIME": "Teilzeit",
         "MINI_JOB": "Minijob",
         "APPRENTICESHIP": "Ausbildung"
-      }
+      },
+      "eyebrow": "Stellenangebote"
+    },
+    "board": {
+      "searchPlaceholder": "Suchen: C+E, ADR, Tagestouren...",
+      "filterCategory": "Kategorie",
+      "filterCountry": "Land",
+      "count": "{count} Angebote für Berufskraftfahrer",
+      "colPosition": "Stelle",
+      "colLocation": "Einsatzort",
+      "colSystem": "System",
+      "colSalary": "Verdienst",
+      "categoryPrefix": "Kat.",
+      "noResults": "Keine passenden Angebote gefunden. Nutzen Sie den schnellen Kontakt unten, wir melden uns."
+    },
+    "callback": {
+      "eyebrow": "Schneller Kontakt",
+      "title": "Kein passendes Angebot dabei?",
+      "text": "Hinterlassen Sie Ihre Nummer. Wir rufen zurück und finden die Tour, die zu Ihren Führerscheinen, Ihrer Erfahrung und Ihren Erwartungen passt. Unverbindlich.",
+      "namePlaceholder": "Name (optional)",
+      "phonePlaceholder": "+49 160 1234567",
+      "consent": "Ich bin mit der telefonischen Kontaktaufnahme und der Verarbeitung meiner Daten zu Recruiting-Zwecken einverstanden (DSGVO).",
+      "submit": "Rückruf anfordern",
+      "successTitle": "Danke, Ihre Nummer ist angekommen.",
+      "successText": "Wir melden uns innerhalb eines Arbeitstages bei Ihnen."
     }
   },
   "driver": {
@@ -393,7 +417,7 @@
         "text": "Rechnungen, Verträge und allgemeine Anliegen."
       }
     ],
-    "locationsTitle": "Unsere Standorte",
+    "locationsTitle": "Unsere Einsatzorte",
     "formTitle": "Schreiben Sie uns",
     "formDescription": "Senden Sie uns Ihre Nachricht über das Formular. Wir antworten innerhalb von 2 Arbeitsstunden."
   },

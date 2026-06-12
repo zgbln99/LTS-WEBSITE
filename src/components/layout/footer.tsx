@@ -16,12 +16,14 @@ export async function Footer({ locale }: { locale: Locale }) {
       <Container className="py-14 lg:py-20">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2 text-white">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-500 font-display text-sm font-extrabold">
-                LTS
-              </span>
-              <span className="font-display text-lg font-bold">Logistik</span>
-            </div>
+            <span className="inline-flex items-center rounded-xl bg-white px-2.5 py-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.png"
+                alt="LTS Logistik GmbH"
+                className="h-7 w-auto"
+              />
+            </span>
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
               {t("footer.tagline")}
             </p>
@@ -109,8 +111,11 @@ export async function Footer({ locale }: { locale: Locale }) {
                 <span>
                   {t("footer.headquarters")}
                   <br />
-                  {company.address.street}, {company.address.zip}{" "}
-                  {company.address.city}
+                  {company.address.street}
+                  <br />
+                  {company.address.zip} {company.address.city}
+                  <br />
+                  {company.address.district}
                 </span>
               </li>
             </ul>

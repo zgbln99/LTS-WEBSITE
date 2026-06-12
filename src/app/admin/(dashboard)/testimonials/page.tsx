@@ -53,7 +53,7 @@ export default async function TestimonialsAdminPage() {
             <Textarea id="new-quote" name="quote" required minLength={10} />
           </Field>
           <label className="flex items-center gap-2.5 text-sm text-night-900">
-            <input type="checkbox" name="isPublished" className="h-4 w-4 accent-[#ff4d1c]" />
+            <input type="checkbox" name="isPublished" className="h-4 w-4 accent-[#e11d24]" />
             Sofort veröffentlichen
           </label>
           <button
@@ -127,7 +127,7 @@ export default async function TestimonialsAdminPage() {
                       type="checkbox"
                       name="isPublished"
                       defaultChecked={testimonial.isPublished}
-                      className="h-4 w-4 accent-[#ff4d1c]"
+                      className="h-4 w-4 accent-[#e11d24]"
                     />
                     Veröffentlicht
                   </label>

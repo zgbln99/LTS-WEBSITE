@@ -58,6 +58,13 @@ export const contactRequestSchema = z.object({
   consent: consentSchema
 });
 
+export const callbackRequestSchema = z.object({
+  locale: localeSchema,
+  name: z.preprocess(emptyToUndefined, z.string().max(160).optional()),
+  phone: z.string().trim().min(5).max(40),
+  consent: consentSchema
+});
+
 export const jobCategoryKeys = [
   "drivers",
   "dispatchers",
