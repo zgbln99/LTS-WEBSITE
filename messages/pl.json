@@ -74,7 +74,7 @@
     "fleet": {
       "eyebrow": "Flota",
       "title": "Flota do każdego zadania",
-      "description": "Od zwinnego busa po naczepę chłodnię: nasza flota rośnie od 2015 roku i jest stale modernizowana.",
+      "description": "Od zwinnego busa po Actrosa z naczepą chłodnią: jeździmy głównie Mercedesami, regularnie serwisowanymi i na bieżąco odnawianymi.",
       "cta": "Poznaj flotę"
     },
     "testimonials": {
@@ -199,7 +199,7 @@
     "hero": {
       "eyebrow": "Flota",
       "title": "Ponad 260 pojazdów w trasie",
-      "description": "Nasza flota rośnie od 2015 roku i obejmuje każde zadanie transportowe, od pojazdów kurierskich po naczepy chłodnie. Wszystkie pojazdy są regularnie serwisowane i stale modernizowane."
+      "description": "Nasza flota rośnie od 2015 roku i składa się głównie z Mercedesów Actros i Atego w wersji europejskiej. Wszystkie pojazdy są regularnie serwisowane i na bieżąco odnawiane, od aut kurierskich po naczepy chłodnie."
     },
     "categories": [
       {
@@ -210,12 +210,12 @@
       {
         "name": "Pojazdy 12-tonowe",
         "specs": "Do ok. 6 t ładowności, dostępna winda",
-        "text": "Koń roboczy regionalnej dystrybucji i drobnicy."
+        "text": "Mercedes-Benz Atego: koń roboczy regionalnej dystrybucji i drobnicy."
       },
       {
         "name": "Zestawy naczepowe",
         "specs": "Do 25 t ładowności, do 33 europalet",
-        "text": "Pełne ładunki w kraju i za granicą, przewidywalnie i ekonomicznie."
+        "text": "Mercedes-Benz Actros: pełne ładunki w kraju i za granicą, przewidywalnie i ekonomicznie."
       },
       {
         "name": "Chłodnie",
@@ -331,7 +331,7 @@
       },
       {
         "title": "Nowoczesna flota",
-        "text": "Ponad 260 zadbanych pojazdów, regularnie serwisowanych i odnawianych."
+        "text": "Mercedesy Actros i Atego w wersji europejskiej, regularnie serwisowane i na bieżąco odnawiane."
       },
       {
         "title": "Terminowa wypłata",

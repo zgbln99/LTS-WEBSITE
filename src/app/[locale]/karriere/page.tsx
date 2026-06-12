@@ -88,6 +88,7 @@ export default async function CareerPage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
+        image="https://images.unsplash.com/photo-1591768793355-74d04bb6608f?q=80&w=2400&auto=format&fit=crop"
       />
 
       {/* Jobbörse: Suche, Filter, Angebote */}

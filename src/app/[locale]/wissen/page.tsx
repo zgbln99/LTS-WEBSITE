@@ -43,6 +43,7 @@ export default async function KnowledgePage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
+        image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2400&auto=format&fit=crop"
       />
 
       {/* Artikel aus der Datenbank */}

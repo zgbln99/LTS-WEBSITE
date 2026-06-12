@@ -65,6 +65,7 @@ export default async function ContactPage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
+        image="https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=2400&auto=format&fit=crop"
       />
 
       {/* Kontaktkarten */}

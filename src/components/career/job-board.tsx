@@ -93,7 +93,7 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
 
       {/* Tabelle (Desktop) / Karten (Mobil) */}
       <div className="mt-4 overflow-hidden rounded-3xl border border-mist-200 bg-white shadow-card">
-        <div className="hidden grid-cols-[1fr_220px_200px_180px] gap-4 border-b border-mist-100 bg-mist-50 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-mist-400 lg:grid">
+        <div className="hidden grid-cols-[1fr_240px_220px_200px] gap-4 border-b border-mist-100 bg-mist-50 px-7 py-4 text-xs font-semibold uppercase tracking-wider text-mist-400 lg:grid">
           <span>{t("colPosition")}</span>
           <span>{t("colLocation")}</span>
           <span>{t("colSystem")}</span>
@@ -113,7 +113,7 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
                     pathname: "/karriere/stelle/[slug]",
                     params: { slug: job.slug }
                   }}
-                  className="group grid gap-3 px-6 py-5 transition-colors hover:bg-mist-50 lg:grid-cols-[1fr_220px_200px_180px] lg:items-center lg:gap-4"
+                  className="group grid gap-3 px-7 py-6 transition-colors hover:bg-mist-50 lg:grid-cols-[1fr_240px_220px_200px] lg:items-center lg:gap-4"
                 >
                   <div>
                     {job.licenseCategory ? (
@@ -121,7 +121,7 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
                         {t("categoryPrefix")} {job.licenseCategory}
                       </span>
                     ) : null}
-                    <h3 className="mt-0.5 font-display text-base font-bold leading-snug text-night-900">
+                    <h3 className="mt-1 font-display text-lg font-bold leading-snug text-night-900 transition-colors group-hover:text-accent-600">
                       {job.title}
                     </h3>
                   </div>
@@ -132,14 +132,14 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
                   <p className="text-sm text-mist-500">{job.system}</p>
                   <div className="flex items-center justify-between gap-3 lg:justify-end">
                     <p className="text-right">
-                      <span className="font-display text-base font-extrabold text-night-900">
+                      <span className="font-display text-lg font-extrabold text-night-900">
                         {job.salary}
                       </span>{" "}
                       <span className="text-xs text-mist-400">
                         {job.salaryNote}
                       </span>
                     </p>
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-night-950 text-white transition-colors group-hover:bg-accent-500">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-night-950 text-white transition-all group-hover:scale-105 group-hover:bg-accent-500">
                       <ArrowRight className="h-4 w-4" />
                     </span>
                   </div>

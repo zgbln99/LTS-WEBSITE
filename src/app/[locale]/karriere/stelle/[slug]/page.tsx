@@ -93,7 +93,11 @@ export default async function JobDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JsonLdScript(jsonLd) }}
       />
 
-      <PageHero eyebrow={t("hero.eyebrow")} title={job.translation.title}>
+      <PageHero
+        eyebrow={t("hero.eyebrow")}
+        title={job.translation.title}
+        image="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2400&auto=format&fit=crop"
+      >
         <div className="mt-6 flex flex-wrap gap-3 text-sm text-mist-300">
           {job.licenseCategory ? (
             <span className="flex items-center gap-1.5 rounded-full bg-accent-500 px-3.5 py-1.5 font-bold text-white">

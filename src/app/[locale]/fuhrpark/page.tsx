@@ -35,6 +35,7 @@ export default async function FleetPage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
+        image="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2400&auto=format&fit=crop"
       />
       <StatBar />
 

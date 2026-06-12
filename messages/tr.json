@@ -74,7 +74,7 @@
     "fleet": {
       "eyebrow": "Filo",
       "title": "Her görev için bir filo",
-      "description": "Çevik panelvandan frigorifik dorseye: filomuz 2015'ten beri büyüyor ve sürekli yenileniyor.",
+      "description": "Çevik panelvandan frigorifik dorseli Actros'a: ağırlıklı olarak Mercedes-Benz kullanıyoruz, düzenli bakımlı ve sürekli yenilenen.",
       "cta": "Filoyu keşfet"
     },
     "testimonials": {
@@ -199,7 +199,7 @@
     "hero": {
       "eyebrow": "Filo",
       "title": "260'tan fazla araç yollarda",
-      "description": "Filomuz 2015'ten beri büyüyor ve kurye araçlarından frigorifik dorselere kadar her taşıma görevini karşılıyor. Tüm araçlar düzenli bakımdan geçiyor ve sürekli yenileniyor."
+      "description": "Filomuz 2015'ten beri büyüyor ve ağırlıklı olarak Avrupa donanımlı Mercedes-Benz Actros ve Atego araçlardan oluşuyor. Kurye araçlarından frigorifik dorselere kadar tüm araçlar düzenli bakımdan geçiyor ve sürekli yenileniyor."
     },
     "categories": [
       {
@@ -210,12 +210,12 @@
       {
         "name": "12 tonluk kamyonlar",
         "specs": "Yaklaşık 6 tona kadar yük kapasitesi, lift mevcut",
-        "text": "Bölgesel dağıtım ve parsiyel yükün iş atı."
+        "text": "Mercedes-Benz Atego: bölgesel dağıtım ve parsiyel yükün iş atı."
       },
       {
         "name": "Çekiciler",
         "specs": "25 tona kadar yük, 33 euro palete kadar",
-        "text": "Yurtiçi ve uluslararası komple yükler, planlı ve ekonomik."
+        "text": "Mercedes-Benz Actros: yurtiçi ve uluslararası komple yükler, planlı ve ekonomik."
       },
       {
         "name": "Soğutmalı araçlar",
@@ -331,7 +331,7 @@
       },
       {
         "title": "Modern filo",
-        "text": "260'tan fazla bakımlı araç, düzenli servis ve sürekli yenileme."
+        "text": "Avrupa donanımlı Mercedes-Benz Actros ve Atego, düzenli bakımlı ve sürekli yenilenen."
       },
       {
         "title": "Zamanında ödeme",

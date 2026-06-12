@@ -74,7 +74,7 @@
     "fleet": {
       "eyebrow": "Fuhrpark",
       "title": "Ein Fuhrpark für jede Aufgabe",
-      "description": "Vom wendigen Transporter bis zum Kühlauflieger: Unsere Flotte wächst seit 2015 und wird laufend modernisiert.",
+      "description": "Vom wendigen Transporter bis zum Actros mit Kühlauflieger: Wir fahren überwiegend Mercedes-Benz, regelmäßig gewartet und laufend erneuert.",
       "cta": "Fuhrpark entdecken"
     },
     "testimonials": {
@@ -199,7 +199,7 @@
     "hero": {
       "eyebrow": "Fuhrpark",
       "title": "Über 260 Fahrzeuge im Einsatz",
-      "description": "Unsere Flotte wächst seit 2015 und deckt vom Kurierfahrzeug bis zum Kühlauflieger jede Transportaufgabe ab. Alle Fahrzeuge werden regelmäßig gewartet und laufend modernisiert."
+      "description": "Unsere Flotte wächst seit 2015 und besteht überwiegend aus Mercedes-Benz Actros und Atego in Europa-Ausführung. Alle Fahrzeuge werden regelmäßig gewartet und laufend erneuert, vom Kurierfahrzeug bis zum Kühlauflieger."
     },
     "categories": [
       {
@@ -210,12 +210,12 @@
       {
         "name": "12-Tonner",
         "specs": "Bis ca. 6 t Nutzlast, Hebebühne verfügbar",
-        "text": "Das Arbeitstier für regionale Verteilerverkehre und Stückgut."
+        "text": "Mercedes-Benz Atego: das Arbeitstier für regionale Verteilerverkehre und Stückgut."
       },
       {
         "name": "Sattelzüge",
         "specs": "Bis 25 t Nutzlast, bis 33 Europaletten",
-        "text": "Komplettladungen national und international, planbar und wirtschaftlich."
+        "text": "Mercedes-Benz Actros: Komplettladungen national und international, planbar und wirtschaftlich."
       },
       {
         "name": "Kühlfahrzeuge",
@@ -331,7 +331,7 @@
       },
       {
         "title": "Moderne Flotte",
-        "text": "Über 260 gepflegte Fahrzeuge, regelmäßig gewartet und laufend erneuert."
+        "text": "Mercedes-Benz Actros und Atego in Europa-Ausführung, regelmäßig gewartet und laufend erneuert."
       },
       {
         "title": "Pünktliche Bezahlung",

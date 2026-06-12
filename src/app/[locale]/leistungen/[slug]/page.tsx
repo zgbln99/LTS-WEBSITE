@@ -82,6 +82,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={service.name}
         description={service.excerpt}
+        image={service.image}
       />
 
       {/* Beschreibung + Bild */}

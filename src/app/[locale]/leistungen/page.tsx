@@ -28,6 +28,7 @@ export default async function ServicesPage({ params }: Props) {
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
+        image="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=2400&auto=format&fit=crop"
       />
       <section className="bg-mist-50 py-16 sm:py-24">
         <Container>

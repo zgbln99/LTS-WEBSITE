@@ -74,7 +74,7 @@
     "fleet": {
       "eyebrow": "Fleet",
       "title": "A fleet for every task",
-      "description": "From agile vans to reefer trailers: our fleet has been growing since 2015 and is modernised continuously.",
+      "description": "From agile vans to the Actros with reefer trailer: we drive mostly Mercedes-Benz, regularly serviced and continuously renewed.",
       "cta": "Explore the fleet"
     },
     "testimonials": {
@@ -199,7 +199,7 @@
     "hero": {
       "eyebrow": "Fleet",
       "title": "More than 260 vehicles on the road",
-      "description": "Our fleet has been growing since 2015 and covers every transport task, from courier vehicles to reefer trailers. All vehicles are serviced regularly and modernised continuously."
+      "description": "Our fleet has been growing since 2015 and consists mainly of Mercedes-Benz Actros and Atego in European specification. All vehicles are serviced regularly and renewed continuously, from courier vans to reefer trailers."
     },
     "categories": [
       {
@@ -210,12 +210,12 @@
       {
         "name": "12-tonne trucks",
         "specs": "Up to approx. 6 t payload, tail lift available",
-        "text": "The workhorse for regional distribution and general cargo."
+        "text": "Mercedes-Benz Atego: the workhorse for regional distribution and general cargo."
       },
       {
         "name": "Semi-trailers",
         "specs": "Up to 25 t payload, up to 33 euro pallets",
-        "text": "Full truckloads, national and international, predictable and economical."
+        "text": "Mercedes-Benz Actros: full truckloads, national and international, predictable and economical."
       },
       {
         "name": "Refrigerated vehicles",
@@ -331,7 +331,7 @@
       },
       {
         "title": "Modern fleet",
-        "text": "More than 260 well-maintained vehicles, serviced regularly and renewed continuously."
+        "text": "Mercedes-Benz Actros and Atego in European spec, regularly serviced and continuously renewed."
       },
       {
         "title": "Punctual pay",
