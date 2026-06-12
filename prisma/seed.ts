@@ -55,7 +55,7 @@ async function main() {
   // Admin-Benutzer aus Umgebungsvariablen anlegen
   const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
   const adminPassword = process.env.ADMIN_PASSWORD;
-  if (adminEmail && adminPassword && adminPassword.length >= 12) {
+  if (adminEmail && adminPassword && adminPassword.length >= 8) {
     const passwordHash = await hash(adminPassword, 12);
     await prisma.user.upsert({
       where: { email: adminEmail },
@@ -70,7 +70,7 @@ async function main() {
     console.log(`Admin-Benutzer ${adminEmail} angelegt bzw. vorhanden.`);
   } else {
     console.log(
-      "Hinweis: ADMIN_EMAIL und ADMIN_PASSWORD (mind. 12 Zeichen) setzen, um den Admin-Benutzer anzulegen."
+      "Hinweis: ADMIN_EMAIL und ADMIN_PASSWORD (mind. 8 Zeichen) setzen, um den Admin-Benutzer anzulegen."
     );
   }
 

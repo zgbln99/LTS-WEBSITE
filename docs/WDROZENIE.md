@@ -37,7 +37,7 @@ Wartości obowiązkowe:
 | `NEXT_PUBLIC_SITE_URL` | jak wyżej |
 | `SMTP_HOST/PORT/USER/PASSWORD` | hPanel, E-maile (Hostinger: `smtp.hostinger.com`, port 465) |
 | `EMAIL_INTERNAL_INQUIRIES` / `EMAIL_INTERNAL_HR` | adresy dyspozycji i HR |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | konto administratora panelu (hasło min. 12 znaków) |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | konto administratora panelu (hasło min. 8 znaków) |
 
 Opcjonalne: `S3_*` (MEGA S4 na pliki aplikacji), `NEXT_PUBLIC_MAPBOX_TOKEN` (mapa), `NEXT_PUBLIC_GA_MEASUREMENT_ID` itd.
 
