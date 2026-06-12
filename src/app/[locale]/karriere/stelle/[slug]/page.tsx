@@ -13,11 +13,7 @@ import { JsonLdScript } from "@/lib/schema";
 import { company } from "@/data/company";
 import type { jobCategoryKeys } from "@/lib/forms";
 
-export const revalidate = 120;
-
-export function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 

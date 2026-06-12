@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
   ArrowRight,
@@ -26,9 +27,9 @@ import { getPublishedJobs } from "@/server/content";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
 
-// Wichtig: muss NACH allen Imports stehen, sonst erkennt Next.js die
-// Segment-Konfiguration nicht und die Seite wird nie neu generiert.
-export const revalidate = 120;
+// Stellenangebote kommen aus der Datenbank: Seite wird bei jedem Aufruf
+// frisch gerendert, damit Änderungen aus dem Admin sofort sichtbar sind.
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -47,6 +48,10 @@ const categoryIcons: LucideIcon[] = [
 ];
 
 export default async function CareerPage({ params }: Props) {
+  // Erzwingt Rendering zur Anfragezeit, damit Stellen aus der Datenbank
+  // sofort erscheinen (generateStaticParams im Locale-Layout würde die
+  // Seite sonst zur Buildzeit einfrieren).
+  await connection();
   const { locale } = await params;
   setRequestLocale(locale);
 

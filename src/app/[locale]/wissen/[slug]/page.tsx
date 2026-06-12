@@ -11,11 +11,7 @@ import { localizedUrl, pageMetadata } from "@/lib/seo";
 import { JsonLdScript } from "@/lib/schema";
 import { company } from "@/data/company";
 
-export const revalidate = 120;
-
-export function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 
