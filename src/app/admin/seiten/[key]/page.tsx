@@ -14,6 +14,7 @@ import {
   getServiceCities
 } from "@/server/content";
 import { getPathname } from "@/i18n/navigation";
+import { getServices } from "@/data/services";
 import { locales, type Locale } from "@/i18n/routing";
 import { company } from "@/data/company";
 
@@ -62,6 +63,35 @@ export default async function PageEditorPage({
     getPublishedTestimonials(locale)
   ]);
 
+  // Linkziele für das Link-Feld
+  const pageLinks = Object.values(BUILDER_PAGES).map((page) => ({
+    label: page.label,
+    href: getPathname({ locale, href: page.route as never })
+  }));
+  const serviceLinks = getServices(locale).map((service) => ({
+    label: `Leistung: ${service.name}`,
+    href: getPathname({
+      locale,
+      href: { pathname: "/leistungen/[slug]", params: { slug: service.slug } } as never
+    })
+  }));
+  const links = [
+    ...pageLinks,
+    {
+      label: "Leistungen (Übersicht)",
+      href: getPathname({ locale, href: "/leistungen" as never })
+    },
+    {
+      label: "Wissenszentrum",
+      href: getPathname({ locale, href: "/wissen" as never })
+    },
+    ...serviceLinks,
+    { label: "Anruf (Telefon)", href: company.phoneHref },
+    { label: "E-Mail an die Firma", href: `mailto:${company.email}` },
+    { label: "Anker: Bewerbungsformular", href: "#bewerbung" }
+  ];
+
+
   const dynamicData = {
     locale,
     isEditor: true,
@@ -89,7 +119,8 @@ export default async function PageEditorPage({
       quote: entry.quote,
       name: entry.authorName,
       role: [entry.authorRole, entry.authorCompany].filter(Boolean).join(", ")
-    }))
+    })),
+    links
   };
 
   const previewUrl = getPathname({

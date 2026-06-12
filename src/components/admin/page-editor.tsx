@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { Puck, type Data } from "@measured/puck";
 import "@measured/puck/puck.css";
@@ -48,8 +48,24 @@ export function PageEditor({
   previewUrl
 }: PageEditorProps) {
   const latest = useRef<Data>(initialData);
+  const dirty = useRef(false);
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  // Automatisches Speichern des Entwurfs alle 10 Sekunden bei Änderungen
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!dirty.current) return;
+      dirty.current = false;
+      const result = await saveDraftAction(pageKey, locale, latest.current);
+      if (result.ok) {
+        setStatus(
+          `Automatisch gespeichert ${new Date().toLocaleTimeString("de-DE")}`
+        );
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [pageKey, locale]);
 
   const flash = (text: string) => {
     setStatus(text);
@@ -153,8 +169,14 @@ export function PageEditor({
             <Puck
               config={builderConfig}
               data={initialData}
+              viewports={[
+                { width: 390, label: "Smartphone" },
+                { width: 820, label: "Tablet" },
+                { width: 1440, label: "Desktop" }
+              ]}
               onChange={(data) => {
                 latest.current = data;
+                dirty.current = true;
               }}
               onPublish={async (data) => {
                 latest.current = data;

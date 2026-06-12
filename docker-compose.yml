@@ -17,6 +17,9 @@ services:
       - "2015:3000"
     env_file:
       - .env
+    volumes:
+      # Hochgeladene Bilder bleiben über Rebuilds hinweg erhalten
+      - ./public/uploads:/app/public/uploads
     environment:
       NODE_ENV: production
     healthcheck:

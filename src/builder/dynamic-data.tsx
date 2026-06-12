@@ -17,6 +17,8 @@ export interface BuilderDynamicData {
   jobs: BoardJob[];
   cities: MapMarker[];
   testimonials: BuilderTestimonial[];
+  /** Linkziele für das Link-Feld im Editor (lokalisierte Seitenpfade) */
+  links?: { label: string; href: string }[];
 }
 
 const defaultValue: BuilderDynamicData = {

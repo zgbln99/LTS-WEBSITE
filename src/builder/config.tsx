@@ -23,6 +23,8 @@ import {
   TestimonialsBlock
 } from "@/builder/blocks";
 import { RichTextField } from "@/builder/rich-text-field";
+import { ImageField } from "@/builder/fields/image-field";
+import { LinkField } from "@/builder/fields/link-field";
 
 const themeField = {
   type: "select" as const,
@@ -33,6 +35,30 @@ const themeField = {
     { label: "Dunkel", value: "dark" }
   ]
 };
+
+const imageField = (label: string) => ({
+  type: "custom" as const,
+  label,
+  render: ({
+    value,
+    onChange
+  }: {
+    value: string;
+    onChange: (value: string) => void;
+  }) => <ImageField value={value ?? ""} onChange={onChange} />
+});
+
+const linkField = (label: string) => ({
+  type: "custom" as const,
+  label,
+  render: ({
+    value,
+    onChange
+  }: {
+    value: string;
+    onChange: (value: string) => void;
+  }) => <LinkField value={value ?? ""} onChange={onChange} />
+});
 
 const richTextField = {
   type: "custom" as const,
@@ -84,10 +110,10 @@ export const builderConfig: Config = {
     Hero: {
       label: "Hero (große Startfläche)",
       fields: {
-        eyebrow: { type: "text", label: "Badge-Text" },
-        title: { type: "textarea", label: "Überschrift" },
-        subtitle: { type: "textarea", label: "Untertitel" },
-        image: { type: "text", label: "Hintergrundbild (URL)" },
+        eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
+        title: { type: "textarea", label: "Überschrift", contentEditable: true },
+        subtitle: { type: "textarea", label: "Untertitel", contentEditable: true },
+        image: imageField("Hintergrundbild"),
         height: {
           type: "select",
           label: "Höhe",
@@ -97,10 +123,10 @@ export const builderConfig: Config = {
             { label: "Mittel", value: "medium" }
           ]
         },
-        primaryLabel: { type: "text", label: "Button 1: Text" },
-        primaryHref: { type: "text", label: "Button 1: Link" },
-        secondaryLabel: { type: "text", label: "Button 2: Text" },
-        secondaryHref: { type: "text", label: "Button 2: Link" }
+        primaryLabel: { type: "text", label: "Button 1: Text", contentEditable: true },
+        primaryHref: linkField("Button 1: Link"),
+        secondaryLabel: { type: "text", label: "Button 2: Text", contentEditable: true },
+        secondaryHref: linkField("Button 2: Link")
       },
       defaultProps: {
         eyebrow: "",
@@ -119,10 +145,10 @@ export const builderConfig: Config = {
     Seitenkopf: {
       label: "Seitenkopf (Unterseite)",
       fields: {
-        eyebrow: { type: "text", label: "Badge-Text" },
-        title: { type: "textarea", label: "Überschrift" },
-        description: { type: "textarea", label: "Beschreibung" },
-        image: { type: "text", label: "Hintergrundbild (URL)" }
+        eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
+        title: { type: "textarea", label: "Überschrift", contentEditable: true },
+        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
+        image: imageField("Hintergrundbild")
       },
       defaultProps: {
         eyebrow: "",
@@ -136,9 +162,9 @@ export const builderConfig: Config = {
     Ueberschrift: {
       label: "Überschrift",
       fields: {
-        eyebrow: { type: "text", label: "Badge-Text" },
-        title: { type: "textarea", label: "Überschrift" },
-        description: { type: "textarea", label: "Beschreibung" },
+        eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
+        title: { type: "textarea", label: "Überschrift", contentEditable: true },
+        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
         theme: themeField,
         align: {
           type: "radio",
@@ -186,7 +212,7 @@ export const builderConfig: Config = {
       label: "Bild + Text",
       fields: {
         html: richTextField,
-        image: { type: "text", label: "Bild (URL)" },
+        image: imageField("Bild"),
         reverse: {
           type: "radio",
           label: "Bildposition",
@@ -209,7 +235,7 @@ export const builderConfig: Config = {
     Bild: {
       label: "Bild",
       fields: {
-        image: { type: "text", label: "Bild (URL)" },
+        image: imageField("Bild"),
         alt: { type: "text", label: "Alt-Text" },
         height: {
           type: "select",
@@ -255,8 +281,8 @@ export const builderConfig: Config = {
             title: { type: "text", label: "Titel" },
             specs: { type: "text", label: "Hervorgehobene Zeile (rot)" },
             text: { type: "textarea", label: "Text" },
-            image: { type: "text", label: "Bild (URL)" },
-            href: { type: "text", label: "Link (optional)" }
+            image: imageField("Bild"),
+            href: linkField("Link (optional)")
           },
           defaultItemProps: {
             title: "Titel",
@@ -386,8 +412,8 @@ export const builderConfig: Config = {
     Referenzen: {
       label: "Referenzen",
       fields: {
-        eyebrow: { type: "text", label: "Badge-Text" },
-        title: { type: "text", label: "Überschrift" }
+        eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
+        title: { type: "text", label: "Überschrift", contentEditable: true }
       },
       defaultProps: { eyebrow: "Referenzen", title: "Was unsere Kunden sagen" },
       render: (props) => <TestimonialsBlock {...(props as any)} />
@@ -396,7 +422,7 @@ export const builderConfig: Config = {
     Bewerbungsformular: {
       label: "Bewerbungsformular",
       fields: {
-        title: { type: "text", label: "Überschrift" },
+        title: { type: "text", label: "Überschrift", contentEditable: true },
         category: {
           type: "select",
           label: "Vorausgewählter Bereich",
@@ -416,7 +442,7 @@ export const builderConfig: Config = {
 
     Kontaktformular: {
       label: "Kontaktformular",
-      fields: { title: { type: "text", label: "Überschrift" } },
+      fields: { title: { type: "text", label: "Überschrift", contentEditable: true } },
       defaultProps: { title: "Schreiben Sie uns" },
       render: (props) => <ContactFormBlock {...(props as any)} />
     },
@@ -424,12 +450,12 @@ export const builderConfig: Config = {
     CTABanner: {
       label: "CTA-Banner (dunkel)",
       fields: {
-        title: { type: "textarea", label: "Überschrift" },
-        description: { type: "textarea", label: "Beschreibung" },
-        primaryLabel: { type: "text", label: "Button 1: Text" },
-        primaryHref: { type: "text", label: "Button 1: Link" },
+        title: { type: "textarea", label: "Überschrift", contentEditable: true },
+        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
+        primaryLabel: { type: "text", label: "Button 1: Text", contentEditable: true },
+        primaryHref: linkField("Button 1: Link"),
         secondaryLabel: { type: "text", label: "Button 2: Text (Telefon)" },
-        secondaryHref: { type: "text", label: "Button 2: Link" }
+        secondaryHref: linkField("Button 2: Link")
       },
       defaultProps: {
         title: "Überschrift",

@@ -30,3 +30,7 @@ yarn-error.log*
 
 # prisma
 /prisma/migrations/dev.db*
+
+# hochgeladene Medien
+public/uploads/*
+!public/uploads/.gitkeep

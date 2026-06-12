@@ -39,6 +39,10 @@ docker run --rm \
   node:22-alpine \
   sh -c "set -a && . ./.env && set +a && npm ci --no-audit --no-fund && npx prisma db push && npm run db:seed"
 
+# Upload-Verzeichnis für die Mediathek (Container läuft als User 1001)
+mkdir -p public/uploads
+chown -R 1001:1001 public/uploads 2>/dev/null || true
+
 echo "==> Image bauen und Container starten (Port 2015)"
 # .env in die Shell exportieren, damit NEXT_PUBLIC_* sicher als Build-Args
 # ankommen (Karte, Analytics werden zur Buildzeit eingebettet)
