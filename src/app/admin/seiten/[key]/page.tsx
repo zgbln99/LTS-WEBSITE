@@ -9,6 +9,7 @@ import {
 } from "@/builder/defaults";
 import { getEditorPageData } from "@/server/builder";
 import {
+  getPublishedArticles,
   getPublishedJobs,
   getPublishedTestimonials,
   getServiceCities
@@ -57,11 +58,25 @@ export default async function PageEditorPage({
 
   // Echte Daten für die Vorschau dynamischer Blöcke
   const t = await getTranslations({ locale, namespace: "career" });
-  const [jobs, cities, testimonials] = await Promise.all([
+  const [jobs, cities, testimonials, publishedArticles] = await Promise.all([
     getPublishedJobs(locale),
     getServiceCities(),
-    getPublishedTestimonials(locale)
+    getPublishedTestimonials(locale),
+    getPublishedArticles(locale)
   ]);
+  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const articles = publishedArticles.map((article) => ({
+    href: getPathname({
+      locale,
+      href: {
+        pathname: "/wissen/[slug]",
+        params: { slug: article.translation.slug }
+      } as never
+    }),
+    title: article.translation.title,
+    excerpt: article.translation.excerpt,
+    meta: article.publishedAt ? dateFormatter.format(article.publishedAt) : ""
+  }));
 
   // Linkziele für das Link-Feld
   const pageLinks = Object.values(BUILDER_PAGES).map((page) => ({
@@ -120,13 +135,25 @@ export default async function PageEditorPage({
       name: entry.authorName,
       role: [entry.authorRole, entry.authorCompany].filter(Boolean).join(", ")
     })),
-    links
+    links,
+    articles
   };
 
-  const previewUrl = getPathname({
-    locale,
-    href: BUILDER_PAGES[key].route as never
-  });
+  const pageDef = BUILDER_PAGES[key];
+  const previewUrl = pageDef.serviceKey
+    ? getPathname({
+        locale,
+        href: {
+          pathname: "/leistungen/[slug]",
+          params: {
+            slug:
+              getServices(locale).find(
+                (service) => service.key === pageDef.serviceKey
+              )?.slug ?? ""
+          }
+        } as never
+      })
+    : getPathname({ locale, href: pageDef.route as never });
 
   return (
     <PageEditor

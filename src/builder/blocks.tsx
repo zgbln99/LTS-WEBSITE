@@ -18,6 +18,9 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { ContactForm } from "@/components/forms/contact-form";
 import { EuropeMap } from "@/components/sections/europe-map";
 import { useDynamicData } from "@/builder/dynamic-data";
+import { getServices } from "@/data/services";
+import { getPathname } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { jobCategoryKeys } from "@/lib/forms";
 
@@ -29,21 +32,42 @@ const sectionTheme: Record<Theme, string> = {
   dark: "bg-night-950"
 };
 
+export type Padding = "none" | "small" | "normal" | "large";
+
+const sectionPadding: Record<Padding, string> = {
+  none: "py-0",
+  small: "py-8 sm:py-10",
+  normal: "py-14 sm:py-20",
+  large: "py-24 sm:py-32"
+};
+
 function Section({
   theme,
+  padding = "normal",
   children,
   className
 }: {
   theme: Theme;
+  padding?: Padding;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
-    <section className={cn(sectionTheme[theme], "py-14 sm:py-20", className)}>
+    <section
+      className={cn(sectionTheme[theme], sectionPadding[padding], className)}
+    >
       <Container>{children}</Container>
     </section>
   );
 }
+
+export type TextSize = "normal" | "large" | "xl";
+
+const textSizes: Record<TextSize, string> = {
+  normal: "text-base sm:text-lg",
+  large: "text-lg sm:text-xl",
+  xl: "text-xl leading-relaxed sm:text-2xl"
+};
 
 export function RichTextContent({
   html,
@@ -57,9 +81,9 @@ export function RichTextContent({
   return (
     <div
       className={cn(
-        "rt-prose max-w-none text-base leading-relaxed sm:text-lg",
+        "rt-prose max-w-none leading-relaxed",
         dark ? "text-mist-200" : "text-night-800",
-        className
+        className ?? "text-base sm:text-lg"
       )}
       dangerouslySetInnerHTML={{ __html: html }}
     />
@@ -75,6 +99,7 @@ export interface HeroProps {
   title: string;
   subtitle: string;
   image: string;
+  titleSize?: "normal" | "large";
   height: "full" | "large" | "medium";
   primaryLabel: string;
   primaryHref: string;
@@ -113,7 +138,14 @@ export function HeroBlock(props: HeroProps) {
             {props.eyebrow}
           </span>
         ) : null}
-        <h1 className="mt-6 max-w-5xl text-4xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl">
+        <h1
+          className={cn(
+            "mt-6 max-w-5xl font-extrabold leading-[1.05] text-white",
+            (props.titleSize ?? "normal") === "large"
+              ? "text-5xl sm:text-7xl lg:text-8xl"
+              : "text-4xl sm:text-6xl lg:text-7xl"
+          )}
+        >
           {props.title}
         </h1>
         {props.subtitle ? (
@@ -195,15 +227,34 @@ export interface HeadingProps {
   description: string;
   theme: Theme;
   align: "left" | "center";
+  size?: "normal" | "large" | "xl";
+  width?: "normal" | "wide" | "full";
+  padding?: Padding;
 }
+
+const headingSizes = {
+  normal: "text-3xl sm:text-4xl lg:text-5xl",
+  large: "text-4xl sm:text-5xl lg:text-6xl",
+  xl: "text-5xl sm:text-6xl lg:text-7xl"
+};
+
+const headingWidths = {
+  normal: "max-w-4xl",
+  wide: "max-w-6xl",
+  full: "max-w-none"
+};
 
 export function HeadingBlock(props: HeadingProps) {
   const dark = props.theme === "dark";
   return (
-    <Section theme={props.theme} className="pb-4 sm:pb-6">
+    <Section
+      theme={props.theme}
+      padding={props.padding ?? "small"}
+      className="pb-4 sm:pb-6"
+    >
       <div
         className={cn(
-          "max-w-4xl",
+          headingWidths[props.width ?? "normal"],
           props.align === "center" && "mx-auto text-center"
         )}
       >
@@ -221,7 +272,8 @@ export function HeadingBlock(props: HeadingProps) {
         ) : null}
         <h2
           className={cn(
-            "text-3xl font-bold sm:text-4xl lg:text-5xl",
+            "font-bold",
+            headingSizes[props.size ?? "normal"],
             dark ? "text-white" : "text-night-900"
           )}
         >
@@ -230,7 +282,10 @@ export function HeadingBlock(props: HeadingProps) {
         {props.description ? (
           <p
             className={cn(
-              "mt-4 text-base leading-relaxed sm:text-lg",
+              "mt-4 leading-relaxed",
+              textSizes[
+                (props.size ?? "normal") === "normal" ? "normal" : "large"
+              ],
               dark ? "text-mist-300" : "text-mist-500"
             )}
           >
@@ -246,6 +301,8 @@ export interface RichTextProps {
   html: string;
   theme: Theme;
   width: "narrow" | "normal" | "wide";
+  size?: TextSize;
+  padding?: Padding;
 }
 
 export function RichTextBlock(props: RichTextProps) {
@@ -255,11 +312,11 @@ export function RichTextBlock(props: RichTextProps) {
     wide: "max-w-none"
   };
   return (
-    <Section theme={props.theme}>
+    <Section theme={props.theme} padding={props.padding ?? "normal"}>
       <RichTextContent
         html={props.html}
         dark={props.theme === "dark"}
-        className={widths[props.width]}
+        className={cn(widths[props.width], textSizes[props.size ?? "normal"])}
       />
     </Section>
   );
@@ -303,6 +360,7 @@ export function StatsBlock(props: StatsProps) {
 
 export interface CardsProps {
   theme: Theme;
+  padding?: Padding;
   columns: "2" | "3" | "4";
   style: "icon" | "photo" | "plain";
   items: {
@@ -322,7 +380,7 @@ export function CardsBlock(props: CardsProps) {
     "4": "sm:grid-cols-2 lg:grid-cols-4"
   };
   return (
-    <Section theme={props.theme}>
+    <Section theme={props.theme} padding={props.padding ?? "normal"}>
       <div className={cn("grid gap-4", cols[props.columns])}>
         {props.items.map((item, index) => {
           const inner = (
@@ -400,11 +458,12 @@ export interface SplitProps {
   image: string;
   reverse: boolean;
   theme: Theme;
+  padding?: Padding;
 }
 
 export function SplitBlock(props: SplitProps) {
   return (
-    <Section theme={props.theme}>
+    <Section theme={props.theme} padding={props.padding ?? "normal"}>
       <div className="grid items-center gap-10 lg:grid-cols-2">
         <div className={cn(props.reverse && "lg:order-2")}>
           <RichTextContent html={props.html} dark={props.theme === "dark"} />
@@ -745,14 +804,16 @@ export function ContactFormBlock({ title }: { title: string }) {
 
 export function ChecklistBlock({
   theme,
-  items
+  items,
+  padding
 }: {
   theme: Theme;
   items: { text: string }[];
+  padding?: Padding;
 }) {
   const dark = theme === "dark";
   return (
-    <Section theme={theme} className="py-8 sm:py-12">
+    <Section theme={theme} padding={padding ?? "small"}>
       <ul className="max-w-3xl space-y-3">
         {items.map((item, index) => (
           <li
@@ -779,6 +840,94 @@ export function ChecklistBlock({
           </li>
         ))}
       </ul>
+    </Section>
+  );
+}
+
+
+// Leistungs-Raster: zeigt automatisch alle Leistungsseiten der Sprache.
+export function LeistungenBlock({ ctaLabel }: { ctaLabel: string }) {
+  const { locale } = useDynamicData();
+  const services = getServices(locale as Locale);
+  return (
+    <Section theme="light">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {services.map((service) => (
+          <a
+            key={service.key}
+            href={getPathname({
+              locale: locale as Locale,
+              href: {
+                pathname: "/leistungen/[slug]",
+                params: { slug: service.slug }
+              }
+            })}
+            className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+          >
+            <div className="relative h-40 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={service.image}
+                alt={service.name}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <div className="flex flex-1 flex-col p-5">
+              <h3 className="font-display text-lg font-bold text-night-900">
+                {service.name}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-mist-500">
+                {service.excerpt}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
+                {ctaLabel}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+// Artikel-Liste: veröffentlichte Beiträge aus dem Wissenszentrum.
+export function ArtikelBlock() {
+  const { articles = [], isEditor } = useDynamicData();
+  if (articles.length === 0) {
+    return isEditor ? (
+      <Section theme="white">
+        <div className="rounded-3xl border-2 border-dashed border-mist-300 p-10 text-center text-sm text-mist-500">
+          Artikel: zeigt automatisch alle veröffentlichten Beiträge aus dem
+          Wissenszentrum.
+        </div>
+      </Section>
+    ) : null;
+  }
+  return (
+    <Section theme="white">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {articles.map((article) => (
+          <a
+            key={article.href}
+            href={article.href}
+            className="group flex h-full flex-col rounded-3xl border border-mist-200 bg-mist-50 p-6 transition-all hover:-translate-y-0.5 hover:bg-white hover:shadow-card sm:p-8"
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide text-mist-400">
+              {article.meta}
+            </p>
+            <h3 className="mt-3 font-display text-lg font-bold text-night-900">
+              {article.title}
+            </h3>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-mist-500">
+              {article.excerpt}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </a>
+        ))}
+      </div>
     </Section>
   );
 }

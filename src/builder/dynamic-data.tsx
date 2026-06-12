@@ -19,6 +19,8 @@ export interface BuilderDynamicData {
   testimonials: BuilderTestimonial[];
   /** Linkziele für das Link-Feld im Editor (lokalisierte Seitenpfade) */
   links?: { label: string; href: string }[];
+  /** Veröffentlichte Artikel für den Artikel-Block */
+  articles?: { href: string; title: string; excerpt: string; meta: string }[];
 }
 
 const defaultValue: BuilderDynamicData = {

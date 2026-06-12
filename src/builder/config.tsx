@@ -20,7 +20,9 @@ import {
   SpacerBlock,
   SplitBlock,
   StatsBlock,
-  TestimonialsBlock
+  TestimonialsBlock,
+  LeistungenBlock,
+  ArtikelBlock
 } from "@/builder/blocks";
 import { RichTextField } from "@/builder/rich-text-field";
 import { ImageField } from "@/builder/fields/image-field";
@@ -60,6 +62,27 @@ const linkField = (label: string) => ({
   }) => <LinkField value={value ?? ""} onChange={onChange} />
 });
 
+const paddingField = {
+  type: "select" as const,
+  label: "Abstand oben/unten",
+  options: [
+    { label: "Ohne", value: "none" },
+    { label: "Klein", value: "small" },
+    { label: "Normal", value: "normal" },
+    { label: "Groß", value: "large" }
+  ]
+};
+
+const textSizeField = {
+  type: "select" as const,
+  label: "Textgröße",
+  options: [
+    { label: "Normal", value: "normal" },
+    { label: "Groß", value: "large" },
+    { label: "Sehr groß", value: "xl" }
+  ]
+};
+
 const richTextField = {
   type: "custom" as const,
   label: "Text",
@@ -95,6 +118,8 @@ export const builderConfig: Config = {
     dynamisch: {
       title: "Funktionen",
       components: [
+        "Leistungen",
+        "Artikel",
         "Jobboerse",
         "RueckrufPanel",
         "Karte",
@@ -123,6 +148,14 @@ export const builderConfig: Config = {
             { label: "Mittel", value: "medium" }
           ]
         },
+        titleSize: {
+          type: "select",
+          label: "Überschriftgröße",
+          options: [
+            { label: "Normal", value: "normal" },
+            { label: "Sehr groß", value: "large" }
+          ]
+        },
         primaryLabel: { type: "text", label: "Button 1: Text", contentEditable: true },
         primaryHref: linkField("Button 1: Link"),
         secondaryLabel: { type: "text", label: "Button 2: Text", contentEditable: true },
@@ -134,6 +167,7 @@ export const builderConfig: Config = {
         subtitle: "",
         image: "",
         height: "large",
+        titleSize: "normal",
         primaryLabel: "",
         primaryHref: "",
         secondaryLabel: "",
@@ -173,14 +207,36 @@ export const builderConfig: Config = {
             { label: "Links", value: "left" },
             { label: "Zentriert", value: "center" }
           ]
-        }
+        },
+        size: {
+          type: "select",
+          label: "Überschriftgröße",
+          options: [
+            { label: "Normal", value: "normal" },
+            { label: "Groß", value: "large" },
+            { label: "Sehr groß", value: "xl" }
+          ]
+        },
+        width: {
+          type: "select",
+          label: "Breite",
+          options: [
+            { label: "Normal", value: "normal" },
+            { label: "Breit", value: "wide" },
+            { label: "Volle Breite", value: "full" }
+          ]
+        },
+        padding: paddingField
       },
       defaultProps: {
         eyebrow: "",
         title: "Überschrift",
         description: "",
         theme: "light",
-        align: "left"
+        align: "left",
+        size: "normal",
+        width: "normal",
+        padding: "small"
       },
       render: (props) => <HeadingBlock {...(props as any)} />
     },
@@ -198,12 +254,16 @@ export const builderConfig: Config = {
             { label: "Normal", value: "normal" },
             { label: "Volle Breite", value: "wide" }
           ]
-        }
+        },
+        size: textSizeField,
+        padding: paddingField
       },
       defaultProps: {
         html: "<p>Ihr Text...</p>",
         theme: "white",
-        width: "normal"
+        width: "normal",
+        size: "normal",
+        padding: "normal"
       },
       render: (props) => <RichTextBlock {...(props as any)} />
     },
@@ -221,13 +281,15 @@ export const builderConfig: Config = {
             { label: "Links", value: true }
           ]
         },
-        theme: themeField
+        theme: themeField,
+        padding: paddingField
       },
       defaultProps: {
         html: "<p>Ihr Text...</p>",
         image: "",
         reverse: false,
-        theme: "light"
+        theme: "light",
+        padding: "normal"
       },
       render: (props) => <SplitBlock {...(props as any)} />
     },
@@ -255,6 +317,7 @@ export const builderConfig: Config = {
       label: "Karten-Raster",
       fields: {
         theme: themeField,
+        padding: paddingField,
         columns: {
           type: "select",
           label: "Spalten",
@@ -295,6 +358,7 @@ export const builderConfig: Config = {
       },
       defaultProps: {
         theme: "light",
+        padding: "normal",
         columns: "3",
         style: "plain",
         items: []
@@ -306,6 +370,7 @@ export const builderConfig: Config = {
       label: "Checkliste",
       fields: {
         theme: themeField,
+        padding: paddingField,
         items: {
           type: "array",
           label: "Punkte",
@@ -315,7 +380,7 @@ export const builderConfig: Config = {
           defaultItemProps: { text: "" }
         }
       },
-      defaultProps: { theme: "white", items: [] },
+      defaultProps: { theme: "white", padding: "small", items: [] },
       render: (props) => <ChecklistBlock {...(props as any)} />
     },
 
@@ -372,6 +437,21 @@ export const builderConfig: Config = {
       },
       defaultProps: { size: "medium" },
       render: (props) => <SpacerBlock {...(props as any)} />
+    },
+
+    Leistungen: {
+      label: "Leistungs-Raster",
+      fields: {
+        ctaLabel: { type: "text", label: "Button-Text auf den Karten" }
+      },
+      defaultProps: { ctaLabel: "Mehr erfahren" },
+      render: (props) => <LeistungenBlock {...(props as any)} />
+    },
+
+    Artikel: {
+      label: "Artikel (Wissenszentrum)",
+      fields: {},
+      render: () => <ArtikelBlock />
     },
 
     Jobboerse: {

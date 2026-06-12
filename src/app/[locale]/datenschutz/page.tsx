@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/sections/page-hero";
 import { buildAlternates } from "@/lib/seo";
 import { company } from "@/data/company";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -22,6 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PrivacyPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  const builderData = await getPublishedPageData("datenschutz", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   return (
     <>

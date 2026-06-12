@@ -4,17 +4,56 @@ import type { Locale } from "@/i18n/routing";
 import { getServices } from "@/data/services";
 import { company } from "@/data/company";
 
+import { serviceOrder, type ServiceKey } from "@/data/services";
+
+export interface BuilderPageDef {
+  label: string;
+  /** statische Route oder Leistungs-Schlüssel für dynamische Slugs */
+  route: string;
+  group: "haupt" | "leistungen" | "rechtliches";
+  serviceKey?: ServiceKey;
+}
+
+const servicePages = Object.fromEntries(
+  serviceOrder.map((key) => [
+    `leistung-${key}`,
+    {
+      label: `Leistung: ${key}`, // wird in der Liste durch den Namen ersetzt
+      route: "/leistungen/[slug]",
+      group: "leistungen" as const,
+      serviceKey: key
+    }
+  ])
+);
+
 // Seiten, die im Page-Builder bearbeitet werden können.
-export const BUILDER_PAGES = {
-  home: { label: "Startseite", route: "/" },
-  karriere: { label: "Karriere", route: "/karriere" },
-  "lkw-fahrer": { label: "LKW-Fahrer Landingpage", route: "/karriere/lkw-fahrer" },
-  fuhrpark: { label: "Fuhrpark", route: "/fuhrpark" },
-  unternehmen: { label: "Unternehmen", route: "/unternehmen" },
-  kontakt: { label: "Kontakt", route: "/kontakt" }
+export const BUILDER_PAGES: Record<string, BuilderPageDef> = {
+  home: { label: "Startseite", route: "/", group: "haupt" },
+  karriere: { label: "Karriere", route: "/karriere", group: "haupt" },
+  "lkw-fahrer": {
+    label: "LKW-Fahrer Landingpage",
+    route: "/karriere/lkw-fahrer",
+    group: "haupt"
+  },
+  fuhrpark: { label: "Fuhrpark", route: "/fuhrpark", group: "haupt" },
+  unternehmen: { label: "Unternehmen", route: "/unternehmen", group: "haupt" },
+  kontakt: { label: "Kontakt", route: "/kontakt", group: "haupt" },
+  wissen: { label: "Wissenszentrum", route: "/wissen", group: "haupt" },
+  leistungen: {
+    label: "Leistungen (Übersicht)",
+    route: "/leistungen",
+    group: "leistungen"
+  },
+  ...servicePages,
+  impressum: { label: "Impressum", route: "/impressum", group: "rechtliches" },
+  datenschutz: {
+    label: "Datenschutzerklärung",
+    route: "/datenschutz",
+    group: "rechtliches"
+  }
 } as const;
 
-export type BuilderPageKey = keyof typeof BUILDER_PAGES;
+export type BuilderPageKey = keyof typeof BUILDER_PAGES & string;
 
 export function isBuilderPageKey(key: string): key is BuilderPageKey {
   return key in BUILDER_PAGES;
@@ -436,6 +475,183 @@ export function generateDefaultData(
         align: "left"
       }),
       block("Einsatzorte", { title: "" })
+    );
+  }
+
+  if (key === "leistungen") {
+    content.push(
+      block("Seitenkopf", {
+        eyebrow: m.servicesPage.hero.eyebrow,
+        title: m.servicesPage.hero.title,
+        description: m.servicesPage.hero.description,
+        image: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=2400&auto=format&fit=crop"
+      }),
+      block("Leistungen", { ctaLabel: m.common.cta.learnMore }),
+      block("CTABanner", {
+        title: m.servicesPage.cta.title,
+        description: m.servicesPage.cta.description,
+        primaryLabel: m.servicesPage.cta.primary,
+        primaryHref: href("/kontakt"),
+        secondaryLabel: m.servicesPage.cta.secondary,
+        secondaryHref: tel
+      })
+    );
+  }
+
+  if (key.startsWith("leistung-")) {
+    const serviceKey = BUILDER_PAGES[key]?.serviceKey;
+    const service = getServices(locale).find(
+      (entry) => entry.key === serviceKey
+    );
+    if (service) {
+      content.push(
+        block("Seitenkopf", {
+          eyebrow: m.servicesPage.hero.eyebrow,
+          title: service.name,
+          description: service.excerpt,
+          image: service.image
+        }),
+        block("BildText", {
+          html: paragraphs(service.description),
+          image: service.image,
+          reverse: false,
+          theme: "light"
+        }),
+        block("Ueberschrift", {
+          eyebrow: "",
+          title: m.servicesPage.benefitsTitle,
+          description: "",
+          theme: "white",
+          align: "left"
+        }),
+        block("Karten", {
+          theme: "white",
+          columns: "4",
+          style: "plain",
+          items: service.benefits.map((benefit) => ({
+            title: benefit.title,
+            specs: "",
+            text: benefit.text,
+            image: "",
+            href: ""
+          }))
+        }),
+        block("Ueberschrift", {
+          eyebrow: "",
+          title: m.servicesPage.processTitle,
+          description: "",
+          theme: "dark",
+          align: "left"
+        }),
+        block("Karten", {
+          theme: "dark",
+          columns: "4",
+          style: "plain",
+          items: service.steps.map((step, index) => ({
+            title: step.title,
+            specs: String(index + 1).padStart(2, "0"),
+            text: step.text,
+            image: "",
+            href: ""
+          }))
+        }),
+        block("Ueberschrift", {
+          eyebrow: "",
+          title: m.servicesPage.faqTitle,
+          description: "",
+          theme: "light",
+          align: "center"
+        }),
+        block("FAQ", {
+          items: service.faqs.map((faq) => ({
+            question: faq.question,
+            answer: faq.answer
+          }))
+        }),
+        block("CTABanner", {
+          title: m.servicesPage.cta.title,
+          description: m.servicesPage.cta.description,
+          primaryLabel: m.servicesPage.cta.primary,
+          primaryHref: href("/kontakt"),
+          secondaryLabel: m.servicesPage.cta.secondary,
+          secondaryHref: tel
+        })
+      );
+    }
+  }
+
+  if (key === "wissen") {
+    content.push(
+      block("Seitenkopf", {
+        eyebrow: m.knowledge.hero.eyebrow,
+        title: m.knowledge.hero.title,
+        description: m.knowledge.hero.description,
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2400&auto=format&fit=crop"
+      }),
+      block("Artikel", {}),
+      block("Ueberschrift", {
+        eyebrow: "",
+        title: m.knowledge.categoriesTitle,
+        description: "",
+        theme: "light",
+        align: "left"
+      }),
+      block("Karten", {
+        theme: "light",
+        columns: "4",
+        style: "plain",
+        items: (m.knowledge.categories as any[]).map((category) => ({
+          title: category.name,
+          specs: "",
+          text: category.text,
+          image: "",
+          href: ""
+        }))
+      })
+    );
+  }
+
+  if (key === "impressum") {
+    const address = `${company.address.street}<br/>${company.address.zip} ${company.address.city}<br/>${company.address.district}`;
+    content.push(
+      block("Seitenkopf", {
+        eyebrow: "Rechtliches",
+        title: "Impressum",
+        description: "",
+        image: ""
+      }),
+      block("Text", {
+        theme: "light",
+        width: "narrow",
+        html:
+          `<h2>Angaben gemäß § 5 TMG</h2><p>${company.legalName}<br/>${address}</p>` +
+          `<h2>Kontakt</h2><p>Telefon: ${company.phone}<br/>E-Mail: ${company.email}</p>` +
+          `<h2>Vertretungsberechtigte Geschäftsführung</h2><p>Die Angaben zur Geschäftsführung, zum Handelsregister und zur Umsatzsteuer-Identifikationsnummer werden vor Veröffentlichung durch die Geschäftsleitung ergänzt und geprüft.</p>` +
+          `<h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2><p>${company.legalName}, ${company.address.street}, ${company.address.zip} ${company.address.city}, ${company.address.district}</p>` +
+          `<h2>Streitschlichtung</h2><p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a>. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>`
+      })
+    );
+  }
+
+  if (key === "datenschutz") {
+    content.push(
+      block("Seitenkopf", {
+        eyebrow: "Rechtliches",
+        title: "Datenschutzerklärung",
+        description: "",
+        image: ""
+      }),
+      block("Text", {
+        theme: "light",
+        width: "narrow",
+        html:
+          `<h2>1. Verantwortlicher</h2><p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Website ist die ${company.legalName}, ${company.address.street}, ${company.address.zip} ${company.address.city}, ${company.address.district}, E-Mail: ${company.email}, Telefon: ${company.phone}.</p>` +
+          `<h2>2. Erhebung und Speicherung personenbezogener Daten</h2><p>Beim Aufruf dieser Website werden durch den Hostinganbieter automatisch Informationen in sogenannten Server-Logfiles gespeichert (IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der Sicherstellung eines störungsfreien Betriebs und werden nach kurzer Zeit gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>` +
+          `<h2>3. Kontaktaufnahme</h2><p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, verarbeiten wir die von Ihnen übermittelten Daten zur Bearbeitung Ihrer Anfrage. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage der Anbahnung oder Durchführung eines Vertrags dient, im Übrigen Art. 6 Abs. 1 lit. f DSGVO.</p>` +
+          `<h2>4. Bewerbungen</h2><p>Bewerbungsunterlagen verarbeiten wir ausschließlich zum Zweck des Bewerbungsverfahrens auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO und § 26 BDSG. Unterlagen nicht berücksichtigter Bewerbungen werden spätestens sechs Monate nach Abschluss des Verfahrens gelöscht, sofern keine Einwilligung zur längeren Speicherung vorliegt.</p>` +
+          `<h2>5. Ihre Rechte</h2><p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) sowie Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Außerdem besteht ein Beschwerderecht bei der zuständigen Datenschutzaufsichtsbehörde.</p>` +
+          `<h2>6. Cookies und Analysedienste</h2><p>Analyse- und Marketingdienste werden ausschließlich nach Ihrer ausdrücklichen Einwilligung über das Consent-Banner geladen (Art. 6 Abs. 1 lit. a DSGVO, § 25 TDDDG). Ihre Auswahl können Sie jederzeit über das Löschen der Cookies widerrufen.</p>`
+      })
     );
   }
 

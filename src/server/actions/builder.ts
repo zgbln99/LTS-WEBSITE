@@ -13,14 +13,25 @@ import { BUILDER_PAGES, isBuilderPageKey } from "@/builder/defaults";
 
 const BUILDER_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
 
-const PAGE_PATHS: Record<string, string> = {
-  home: "",
-  karriere: "/karriere",
-  "lkw-fahrer": "/karriere/lkw-fahrer",
-  fuhrpark: "/fuhrpark",
-  unternehmen: "/unternehmen",
-  kontakt: "/kontakt"
+const PAGE_PATHS: Record<string, string[]> = {
+  home: [""],
+  karriere: ["/karriere"],
+  "lkw-fahrer": ["/karriere/lkw-fahrer"],
+  fuhrpark: ["/fuhrpark"],
+  unternehmen: ["/unternehmen"],
+  kontakt: ["/kontakt"],
+  wissen: ["/wissen"],
+  leistungen: ["/leistungen"],
+  impressum: ["/impressum"],
+  datenschutz: ["/datenschutz"]
 };
+
+function pathsFor(key: string) {
+  if (key.startsWith("leistung-")) {
+    return ["/leistungen", "/leistungen/[slug]"];
+  }
+  return PAGE_PATHS[key] ?? [""];
+}
 
 async function ensureTranslation(key: string, locale: string) {
   const page = await prisma.page.upsert({
@@ -91,7 +102,7 @@ export async function publishPageAction(
     entityType: "PagePublish",
     entityId: `${key}:${locale}`
   });
-  revalidatePublic([PAGE_PATHS[key] ?? ""]);
+  revalidatePublic(pathsFor(key));
   revalidatePath("/admin/seiten");
   return { ok: true };
 }
@@ -114,7 +125,7 @@ export async function resetPageAction(key: string, locale: string) {
     entityType: "PageContent",
     entityId: `${key}:${locale}`
   });
-  revalidatePublic([PAGE_PATHS[key] ?? ""]);
+  revalidatePublic(pathsFor(key));
   revalidatePath("/admin/seiten");
   return { ok: true };
 }

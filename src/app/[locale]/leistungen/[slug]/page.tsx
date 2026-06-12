@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -27,6 +29,8 @@ import {
   serviceSchema
 } from "@/lib/schema";
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 
 export function generateStaticParams() {
@@ -51,6 +55,14 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const service = getServiceBySlug(locale, slug);
   if (!service) notFound();
+
+  const builderData = await getPublishedPageData(
+    `leistung-${service.key}`,
+    locale
+  );
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("servicesPage");
   const url = localizedUrl(locale, {

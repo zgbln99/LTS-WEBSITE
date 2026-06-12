@@ -6,6 +6,7 @@ import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { BUILDER_PAGES } from "@/builder/defaults";
+import { getServices } from "@/data/services";
 import { locales } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -59,13 +60,42 @@ export default async function PagesAdminPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        {Object.entries(BUILDER_PAGES).map(([key, page]) => (
+      {/* Hinweis: globale Elemente werden über Website-Texte gepflegt */}
+      <div className="rounded-2xl bg-night-950 px-5 py-4 text-sm text-mist-300">
+        Cookie-Banner, Navigation, Fußzeile und Formular-Beschriftungen
+        bearbeiten Sie unter{" "}
+        <Link href="/admin/texte" className="font-semibold text-white underline">
+          Website-Texte
+        </Link>{" "}
+        (z.B. nach "Cookies" suchen).
+      </div>
+
+      {(
+        [
+          ["haupt", "Hauptseiten"],
+          ["leistungen", "Leistungen"],
+          ["rechtliches", "Rechtliches"]
+        ] as const
+      ).map(([group, groupLabel]) => (
+        <div key={group} className="space-y-3">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
+            {groupLabel}
+          </h2>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {Object.entries(BUILDER_PAGES)
+              .filter(([, page]) => page.group === group)
+              .map(([key, page]) => (
           <AdminCard key={key}>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="font-display text-lg font-bold text-night-900">
-                  {page.label}
+                  {page.serviceKey
+                    ? `Leistung: ${
+                        getServices("de").find(
+                          (service) => service.key === page.serviceKey
+                        )?.name ?? page.serviceKey
+                      }`
+                    : page.label}
                 </h2>
                 <p className="text-xs text-mist-400">{page.route}</p>
               </div>
@@ -102,8 +132,10 @@ export default async function PagesAdminPage() {
               })}
             </div>
           </AdminCard>
-        ))}
-      </div>
+              ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

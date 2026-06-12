@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
@@ -6,6 +8,8 @@ import { PageHero } from "@/components/sections/page-hero";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import { pageMetadata } from "@/lib/seo";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -18,6 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  const builderData = await getPublishedPageData("leistungen", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("servicesPage");
   const tCommon = await getTranslations("common");

@@ -3,10 +3,13 @@ import { getTranslations } from "next-intl/server";
 import { BuilderRenderer } from "@/builder/renderer";
 import { company } from "@/data/company";
 import {
+  getPublishedArticles,
   getPublishedJobs,
   getPublishedTestimonials,
   getServiceCities
 } from "@/server/content";
+import { getPathname } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
 
 function formatSalary(min: number | null, max: number | null) {
   if (min && max && min !== max) {
@@ -26,11 +29,26 @@ export async function BuilderPage({
   locale: string;
 }) {
   const t = await getTranslations("career");
-  const [jobs, cities, testimonials] = await Promise.all([
+  const [jobs, cities, testimonials, publishedArticles] = await Promise.all([
     getPublishedJobs(locale),
     getServiceCities(),
-    getPublishedTestimonials(locale)
+    getPublishedTestimonials(locale),
+    getPublishedArticles(locale)
   ]);
+
+  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const articles = publishedArticles.map((article) => ({
+    href: getPathname({
+      locale: locale as Locale,
+      href: {
+        pathname: "/wissen/[slug]",
+        params: { slug: article.translation.slug }
+      }
+    }),
+    title: article.translation.title,
+    excerpt: article.translation.excerpt,
+    meta: article.publishedAt ? dateFormatter.format(article.publishedAt) : ""
+  }));
 
   const boardJobs = jobs.map((job) => ({
     id: job.id,
@@ -63,7 +81,8 @@ export async function BuilderPage({
         isEditor: false,
         jobs: boardJobs,
         cities: markers,
-        testimonials: quotes
+        testimonials: quotes,
+        articles
       }}
     />
   );

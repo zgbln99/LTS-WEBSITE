@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getPublishedPageData } from "@/server/builder";
+import { BuilderPage } from "@/builder/builder-page";
 import { connection } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BookOpen, Newspaper, Scale, Snowflake, type LucideIcon } from "lucide-react";
@@ -28,6 +30,11 @@ export default async function KnowledgePage({ params }: Props) {
   await connection();
   const { locale } = await params;
   setRequestLocale(locale);
+
+  const builderData = await getPublishedPageData("wissen", locale);
+  if (builderData) {
+    return <BuilderPage data={builderData} locale={locale} />;
+  }
 
   const t = await getTranslations("knowledge");
   const categories = t.raw("categories") as { name: string; text: string }[];
