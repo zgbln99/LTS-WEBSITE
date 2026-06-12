@@ -8,6 +8,7 @@ import type { AppPathname, Locale } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { Logo } from "@/components/layout/logo";
 import { company } from "@/data/company";
 import { cn } from "@/lib/utils";
 
@@ -40,13 +41,7 @@ export function Header({ locale }: { locale: Locale }) {
             onClick={() => setOpen(false)}
           >
             <span className="flex items-center rounded-xl bg-white px-2.5 py-1.5">
-              {/* Firmenlogo, wird beim Deployment nach public/logo.png geladen */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.png"
-                alt="LTS Logistik GmbH"
-                className="h-7 w-auto"
-              />
+              <Logo />
             </span>
           </Link>
 

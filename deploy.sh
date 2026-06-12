@@ -13,12 +13,22 @@ fi
 echo "==> Code aktualisieren"
 git pull --ff-only
 
-# Firmenlogo einmalig von der alten Website laden
+# Firmenlogo einmalig von der alten Website laden (mit Browser-Headern,
+# da der alte Server einfache Clients blockiert)
 if [ ! -s public/logo.png ]; then
   echo "==> Logo herunterladen"
-  curl -fsSL -A "Mozilla/5.0" -o public/logo.png \
-    "https://ltslogistik.de/wp-content/uploads/2025/03/lts-duze.png" \
-    || echo "WARNUNG: Logo konnte nicht geladen werden, bitte public/logo.png manuell ablegen."
+  curl -fsSL --compressed -o public/logo.png \
+    -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36" \
+    -H "Accept: image/avif,image/webp,image/png,image/*;q=0.8" \
+    -H "Referer: https://ltslogistik.de/" \
+    "https://ltslogistik.de/wp-content/uploads/2025/03/lts-duze.png" || true
+  # Prüfen, ob wirklich ein Bild angekommen ist
+  if ! file public/logo.png 2>/dev/null | grep -qiE "image|PNG"; then
+    rm -f public/logo.png
+    echo "WARNUNG: Logo konnte nicht geladen werden. Die Website zeigt das Text-Logo."
+    echo "         Manuell beheben: Logo im Browser herunterladen und per scp nach"
+    echo "         /opt/lts-website/public/logo.png kopieren, dann ./deploy.sh erneut."
+  fi
 fi
 
 echo "==> Datenbankschema anwenden und Seed ausführen"

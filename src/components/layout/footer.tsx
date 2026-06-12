@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
+import { Logo } from "@/components/layout/logo";
 import { company } from "@/data/company";
 import { getServices } from "@/data/services";
 
@@ -17,12 +18,7 @@ export async function Footer({ locale }: { locale: Locale }) {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <span className="inline-flex items-center rounded-xl bg-white px-2.5 py-1.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.png"
-                alt="LTS Logistik GmbH"
-                className="h-7 w-auto"
-              />
+              <Logo />
             </span>
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
               {t("footer.tagline")}
