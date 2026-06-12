@@ -21,7 +21,20 @@ Phase 4 (Formulare und Benachrichtigungen) ist umgesetzt:
 - Speicherung in MySQL (Prisma), SMTP-Benachrichtigungen an Disposition/HR mit Anhängen, Bestätigungs-E-Mails an Absender in deren Sprache
 - Spam-Schutz: Honeypot, Rate Limiting, Zod-Validierung, Dateityp- und Größenprüfung
 
-Nächste Phasen: Mapbox-Europakarte, Admin-Panel (Anfragen, Recruiting-Kanban, Inhalte), Wissenszentrum mit Artikeln, Cookie-Consent und Analytics.
+Phase 6 (Admin-Panel unter `/admin`) ist umgesetzt:
+
+- Anmeldung mit Auth.js (Credentials, bcrypt, JWT-Session, 8 h)
+- Rollenbasierte Zugriffe: Super Admin, HR (Bewerbungen), Marketing (Anfragen), Redaktion
+- Dashboard mit Kennzahlen und neuesten Eingängen
+- Transportanfragen: Tabelle, Detailansicht, Statusverwaltung (Neu bis Gewonnen/Verloren)
+- Kontaktanfragen mit Abteilungs- und Statusverwaltung
+- Bewerbungen: Statusboard (Neu/Geprüft/Interview/Abgesagt/Eingestellt), Kandidatenakte
+  mit Unterlagen-Downloads (S3 presigned URLs), internen Notizen und Aktivitätsverlauf
+- Audit-Log für alle Statusänderungen und Notizen
+
+Admin-Benutzer anlegen: `ADMIN_EMAIL` und `ADMIN_PASSWORD` (mind. 12 Zeichen) in `.env` setzen, dann `npm run db:seed`.
+
+Nächste Phasen: Mapbox-Europakarte, Content-Module im Admin (Leistungen, FAQ, Testimonials, Wissenszentrum), Cookie-Consent und Analytics.
 
 ### Konfiguration
 

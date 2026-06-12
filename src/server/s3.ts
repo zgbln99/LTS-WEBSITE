@@ -1,4 +1,9 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 let cached: S3Client | null = null;
 
@@ -38,4 +43,21 @@ export async function uploadApplicationFile(
     })
   );
   return key;
+}
+
+export async function getDownloadUrl(key: string, expiresInSeconds = 3600) {
+  if (!isS3Configured()) return null;
+  try {
+    return await getSignedUrl(
+      getClient(),
+      new GetObjectCommand({
+        Bucket: process.env.S3_BUCKET_APPLICATIONS ?? "lts-applications",
+        Key: key
+      }),
+      { expiresIn: expiresInSeconds }
+    );
+  } catch (error) {
+    console.error("Presigned URL konnte nicht erstellt werden:", error);
+    return null;
+  }
 }
