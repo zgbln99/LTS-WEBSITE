@@ -9,6 +9,7 @@ import { writeAuditLog } from "@/server/audit";
 import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
+import { revalidatePublic } from "@/server/revalidate-public";
 
 const JOB_ROLES: Role[] = ["SUPER_ADMIN", "HR"];
 const CONTENT_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
@@ -142,6 +143,7 @@ export async function saveJobPosting(formData: FormData) {
     entityId: jobId
   });
   revalidatePath("/admin/stellen");
+  revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
   redirect("/admin/stellen");
 }
 
@@ -159,6 +161,7 @@ export async function deleteJobPosting(formData: FormData) {
     entityId: id
   });
   revalidatePath("/admin/stellen");
+  revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
 }
 
 // ---------------------------------------------------------------------------
@@ -214,6 +217,7 @@ export async function saveServiceCity(formData: FormData) {
     entityId: data.id
   });
   revalidatePath("/admin/einsatzorte");
+  revalidatePublic(["", "/kontakt", "/unternehmen"]);
   redirect("/admin/einsatzorte");
 }
 
@@ -231,6 +235,7 @@ export async function deleteServiceCity(formData: FormData) {
     entityId: id
   });
   revalidatePath("/admin/einsatzorte");
+  revalidatePublic(["", "/kontakt", "/unternehmen"]);
 }
 
 // ---------------------------------------------------------------------------
@@ -320,6 +325,7 @@ export async function saveArticle(formData: FormData) {
     entityId: data.id
   });
   revalidatePath("/admin/artikel");
+  revalidatePublic(["/wissen", "/wissen/[slug]"]);
   redirect("/admin/artikel");
 }
 
@@ -337,6 +343,7 @@ export async function deleteArticle(formData: FormData) {
     entityId: id
   });
   revalidatePath("/admin/artikel");
+  revalidatePublic(["/wissen", "/wissen/[slug]"]);
 }
 
 // ---------------------------------------------------------------------------
@@ -407,6 +414,7 @@ export async function saveTestimonial(formData: FormData) {
     entityId: data.id
   });
   revalidatePath("/admin/testimonials");
+  revalidatePublic([""]);
   redirect("/admin/testimonials");
 }
 
@@ -424,4 +432,5 @@ export async function deleteTestimonial(formData: FormData) {
     entityId: id
   });
   revalidatePath("/admin/testimonials");
+  revalidatePublic([""]);
 }

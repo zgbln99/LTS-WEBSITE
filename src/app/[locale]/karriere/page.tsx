@@ -23,10 +23,12 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { JobBoard } from "@/components/career/job-board";
 import { CallbackPanel } from "@/components/career/callback-form";
 import { getPublishedJobs } from "@/server/content";
-
-export const revalidate = 120;
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
+
+// Wichtig: muss NACH allen Imports stehen, sonst erkennt Next.js die
+// Segment-Konfiguration nicht und die Seite wird nie neu generiert.
+export const revalidate = 120;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
