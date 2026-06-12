@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
+  Briefcase,
   Inbox,
   LayoutDashboard,
   LogOut,
   Mail,
+  Newspaper,
+  Quote,
   Users
 } from "lucide-react";
 import { auth } from "@/auth";
@@ -42,6 +45,24 @@ const navItems = [
     label: "Bewerbungen",
     icon: Users,
     roles: ["SUPER_ADMIN", "HR"] as Role[]
+  },
+  {
+    href: "/admin/stellen",
+    label: "Stellenanzeigen",
+    icon: Briefcase,
+    roles: ["SUPER_ADMIN", "HR"] as Role[]
+  },
+  {
+    href: "/admin/artikel",
+    label: "Wissenszentrum",
+    icon: Newspaper,
+    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
+  },
+  {
+    href: "/admin/testimonials",
+    label: "Testimonials",
+    icon: Quote,
+    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
   }
 ];
 

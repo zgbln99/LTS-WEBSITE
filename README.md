@@ -34,7 +34,19 @@ Phase 6 (Admin-Panel unter `/admin`) ist umgesetzt:
 
 Admin-Benutzer anlegen: `ADMIN_EMAIL` und `ADMIN_PASSWORD` (mind. 12 Zeichen) in `.env` setzen, dann `npm run db:seed`.
 
-Nächste Phasen: Mapbox-Europakarte, Content-Module im Admin (Leistungen, FAQ, Testimonials, Wissenszentrum), Cookie-Consent und Analytics.
+Phase 7 (Inhalte, Karte, Consent) ist umgesetzt:
+
+- Cookie-Consent-Banner (DSGVO): GA4, Matomo und Meta Pixel laden ausschließlich nach Einwilligung
+- Mapbox-Europakarte mit allen 10 Standorten auf der Startseite (aktiv mit NEXT_PUBLIC_MAPBOX_TOKEN)
+- Stellenanzeigen: Verwaltung im Admin, öffentliche Liste auf der Karriereseite und
+  Detailseiten mit Google-for-Jobs-Schema (JobPosting) und vorbelegtem Bewerbungsformular
+- Wissenszentrum: Artikelverwaltung im Admin, öffentliche Liste und Artikelseiten mit Article-Schema
+- Testimonials: Verwaltung im Admin, Startseite zeigt veröffentlichte Einträge (Fallback: Beispieltexte)
+- Öffentliche Datenbankinhalte mit ISR (Revalidierung 2 bis 5 Minuten), Admin vollständig dynamisch
+
+Hinweis: Marketinginhalte (Leistungsseiten, FAQ je Leistung, statische Seiten) bleiben bewusst
+versioniert im Code (`src/data`, `messages/`). Dynamische Inhalte (Stellen, Artikel, Testimonials,
+Anfragen, Bewerbungen) liegen in der Datenbank.
 
 ### Konfiguration
 

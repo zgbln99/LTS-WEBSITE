@@ -13,7 +13,10 @@ import { cn } from "@/lib/utils";
 
 const navItems: {
   key: string;
-  href: Exclude<AppPathname, "/leistungen/[slug]">;
+  href: Exclude<
+    AppPathname,
+    "/leistungen/[slug]" | "/karriere/stelle/[slug]" | "/wissen/[slug]"
+  >;
 }[] = [
   { key: "about", href: "/unternehmen" },
   { key: "services", href: "/leistungen" },

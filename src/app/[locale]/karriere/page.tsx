@@ -20,6 +20,9 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { ApplicationForm } from "@/components/forms/application-form";
+import { getPublishedJobs } from "@/server/content";
+
+export const revalidate = 120;
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
 
@@ -47,6 +50,7 @@ export default async function CareerPage({ params }: Props) {
 
   const categories = t.raw("categories") as { name: string; text: string }[];
   const benefits = t.raw("benefits") as string[];
+  const jobs = await getPublishedJobs(locale);
 
   return (
     <>
@@ -55,6 +59,43 @@ export default async function CareerPage({ params }: Props) {
         title={t("hero.title")}
         description={t("hero.description")}
       />
+
+      {/* Offene Stellen aus der Datenbank */}
+      {jobs.length > 0 ? (
+        <section className="bg-white py-16 sm:py-24">
+          <Container>
+            <SectionHeading title={t("jobs.title")} />
+            <div className="mt-10 grid gap-4 lg:grid-cols-2">
+              {jobs.map((job, index) => (
+                <Reveal key={job.id} delay={(index % 2) * 0.07}>
+                  <Link
+                    href={{
+                      pathname: "/karriere/stelle/[slug]",
+                      params: { slug: job.translation.slug }
+                    }}
+                    className="group flex h-full flex-col rounded-3xl border border-mist-200 bg-mist-50 p-6 transition-all hover:-translate-y-0.5 hover:border-accent-500/40 hover:bg-white hover:shadow-card sm:p-8"
+                  >
+                    <h3 className="font-display text-lg font-bold text-night-900">
+                      {job.translation.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-mist-500">
+                      {job.locationCity} ·{" "}
+                      {t(`jobs.employmentTypes.${job.employmentType}`)}
+                      {job.salaryMin && job.salaryMax
+                        ? ` · ${job.salaryMin.toLocaleString("de-DE")} ${t("jobs.salaryTo")} ${job.salaryMax.toLocaleString("de-DE")} EUR`
+                        : ""}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-600">
+                      {t("jobs.cta")}
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      ) : null}
 
       {/* Bereiche */}
       <section className="bg-mist-50 py-16 sm:py-24">

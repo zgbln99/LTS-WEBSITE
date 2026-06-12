@@ -274,6 +274,18 @@
       "phoneCta": "Direkt anrufen",
       "driverTeaser": "Sie sind LKW-Fahrer? Hier geht es zu Ihrer Seite mit allen Details.",
       "driverCta": "Infos für LKW-Fahrer"
+    },
+    "jobs": {
+      "title": "Offene Stellen",
+      "cta": "Details und Bewerbung",
+      "salaryTo": "bis",
+      "requirementsTitle": "Das bringen Sie mit",
+      "employmentTypes": {
+        "FULL_TIME": "Vollzeit",
+        "PART_TIME": "Teilzeit",
+        "MINI_JOB": "Minijob",
+        "APPRENTICESHIP": "Ausbildung"
+      }
     }
   },
   "driver": {
@@ -347,7 +359,10 @@
         "text": "Neue Standorte, Fahrzeuge und Projekte bei LTS Logistik."
       }
     ],
-    "comingSoon": "Die ersten Fachbeiträge erscheinen in Kürze. Schauen Sie bald wieder vorbei oder folgen Sie uns auf LinkedIn."
+    "comingSoon": "Die ersten Fachbeiträge erscheinen in Kürze. Schauen Sie bald wieder vorbei oder folgen Sie uns auf LinkedIn.",
+    "readMore": "Weiterlesen",
+    "backToList": "Alle Artikel",
+    "minRead": "{min} Min. Lesezeit"
   },
   "contact": {
     "hero": {
@@ -527,5 +542,12 @@
       "title": "Transportanfrage",
       "description": "Transportanfrage an LTS Logistik senden: Angebot innerhalb von 2 Arbeitsstunden. Express, Kühltransport, national und international."
     }
+  },
+  "consent": {
+    "title": "Cookies und Datenschutz",
+    "text": "Wir verwenden Cookies, um unsere Website zu verbessern. Analyse- und Marketingdienste laden wir nur mit Ihrer Einwilligung. Details finden Sie in der",
+    "acceptAll": "Alle akzeptieren",
+    "necessaryOnly": "Nur notwendige",
+    "privacy": "Datenschutzerklärung."
   }
 }

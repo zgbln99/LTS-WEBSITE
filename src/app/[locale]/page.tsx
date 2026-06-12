@@ -11,8 +11,12 @@ import { HomeHero } from "@/components/sections/home-hero";
 import { StatBar } from "@/components/sections/stat-bar";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { CtaBanner } from "@/components/sections/cta-banner";
+import { EuropeMap } from "@/components/sections/europe-map";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
+import { getPublishedTestimonials } from "@/server/content";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -31,11 +35,23 @@ export default async function HomePage({ params }: Props) {
   const tFleet = await getTranslations("fleetPage");
 
   const countries = t.raw("coverage.countries") as string[];
-  const testimonials = t.raw("testimonials.items") as {
-    quote: string;
-    name: string;
-    role: string;
-  }[];
+
+  // Testimonials aus der Datenbank, mit Fallback auf die Beispieltexte
+  const dbTestimonials = await getPublishedTestimonials(locale);
+  const testimonials =
+    dbTestimonials.length > 0
+      ? dbTestimonials.map((entry) => ({
+          quote: entry.quote,
+          name: entry.authorName,
+          role: [entry.authorRole, entry.authorCompany]
+            .filter(Boolean)
+            .join(", ")
+        }))
+      : (t.raw("testimonials.items") as {
+          quote: string;
+          name: string;
+          role: string;
+        }[]);
   const fleetCategories = (
     tFleet.raw("categories") as { name: string; specs: string; text: string }[]
   ).slice(0, 4);
@@ -77,7 +93,10 @@ export default async function HomePage({ params }: Props) {
             title={t("coverage.title")}
             description={t("coverage.description")}
           />
-          <div className="mt-10 grid gap-5 lg:grid-cols-2">
+          <div className="mt-10">
+            <EuropeMap />
+          </div>
+          <div className="mt-5 grid gap-5 lg:grid-cols-2">
             <Reveal>
               <div className="h-full rounded-3xl bg-night-900 p-6 sm:p-8">
                 <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-mist-400">
@@ -162,7 +181,7 @@ export default async function HomePage({ params }: Props) {
           />
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {testimonials.map((item, index) => (
-              <Reveal key={item.role} delay={index * 0.08}>
+              <Reveal key={`${item.name}-${index}`} delay={index * 0.08}>
                 <figure className="flex h-full flex-col rounded-3xl bg-mist-50 p-6 sm:p-8">
                   <Quote className="h-7 w-7 text-accent-500" aria-hidden />
                   <blockquote className="mt-4 flex-1 text-base leading-relaxed text-night-800">

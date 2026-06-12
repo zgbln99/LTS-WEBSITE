@@ -274,6 +274,18 @@
       "phoneCta": "Zadzwoń bezpośrednio",
       "driverTeaser": "Jesteś kierowcą? Tu znajdziesz stronę ze wszystkimi szczegółami.",
       "driverCta": "Informacje dla kierowców"
+    },
+    "jobs": {
+      "title": "Aktualne oferty pracy",
+      "cta": "Szczegóły i aplikacja",
+      "salaryTo": "do",
+      "requirementsTitle": "Czego oczekujemy",
+      "employmentTypes": {
+        "FULL_TIME": "Pełny etat",
+        "PART_TIME": "Część etatu",
+        "MINI_JOB": "Minijob",
+        "APPRENTICESHIP": "Praktyka zawodowa"
+      }
     }
   },
   "driver": {
@@ -347,7 +359,10 @@
         "text": "Nowe oddziały, pojazdy i projekty w LTS Logistik."
       }
     ],
-    "comingSoon": "Pierwsze artykuły pojawią się wkrótce. Zajrzyj ponownie lub obserwuj nas na LinkedIn."
+    "comingSoon": "Pierwsze artykuły pojawią się wkrótce. Zajrzyj ponownie lub obserwuj nas na LinkedIn.",
+    "readMore": "Czytaj dalej",
+    "backToList": "Wszystkie artykuły",
+    "minRead": "{min} min czytania"
   },
   "contact": {
     "hero": {
@@ -527,5 +542,12 @@
       "title": "Zapytanie transportowe",
       "description": "Wyślij zapytanie transportowe do LTS Logistik: oferta w ciągu 2 godzin roboczych. Ekspres, chłodnia, kraj i zagranica."
     }
+  },
+  "consent": {
+    "title": "Pliki cookie i prywatność",
+    "text": "Używamy plików cookie, aby ulepszać naszą stronę. Usługi analityczne i marketingowe ładujemy wyłącznie za Twoją zgodą. Szczegóły znajdziesz w",
+    "acceptAll": "Akceptuję wszystkie",
+    "necessaryOnly": "Tylko niezbędne",
+    "privacy": "polityce prywatności."
   }
 }

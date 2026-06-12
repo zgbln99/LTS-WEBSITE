@@ -51,12 +51,26 @@ export const routing = defineRouting({
       tr: "/kariyer/tir-soforleri",
       uk: "/karyera/vodiyi"
     },
+    "/karriere/stelle/[slug]": {
+      de: "/karriere/stelle/[slug]",
+      en: "/careers/job/[slug]",
+      pl: "/kariera/oferta/[slug]",
+      tr: "/kariyer/ilan/[slug]",
+      uk: "/karyera/vakansiya/[slug]"
+    },
     "/wissen": {
       de: "/wissen",
       en: "/knowledge",
       pl: "/baza-wiedzy",
       tr: "/bilgi-merkezi",
       uk: "/baza-znan"
+    },
+    "/wissen/[slug]": {
+      de: "/wissen/[slug]",
+      en: "/knowledge/[slug]",
+      pl: "/baza-wiedzy/[slug]",
+      tr: "/bilgi-merkezi/[slug]",
+      uk: "/baza-znan/[slug]"
     },
     "/transportanfrage": {
       de: "/transportanfrage",

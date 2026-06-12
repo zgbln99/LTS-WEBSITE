@@ -274,6 +274,18 @@
       "phoneCta": "Call directly",
       "driverTeaser": "You are a truck driver? Here is your page with all the details.",
       "driverCta": "Info for truck drivers"
+    },
+    "jobs": {
+      "title": "Open positions",
+      "cta": "Details and application",
+      "salaryTo": "to",
+      "requirementsTitle": "What you bring",
+      "employmentTypes": {
+        "FULL_TIME": "Full-time",
+        "PART_TIME": "Part-time",
+        "MINI_JOB": "Mini job",
+        "APPRENTICESHIP": "Apprenticeship"
+      }
     }
   },
   "driver": {
@@ -347,7 +359,10 @@
         "text": "New locations, vehicles and projects at LTS Logistik."
       }
     ],
-    "comingSoon": "The first articles will be published shortly. Check back soon or follow us on LinkedIn."
+    "comingSoon": "The first articles will be published shortly. Check back soon or follow us on LinkedIn.",
+    "readMore": "Read more",
+    "backToList": "All articles",
+    "minRead": "{min} min read"
   },
   "contact": {
     "hero": {
@@ -527,5 +542,12 @@
       "title": "Transport Inquiry",
       "description": "Send a transport inquiry to LTS Logistik: quote within 2 working hours. Express, refrigerated, national and international."
     }
+  },
+  "consent": {
+    "title": "Cookies and privacy",
+    "text": "We use cookies to improve our website. Analytics and marketing services are only loaded with your consent. Details can be found in the",
+    "acceptAll": "Accept all",
+    "necessaryOnly": "Necessary only",
+    "privacy": "privacy policy."
   }
 }

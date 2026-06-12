@@ -6,6 +6,8 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { routing, type Locale } from "@/i18n/routing";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { CookieConsent } from "@/components/consent/cookie-consent";
+import { Analytics } from "@/components/consent/analytics";
 import "../globals.css";
 
 const inter = Inter({
@@ -63,6 +65,8 @@ export default async function LocaleLayout({
           <Header locale={locale as Locale} />
           <main id="content">{children}</main>
           <Footer locale={locale as Locale} />
+          <CookieConsent />
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

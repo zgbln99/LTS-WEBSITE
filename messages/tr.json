@@ -274,6 +274,18 @@
       "phoneCta": "Doğrudan ara",
       "driverTeaser": "Tır şoförü müsünüz? Tüm detayların olduğu sayfanız burada.",
       "driverCta": "Şoförler için bilgi"
+    },
+    "jobs": {
+      "title": "Açık pozisyonlar",
+      "cta": "Detaylar ve başvuru",
+      "salaryTo": "ile",
+      "requirementsTitle": "Sizden beklediklerimiz",
+      "employmentTypes": {
+        "FULL_TIME": "Tam zamanlı",
+        "PART_TIME": "Yarı zamanlı",
+        "MINI_JOB": "Mini iş",
+        "APPRENTICESHIP": "Çıraklık"
+      }
     }
   },
   "driver": {
@@ -347,7 +359,10 @@
         "text": "LTS Logistik'te yeni lokasyonlar, araçlar ve projeler."
       }
     ],
-    "comingSoon": "İlk makaleler yakında yayınlanacak. Tekrar uğrayın veya bizi LinkedIn'de takip edin."
+    "comingSoon": "İlk makaleler yakında yayınlanacak. Tekrar uğrayın veya bizi LinkedIn'de takip edin.",
+    "readMore": "Devamını oku",
+    "backToList": "Tüm makaleler",
+    "minRead": "{min} dk okuma"
   },
   "contact": {
     "hero": {
@@ -527,5 +542,12 @@
       "title": "Nakliye Talebi",
       "description": "LTS Logistik'e nakliye talebi gönderin: 2 iş saati içinde teklif. Ekspres, soğutmalı, yurtiçi ve uluslararası."
     }
+  },
+  "consent": {
+    "title": "Çerezler ve gizlilik",
+    "text": "Web sitemizi iyileştirmek için çerezler kullanıyoruz. Analiz ve pazarlama hizmetleri yalnızca onayınızla yüklenir. Ayrıntılar için bkz.",
+    "acceptAll": "Tümünü kabul et",
+    "necessaryOnly": "Yalnızca gerekli",
+    "privacy": "gizlilik politikası."
   }
 }
