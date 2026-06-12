@@ -1,20 +1,24 @@
 export interface CompanyLocation {
   city: string;
   region: string;
+  /** [Längengrad, Breitengrad] für die Kartenmarkierung */
+  lngLat: [number, number];
   isHeadquarters?: boolean;
 }
 
+// Zentrale Standortliste: speist die Standort-Listen auf der Website UND die
+// Kartenmarkierungen. Neue Standorte nur hier ergänzen.
 const locations: CompanyLocation[] = [
-  { city: "Berlin", region: "Berlin/Brandenburg", isHeadquarters: true },
-  { city: "Stavenhagen", region: "Mecklenburg-Vorpommern" },
-  { city: "Neustrelitz", region: "Mecklenburg-Vorpommern" },
-  { city: "Magdeburg", region: "Sachsen-Anhalt" },
-  { city: "Hof", region: "Bayern" },
-  { city: "Dresden", region: "Sachsen" },
-  { city: "Erfurt", region: "Thüringen" },
-  { city: "Prenzlau", region: "Brandenburg" },
-  { city: "Landsberg", region: "Sachsen-Anhalt" },
-  { city: "München", region: "Bayern" }
+  { city: "Berlin", region: "Berlin/Brandenburg", lngLat: [13.405, 52.52], isHeadquarters: true },
+  { city: "Stavenhagen", region: "Mecklenburg-Vorpommern", lngLat: [12.911, 53.703] },
+  { city: "Neustrelitz", region: "Mecklenburg-Vorpommern", lngLat: [13.072, 53.361] },
+  { city: "Magdeburg", region: "Sachsen-Anhalt", lngLat: [11.627, 52.131] },
+  { city: "Hof", region: "Bayern", lngLat: [11.918, 50.313] },
+  { city: "Dresden", region: "Sachsen", lngLat: [13.738, 51.05] },
+  { city: "Erfurt", region: "Thüringen", lngLat: [11.029, 50.978] },
+  { city: "Prenzlau", region: "Brandenburg", lngLat: [13.862, 53.316] },
+  { city: "Landsberg", region: "Sachsen-Anhalt", lngLat: [12.16, 51.527] },
+  { city: "München", region: "Bayern", lngLat: [11.582, 48.135] }
 ];
 
 export const company = {

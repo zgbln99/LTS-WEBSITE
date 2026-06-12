@@ -1,22 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { company } from "@/data/company";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-const locations: { city: string; lngLat: [number, number]; hq?: boolean }[] = [
-  { city: "Berlin", lngLat: [13.405, 52.52], hq: true },
-  { city: "Stavenhagen", lngLat: [12.911, 53.703] },
-  { city: "Neustrelitz", lngLat: [13.072, 53.361] },
-  { city: "Magdeburg", lngLat: [11.627, 52.131] },
-  { city: "Hof", lngLat: [11.918, 50.313] },
-  { city: "Dresden", lngLat: [13.738, 51.05] },
-  { city: "Erfurt", lngLat: [11.029, 50.978] },
-  { city: "Prenzlau", lngLat: [13.862, 53.316] },
-  { city: "Landsberg", lngLat: [12.16, 51.527] },
-  { city: "München", lngLat: [11.582, 48.135] }
-];
+// Standorte kommen zentral aus src/data/company.ts
+const locations = company.locations.map((location) => ({
+  city: location.city,
+  lngLat: location.lngLat,
+  hq: location.isHeadquarters
+}));
 
 export function EuropeMap() {
   const containerRef = useRef<HTMLDivElement>(null);
