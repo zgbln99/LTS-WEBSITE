@@ -14,11 +14,12 @@ echo "==> Code aktualisieren"
 git pull --ff-only
 
 echo "==> Datenbankschema anwenden und Seed ausführen"
+# .env wird in der Shell des Containers geladen (entfernt Anführungszeichen korrekt,
+# im Gegensatz zu docker --env-file)
 docker run --rm \
   -v "$(pwd)":/app -w /app \
-  --env-file .env \
   node:22-alpine \
-  sh -c "npm ci --no-audit --no-fund && npx prisma db push && npm run db:seed"
+  sh -c "set -a && . ./.env && set +a && npm ci --no-audit --no-fund && npx prisma db push && npm run db:seed"
 
 echo "==> Image bauen und Container starten (Port 2015)"
 docker compose build
