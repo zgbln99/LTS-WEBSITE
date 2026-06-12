@@ -93,10 +93,10 @@ Typowy obraz rynku: strony oparte o WordPress z motywami z lat 2015–2019, brak
 | Stylowanie | Tailwind CSS 4 + shadcn/ui | design system na tokenach, pełna kontrola |
 | Animacje | Framer Motion (motion) | scroll reveal, page transitions, micro-interactions |
 | i18n | next-intl | localized routes, metadata, middleware detekcji języka |
-| Baza danych | PostgreSQL 16 + Prisma | relacyjna struktura tłumaczeń, migracje |
+| Baza danych | MySQL 8 (Hostinger) + Prisma | relacyjna struktura tłumaczeń, migracje |
 | Auth | Auth.js v5 (credentials + opcjonalnie passkeys) | RBAC dla panelu admina |
 | Pliki | S3 API (AWS S3 lub MinIO), presigned URLs | CV, dokumenty, media library |
-| E-mail | Resend + react-email | potwierdzenia, notyfikacje, szablony brandowe |
+| E-mail | SMTP (nodemailer) | potwierdzenia, notyfikacje, szablony brandowe |
 | Mapy | Mapbox GL JS | interaktywna mapa Europy, custom styling |
 | Walidacja | Zod (współdzielone schematy klient/serwer) | spójna walidacja formularzy i API |
 | Rate limiting | middleware + sliding window w Postgres/Redis | ochrona formularzy i API |

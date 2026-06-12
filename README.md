@@ -13,7 +13,23 @@ Phase 1 bis 3 (Fundament, Design System, öffentliche Website) sind umgesetzt:
 - Schema.org (LocalBusiness, Service, FAQPage, BreadcrumbList), robots.txt, sitemap.xml
 - Dockerfile (standalone) und GitHub Actions CI
 
-Nächste Phasen: Formulare mit Datenbankanbindung (Transportanfrage, Bewerbungen mit S3-Upload), E-Mail-Versand (Resend), Mapbox-Europakarte, Admin-Panel, Wissenszentrum mit Artikeln.
+Phase 4 (Formulare und Benachrichtigungen) ist umgesetzt:
+
+- Transportanfrage als dreistufiger Formular-Assistent mit Referenznummer
+- Kontaktformular mit Abteilungsauswahl
+- Bewerbungsformular mit Datei-Upload (CV, Führerschein, Zertifikate) auf der Karriereseite und der Fahrer-Landingpage
+- Speicherung in MySQL (Prisma), SMTP-Benachrichtigungen an Disposition/HR mit Anhängen, Bestätigungs-E-Mails an Absender in deren Sprache
+- Spam-Schutz: Honeypot, Rate Limiting, Zod-Validierung, Dateityp- und Größenprüfung
+
+Nächste Phasen: Mapbox-Europakarte, Admin-Panel (Anfragen, Recruiting-Kanban, Inhalte), Wissenszentrum mit Artikeln, Cookie-Consent und Analytics.
+
+### Konfiguration
+
+Die Formulare funktionieren erst mit gesetzten Umgebungsvariablen (siehe `.env.example`):
+
+- `DATABASE_URL`: MySQL-Verbindung (Hostinger Remote MySQL), danach einmalig `npx prisma db push` und `npm run db:seed`
+- `SMTP_*` und `EMAIL_*`: SMTP-Zugang (z. B. Hostinger Mail) für Benachrichtigungen
+- `S3_*`: optionaler S3-kompatibler Storage für Bewerbungsunterlagen (Anhänge gehen zusätzlich per E-Mail an HR)
 
 ## Entwicklung
 
@@ -36,4 +52,4 @@ Siehe [docs/STRATEGIA-PRODUKTU.md](docs/STRATEGIA-PRODUKTU.md) (Strategie- und A
 
 ## Geplanter Stack
 
-Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, next-intl, PostgreSQL + Prisma, Auth.js, S3/MinIO, Resend, Mapbox, Docker + Coolify.
+Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, next-intl, MySQL (Hostinger) + Prisma, Auth.js, S3-kompatibler Storage (MEGA S4), SMTP (nodemailer), Mapbox, Docker.

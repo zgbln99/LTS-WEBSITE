@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -128,8 +128,8 @@ model ServiceTranslation {
   locale         String
   name           String
   slug           String
-  excerpt        String
-  description    String
+  excerpt        String  @db.Text
+  description    String  @db.Text
   benefits       Json // [{title, text}]
   processSteps   Json // [{title, text}]
   seoTitle       String?
@@ -249,7 +249,7 @@ model JobPostingTranslation {
   locale         String
   title          String
   slug           String
-  description    String
+  description    String     @db.Text
   requirements   Json // string[]
   benefits       Json // string[]
   seoTitle       String?
@@ -275,7 +275,7 @@ model Application {
   lastName      String
   email         String
   phone         String
-  message       String?
+  message       String?           @db.Text
   licenseClass  String? // C, CE, C1 ...
   status        ApplicationStatus @default(NEW)
   source        String? // website, driver-landing, referral
@@ -318,7 +318,7 @@ model ApplicationNote {
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   authorId      String?
   author        User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  body          String
+  body          String      @db.Text
   createdAt     DateTime    @default(now())
 }
 
@@ -339,7 +339,7 @@ model Author {
   id       String  @id @default(cuid())
   name     String
   jobTitle String?
-  bio      String?
+  bio      String? @db.Text
   avatarId String?
 
   blogPosts BlogPost[]
@@ -411,7 +411,7 @@ model BlogPostTranslation {
   locale         String
   title          String
   slug           String
-  excerpt        String
+  excerpt        String   @db.Text
   content        Json // Tiptap/strukturierter Inhalt
   readingTimeMin Int?
   seoTitle       String?
@@ -452,7 +452,7 @@ model TestimonialTranslation {
   testimonialId String
   testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
   locale        String
-  quote         String
+  quote         String      @db.Text
 
   @@unique([testimonialId, locale])
 }
@@ -474,7 +474,7 @@ model FaqTranslation {
   faq      Faq    @relation(fields: [faqId], references: [id], onDelete: Cascade)
   locale   String
   question String
-  answer   String
+  answer   String @db.Text
 
   @@unique([faqId, locale])
 }
@@ -499,7 +499,7 @@ model ContactRequest {
   phone      String?
   company    String?
   department String? // dispo, hr, billing, general
-  message    String
+  message    String        @db.Text
   locale     String        @default("de")
   status     RequestStatus @default(NEW)
   consentAt  DateTime
@@ -529,7 +529,7 @@ model TransportRequest {
   heightM         Float?
   temperatureMin  Float?
   temperatureMax  Float?
-  message         String?
+  message         String?       @db.Text
   locale          String        @default("de")
   status          RequestStatus @default(NEW)
   consentAt       DateTime

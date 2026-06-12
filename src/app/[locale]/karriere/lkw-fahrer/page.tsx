@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { ApplicationForm } from "@/components/forms/application-form";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
 
@@ -59,7 +60,7 @@ export default async function DriverLandingPage({ params }: Props) {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">
-              <a href={mailto}>
+              <a href="#bewerbung">
                 {t("hero.cta")}
                 <ArrowRight className="h-4 w-4" />
               </a>
@@ -157,19 +158,27 @@ export default async function DriverLandingPage({ params }: Props) {
           </div>
 
           <Reveal>
-            <div className="mt-14 flex flex-col gap-3 rounded-[2rem] bg-night-950 p-8 sm:flex-row sm:items-center sm:justify-center sm:p-10">
-              <Button asChild size="lg">
-                <a href={mailto}>
-                  <Mail className="h-4 w-4" />
-                  {t("ctaEmail")}
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline-light">
-                <a href={company.phoneHref}>
-                  <Phone className="h-4 w-4" />
-                  {t("ctaPhone")}
-                </a>
-              </Button>
+            <div id="bewerbung" className="mt-14 rounded-[2rem] bg-mist-50 p-6 sm:p-12">
+              <h2 className="font-display text-2xl font-extrabold text-night-900 sm:text-3xl">
+                {t("hero.cta")}
+              </h2>
+              <div className="mt-8">
+                <ApplicationForm presetCategory="drivers" />
+              </div>
+              <div className="mt-8 flex flex-col gap-3 border-t border-mist-200 pt-6 sm:flex-row">
+                <Button asChild variant="outline">
+                  <a href={mailto}>
+                    <Mail className="h-4 w-4" />
+                    {t("ctaEmail")}
+                  </a>
+                </Button>
+                <Button asChild variant="outline">
+                  <a href={company.phoneHref}>
+                    <Phone className="h-4 w-4" />
+                    {t("ctaPhone")}
+                  </a>
+                </Button>
+              </div>
             </div>
           </Reveal>
         </Container>

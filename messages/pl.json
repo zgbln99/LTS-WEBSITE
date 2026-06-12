@@ -59,7 +59,17 @@
       "description": "Dziesięć oddziałów w Niemczech i regularne połączenia z kluczowymi rynkami Europy. Pozostałe kierunki na zapytanie.",
       "locationsTitle": "Nasze oddziały",
       "countriesTitle": "Regularne kierunki",
-      "countries": ["Niemcy", "Polska", "Czechy", "Holandia", "Belgia", "Austria", "Francja", "Dania", "Szwecja"]
+      "countries": [
+        "Niemcy",
+        "Polska",
+        "Czechy",
+        "Holandia",
+        "Belgia",
+        "Austria",
+        "Francja",
+        "Dania",
+        "Szwecja"
+      ]
     },
     "fleet": {
       "eyebrow": "Flota",
@@ -279,10 +289,22 @@
       "note": "w zależności od doświadczenia, kategorii prawa jazdy i rejonu pracy, plus diety"
     },
     "facts": [
-      { "title": "Stałe trasy", "text": "Przewidywalna praca zamiast tygodni w trasie. Wiele tras z codziennym powrotem do domu." },
-      { "title": "Nowoczesna flota", "text": "Ponad 260 zadbanych pojazdów, regularnie serwisowanych i odnawianych." },
-      { "title": "Terminowa wypłata", "text": "Wynagrodzenie jest niezawodnie na koncie na koniec miesiąca. Bez dyskusji." },
-      { "title": "Prawdziwy zespół", "text": "Dyspozycja, która szanuje kierowców, i koledzy, którzy pomagają, gdy trzeba." }
+      {
+        "title": "Stałe trasy",
+        "text": "Przewidywalna praca zamiast tygodni w trasie. Wiele tras z codziennym powrotem do domu."
+      },
+      {
+        "title": "Nowoczesna flota",
+        "text": "Ponad 260 zadbanych pojazdów, regularnie serwisowanych i odnawianych."
+      },
+      {
+        "title": "Terminowa wypłata",
+        "text": "Wynagrodzenie jest niezawodnie na koncie na koniec miesiąca. Bez dyskusji."
+      },
+      {
+        "title": "Prawdziwy zespół",
+        "text": "Dyspozycja, która szanuje kierowców, i koledzy, którzy pomagają, gdy trzeba."
+      }
     ],
     "requirementsTitle": "Czego oczekujemy",
     "requirements": [
@@ -308,10 +330,22 @@
     },
     "categoriesTitle": "Obszary tematyczne",
     "categories": [
-      { "name": "Logistyka chłodnicza", "text": "Łańcuch chłodniczy, kontrola temperatury i transport żywności." },
-      { "name": "Transport i prawo", "text": "Dokumenty przewozowe, czasy jazdy i przepisy wyjaśnione przystępnie." },
-      { "name": "Kariera kierowcy", "text": "Start, szkolenia i codzienność za kierownicą." },
-      { "name": "Z życia firmy", "text": "Nowe oddziały, pojazdy i projekty w LTS Logistik." }
+      {
+        "name": "Logistyka chłodnicza",
+        "text": "Łańcuch chłodniczy, kontrola temperatury i transport żywności."
+      },
+      {
+        "name": "Transport i prawo",
+        "text": "Dokumenty przewozowe, czasy jazdy i przepisy wyjaśnione przystępnie."
+      },
+      {
+        "name": "Kariera kierowcy",
+        "text": "Start, szkolenia i codzienność za kierownicą."
+      },
+      {
+        "name": "Z życia firmy",
+        "text": "Nowe oddziały, pojazdy i projekty w LTS Logistik."
+      }
     ],
     "comingSoon": "Pierwsze artykuły pojawią się wkrótce. Zajrzyj ponownie lub obserwuj nas na LinkedIn."
   },
@@ -331,11 +365,22 @@
     },
     "departmentsTitle": "Prosto do właściwego zespołu",
     "departments": [
-      { "name": "Dyspozycja i zapytania transportowe", "text": "Oferty, bieżące transporty i przejazdy ekspresowe." },
-      { "name": "Rekrutacja", "text": "Pytania o wolne stanowiska i start w LTS Logistik." },
-      { "name": "Administracja i księgowość", "text": "Faktury, umowy i sprawy ogólne." }
+      {
+        "name": "Dyspozycja i zapytania transportowe",
+        "text": "Oferty, bieżące transporty i przejazdy ekspresowe."
+      },
+      {
+        "name": "Rekrutacja",
+        "text": "Pytania o wolne stanowiska i start w LTS Logistik."
+      },
+      {
+        "name": "Administracja i księgowość",
+        "text": "Faktury, umowy i sprawy ogólne."
+      }
     ],
-    "locationsTitle": "Nasze oddziały"
+    "locationsTitle": "Nasze oddziały",
+    "formTitle": "Napisz do nas",
+    "formDescription": "Wyślij wiadomość przez formularz. Odpowiadamy w ciągu 2 godzin roboczych."
   },
   "inquiry": {
     "hero": {
@@ -357,6 +402,88 @@
     "phoneCta": "Zadzwoń do dyspozycji",
     "responseNote": "Na zapytania otrzymane od poniedziałku do piątku w godzinach 08:00 do 16:00 odpowiadamy w ciągu 2 godzin roboczych.",
     "emailSubject": "Zapytanie transportowe"
+  },
+  "forms": {
+    "labels": {
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+      "name": "Imię i nazwisko",
+      "email": "Adres e-mail",
+      "phone": "Numer telefonu",
+      "company": "Firma",
+      "message": "Twoja wiadomość",
+      "submit": "Wyślij wiadomość",
+      "sending": "Wysyłanie...",
+      "back": "Wstecz",
+      "next": "Dalej",
+      "gdpr": "Zapoznałem się z polityką prywatności i wyrażam zgodę na przetwarzanie moich danych w celu obsługi zapytania."
+    },
+    "errors": {
+      "generic": "Podczas wysyłania wystąpił błąd. Spróbuj ponownie lub zadzwoń do nas.",
+      "validation": "Sprawdź wprowadzone dane i spróbuj ponownie.",
+      "rateLimit": "Zbyt wiele zapytań. Odczekaj kilka minut i spróbuj ponownie.",
+      "file": "Plik jest za duży lub ma nieobsługiwany format. Dozwolone: PDF, JPG i PNG do 10 MB."
+    },
+    "inquiry": {
+      "steps": {
+        "route": "Trasa",
+        "cargo": "Ładunek",
+        "contact": "Kontakt"
+      },
+      "pickupAddress": "Miejsce odbioru (adres lub kod pocztowy)",
+      "pickupCountry": "Kraj odbioru",
+      "deliveryAddress": "Miejsce dostawy (adres lub kod pocztowy)",
+      "deliveryCountry": "Kraj docelowy",
+      "requestedDate": "Preferowany termin",
+      "cargoType": "Rodzaj towaru",
+      "palletCount": "Liczba palet",
+      "weightKg": "Waga (kg)",
+      "lengthM": "Długość (m)",
+      "widthM": "Szerokość (m)",
+      "heightM": "Wysokość (m)",
+      "temperatureMin": "Temperatura min. (°C)",
+      "temperatureMax": "Temperatura maks. (°C)",
+      "temperatureHint": "Wypełnij tylko przy transporcie w kontrolowanej temperaturze.",
+      "submit": "Wyślij zapytanie",
+      "success": {
+        "title": "Twoje zapytanie dotarło",
+        "text": "Dziękujemy. Twój numer referencyjny to {reference}. Nasza dyspozycja odezwie się w ciągu 2 godzin roboczych."
+      }
+    },
+    "application": {
+      "category": "Obszar",
+      "licenseClass": "Kategoria prawa jazdy",
+      "cv": "CV",
+      "licenseFile": "Prawo jazdy",
+      "certificates": "Certyfikaty",
+      "fileHint": "PDF, JPG lub PNG, maks. 10 MB na plik.",
+      "submit": "Wyślij aplikację",
+      "success": {
+        "title": "Twoja aplikacja dotarła",
+        "text": "Dziękujemy za zainteresowanie. Odezwiemy się w ciągu dwóch dni roboczych."
+      }
+    },
+    "contact": {
+      "department": "Dział",
+      "departments": {
+        "general": "Sprawa ogólna",
+        "dispo": "Dyspozycja i transport",
+        "hr": "Rekrutacja i kadry",
+        "billing": "Administracja i księgowość"
+      },
+      "success": {
+        "title": "Twoja wiadomość dotarła",
+        "text": "Dziękujemy. Odezwiemy się w ciągu 2 godzin roboczych."
+      }
+    },
+    "emails": {
+      "inquirySubject": "Twoje zapytanie transportowe {reference} w LTS Logistik",
+      "inquiryBody": "Dzień dobry {name},\n\ndziękujemy za zapytanie transportowe. Twój numer referencyjny to {reference}.\n\nNasza dyspozycja analizuje zapytanie i odezwie się w ciągu 2 godzin roboczych.\n\nZ pozdrowieniami\nLTS Logistik GmbH\n+49 30 81 72 20 10",
+      "applicationSubject": "Twoja aplikacja w LTS Logistik ({reference})",
+      "applicationBody": "Dzień dobry {name},\n\ndziękujemy za aplikację do LTS Logistik. Otrzymaliśmy Twoje dokumenty i odezwiemy się w ciągu dwóch dni roboczych.\n\nZ pozdrowieniami\nLTS Logistik GmbH",
+      "contactSubject": "Twoja wiadomość do LTS Logistik",
+      "contactBody": "Dzień dobry {name},\n\ndziękujemy za wiadomość. Odpowiemy najszybciej, jak to możliwe.\n\nZ pozdrowieniami\nLTS Logistik GmbH"
+    }
   },
   "notFound": {
     "title": "Nie znaleziono strony",

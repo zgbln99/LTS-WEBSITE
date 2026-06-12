@@ -59,7 +59,17 @@
       "description": "Almanya'da on lokasyon ve Avrupa'nın önemli ekonomik bölgelerine düzenli seferler. Diğer destinasyonlar talep üzerine.",
       "locationsTitle": "Lokasyonlarımız",
       "countriesTitle": "Düzenli destinasyonlar",
-      "countries": ["Almanya", "Polonya", "Çekya", "Hollanda", "Belçika", "Avusturya", "Fransa", "Danimarka", "İsveç"]
+      "countries": [
+        "Almanya",
+        "Polonya",
+        "Çekya",
+        "Hollanda",
+        "Belçika",
+        "Avusturya",
+        "Fransa",
+        "Danimarka",
+        "İsveç"
+      ]
     },
     "fleet": {
       "eyebrow": "Filo",
@@ -279,10 +289,22 @@
       "note": "deneyime, ehliyet sınıfına ve çalışma bölgesine göre, harcırah hariç"
     },
     "facts": [
-      { "title": "Sabit turlar", "text": "Haftalarca yolda kalmak yerine planlanabilir görevler. Birçok turda her gün eve dönüş." },
-      { "title": "Modern filo", "text": "260'tan fazla bakımlı araç, düzenli servis ve sürekli yenileme." },
-      { "title": "Zamanında ödeme", "text": "Maaşınız ay sonunda güvenilir şekilde hesabınızda. Tartışmasız." },
-      { "title": "Gerçek bir ekip", "text": "Şoförlere saygı duyan sevkiyatçılar ve gerektiğinde devreye giren meslektaşlar." }
+      {
+        "title": "Sabit turlar",
+        "text": "Haftalarca yolda kalmak yerine planlanabilir görevler. Birçok turda her gün eve dönüş."
+      },
+      {
+        "title": "Modern filo",
+        "text": "260'tan fazla bakımlı araç, düzenli servis ve sürekli yenileme."
+      },
+      {
+        "title": "Zamanında ödeme",
+        "text": "Maaşınız ay sonunda güvenilir şekilde hesabınızda. Tartışmasız."
+      },
+      {
+        "title": "Gerçek bir ekip",
+        "text": "Şoförlere saygı duyan sevkiyatçılar ve gerektiğinde devreye giren meslektaşlar."
+      }
     ],
     "requirementsTitle": "Sizden beklediklerimiz",
     "requirements": [
@@ -308,10 +330,22 @@
     },
     "categoriesTitle": "Konu alanları",
     "categories": [
-      { "name": "Soğutmalı lojistik", "text": "Soğuk zincir, sıcaklık kontrolü ve gıda taşımacılığı." },
-      { "name": "Taşımacılık ve hukuk", "text": "Taşıma belgeleri, sürüş süreleri ve mevzuat anlaşılır şekilde." },
-      { "name": "Şoför kariyeri", "text": "Başlangıç, eğitim ve direksiyon başında günlük yaşam." },
-      { "name": "Şirketten haberler", "text": "LTS Logistik'te yeni lokasyonlar, araçlar ve projeler." }
+      {
+        "name": "Soğutmalı lojistik",
+        "text": "Soğuk zincir, sıcaklık kontrolü ve gıda taşımacılığı."
+      },
+      {
+        "name": "Taşımacılık ve hukuk",
+        "text": "Taşıma belgeleri, sürüş süreleri ve mevzuat anlaşılır şekilde."
+      },
+      {
+        "name": "Şoför kariyeri",
+        "text": "Başlangıç, eğitim ve direksiyon başında günlük yaşam."
+      },
+      {
+        "name": "Şirketten haberler",
+        "text": "LTS Logistik'te yeni lokasyonlar, araçlar ve projeler."
+      }
     ],
     "comingSoon": "İlk makaleler yakında yayınlanacak. Tekrar uğrayın veya bizi LinkedIn'de takip edin."
   },
@@ -331,11 +365,22 @@
     },
     "departmentsTitle": "Doğrudan doğru ekibe",
     "departments": [
-      { "name": "Sevkiyat ve nakliye talepleri", "text": "Teklifler, devam eden taşımalar ve ekspres seferler." },
-      { "name": "Başvurular", "text": "Açık pozisyonlar ve LTS Logistik'e katılım hakkında sorular." },
-      { "name": "Yönetim ve muhasebe", "text": "Faturalar, sözleşmeler ve genel konular." }
+      {
+        "name": "Sevkiyat ve nakliye talepleri",
+        "text": "Teklifler, devam eden taşımalar ve ekspres seferler."
+      },
+      {
+        "name": "Başvurular",
+        "text": "Açık pozisyonlar ve LTS Logistik'e katılım hakkında sorular."
+      },
+      {
+        "name": "Yönetim ve muhasebe",
+        "text": "Faturalar, sözleşmeler ve genel konular."
+      }
     ],
-    "locationsTitle": "Lokasyonlarımız"
+    "locationsTitle": "Lokasyonlarımız",
+    "formTitle": "Bize yazın",
+    "formDescription": "Mesajınızı form üzerinden gönderin. 2 iş saati içinde yanıtlıyoruz."
   },
   "inquiry": {
     "hero": {
@@ -357,6 +402,88 @@
     "phoneCta": "Sevkiyatı ara",
     "responseNote": "Pazartesiden cumaya 08:00 ile 16:00 arasında ulaşan talepler 2 iş saati içinde yanıtlanır.",
     "emailSubject": "Nakliye talebi"
+  },
+  "forms": {
+    "labels": {
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "name": "Ad Soyad",
+      "email": "E-posta adresi",
+      "phone": "Telefon numarası",
+      "company": "Şirket",
+      "message": "Mesajınız",
+      "submit": "Mesaj gönder",
+      "sending": "Gönderiliyor...",
+      "back": "Geri",
+      "next": "İleri",
+      "gdpr": "Gizlilik politikasını okudum ve talebimin işlenmesi için verilerimin kullanılmasına onay veriyorum."
+    },
+    "errors": {
+      "generic": "Gönderim sırasında bir hata oluştu. Lütfen tekrar deneyin veya bizi arayın.",
+      "validation": "Lütfen girdiğiniz bilgileri kontrol edip tekrar deneyin.",
+      "rateLimit": "Çok fazla istek. Lütfen birkaç dakika bekleyip tekrar deneyin.",
+      "file": "Bir dosya çok büyük veya desteklenmeyen formatta. İzin verilenler: 10 MB'a kadar PDF, JPG ve PNG."
+    },
+    "inquiry": {
+      "steps": {
+        "route": "Güzergah",
+        "cargo": "Yük",
+        "contact": "İletişim"
+      },
+      "pickupAddress": "Alım yeri (adres veya posta kodu)",
+      "pickupCountry": "Alım ülkesi",
+      "deliveryAddress": "Teslimat yeri (adres veya posta kodu)",
+      "deliveryCountry": "Varış ülkesi",
+      "requestedDate": "Tercih edilen tarih",
+      "cargoType": "Mal türü",
+      "palletCount": "Palet sayısı",
+      "weightKg": "Ağırlık (kg)",
+      "lengthM": "Uzunluk (m)",
+      "widthM": "Genişlik (m)",
+      "heightM": "Yükseklik (m)",
+      "temperatureMin": "Sıcaklık min. (°C)",
+      "temperatureMax": "Sıcaklık maks. (°C)",
+      "temperatureHint": "Yalnızca sıcaklık kontrollü taşımalarda doldurun.",
+      "submit": "Talebi gönder",
+      "success": {
+        "title": "Talebiniz alındı",
+        "text": "Teşekkürler. Referans numaranız {reference}. Sevkiyat ekibimiz 2 iş saati içinde size dönecektir."
+      }
+    },
+    "application": {
+      "category": "Alan",
+      "licenseClass": "Ehliyet sınıfı",
+      "cv": "Özgeçmiş",
+      "licenseFile": "Ehliyet",
+      "certificates": "Sertifikalar",
+      "fileHint": "PDF, JPG veya PNG, dosya başına en fazla 10 MB.",
+      "submit": "Başvuruyu gönder",
+      "success": {
+        "title": "Başvurunuz alındı",
+        "text": "İlginiz için teşekkürler. İki iş günü içinde size döneceğiz."
+      }
+    },
+    "contact": {
+      "department": "Departman",
+      "departments": {
+        "general": "Genel konu",
+        "dispo": "Sevkiyat ve taşıma",
+        "hr": "Başvuru ve insan kaynakları",
+        "billing": "Yönetim ve muhasebe"
+      },
+      "success": {
+        "title": "Mesajınız alındı",
+        "text": "Teşekkürler. 2 iş saati içinde size döneceğiz."
+      }
+    },
+    "emails": {
+      "inquirySubject": "LTS Logistik'teki {reference} numaralı nakliye talebiniz",
+      "inquiryBody": "Merhaba {name},\n\nnakliye talebiniz için teşekkürler. Referans numaranız {reference}.\n\nSevkiyat ekibimiz talebinizi inceliyor ve 2 iş saati içinde size dönecektir.\n\nSaygılarımızla\nLTS Logistik GmbH\n+49 30 81 72 20 10",
+      "applicationSubject": "LTS Logistik'teki başvurunuz ({reference})",
+      "applicationBody": "Merhaba {name},\n\nLTS Logistik'e başvurunuz için teşekkürler. Belgelerinizi aldık ve iki iş günü içinde size döneceğiz.\n\nSaygılarımızla\nLTS Logistik GmbH",
+      "contactSubject": "LTS Logistik'e mesajınız",
+      "contactBody": "Merhaba {name},\n\nmesajınız için teşekkürler. En kısa sürede size döneceğiz.\n\nSaygılarımızla\nLTS Logistik GmbH"
+    }
   },
   "notFound": {
     "title": "Sayfa bulunamadı",

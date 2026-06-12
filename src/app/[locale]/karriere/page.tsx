@@ -19,6 +19,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
+import { ApplicationForm } from "@/components/forms/application-form";
 import { pageMetadata } from "@/lib/seo";
 import { company } from "@/data/company";
 
@@ -113,22 +114,25 @@ export default async function CareerPage({ params }: Props) {
                 <p className="mt-4 text-base leading-relaxed text-mist-500">
                   {t("apply.description")}
                 </p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button asChild size="lg">
-                    <a
-                      href={`mailto:${company.email}?subject=Bewerbung`}
-                    >
-                      <Mail className="h-4 w-4" />
-                      {t("apply.emailCta")}
-                    </a>
-                  </Button>
-                  <Button asChild size="lg" variant="outline">
-                    <a href={company.phoneHref}>
-                      <Phone className="h-4 w-4" />
-                      {t("apply.phoneCta")}
-                    </a>
-                  </Button>
-                </div>
+              </div>
+
+              <div className="mt-10 rounded-3xl bg-mist-50 p-6 sm:p-10">
+                <ApplicationForm />
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Button asChild variant="outline">
+                  <a href={`mailto:${company.email}?subject=Bewerbung`}>
+                    <Mail className="h-4 w-4" />
+                    {t("apply.emailCta")}
+                  </a>
+                </Button>
+                <Button asChild variant="outline">
+                  <a href={company.phoneHref}>
+                    <Phone className="h-4 w-4" />
+                    {t("apply.phoneCta")}
+                  </a>
+                </Button>
               </div>
               <div className="mt-10 flex flex-col gap-4 rounded-3xl bg-night-950 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
                 <p className="max-w-xl text-sm leading-relaxed text-mist-300">

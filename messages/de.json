@@ -59,7 +59,17 @@
       "description": "Zehn Standorte in Deutschland und regelmäßige Verkehre in die wichtigsten Wirtschaftsräume Europas. Weitere Destinationen realisieren wir auf Anfrage.",
       "locationsTitle": "Unsere Standorte",
       "countriesTitle": "Regelmäßige Destinationen",
-      "countries": ["Deutschland", "Polen", "Tschechien", "Niederlande", "Belgien", "Österreich", "Frankreich", "Dänemark", "Schweden"]
+      "countries": [
+        "Deutschland",
+        "Polen",
+        "Tschechien",
+        "Niederlande",
+        "Belgien",
+        "Österreich",
+        "Frankreich",
+        "Dänemark",
+        "Schweden"
+      ]
     },
     "fleet": {
       "eyebrow": "Fuhrpark",
@@ -279,10 +289,22 @@
       "note": "je nach Erfahrung, Führerscheinklasse und Einsatzgebiet, plus Spesen"
     },
     "facts": [
-      { "title": "Feste Touren", "text": "Planbare Einsätze statt wochenlanger Fernfahrten. Viele Touren mit täglicher Heimkehr." },
-      { "title": "Moderne Flotte", "text": "Über 260 gepflegte Fahrzeuge, regelmäßig gewartet und laufend erneuert." },
-      { "title": "Pünktliche Bezahlung", "text": "Ihr Gehalt ist zuverlässig am Monatsende auf dem Konto. Ohne Diskussionen." },
-      { "title": "Echtes Team", "text": "Disposition, die Fahrer respektiert, und Kollegen, die einspringen, wenn es klemmt." }
+      {
+        "title": "Feste Touren",
+        "text": "Planbare Einsätze statt wochenlanger Fernfahrten. Viele Touren mit täglicher Heimkehr."
+      },
+      {
+        "title": "Moderne Flotte",
+        "text": "Über 260 gepflegte Fahrzeuge, regelmäßig gewartet und laufend erneuert."
+      },
+      {
+        "title": "Pünktliche Bezahlung",
+        "text": "Ihr Gehalt ist zuverlässig am Monatsende auf dem Konto. Ohne Diskussionen."
+      },
+      {
+        "title": "Echtes Team",
+        "text": "Disposition, die Fahrer respektiert, und Kollegen, die einspringen, wenn es klemmt."
+      }
     ],
     "requirementsTitle": "Das bringen Sie mit",
     "requirements": [
@@ -308,10 +330,22 @@
     },
     "categoriesTitle": "Themenbereiche",
     "categories": [
-      { "name": "Kühllogistik", "text": "Kühlkette, Temperaturführung und Lebensmitteltransport." },
-      { "name": "Transport und Recht", "text": "Frachtdokumente, Lenkzeiten und Vorschriften verständlich erklärt." },
-      { "name": "Karriere als Fahrer", "text": "Einstieg, Weiterbildung und Alltag hinter dem Steuer." },
-      { "name": "Aus dem Unternehmen", "text": "Neue Standorte, Fahrzeuge und Projekte bei LTS Logistik." }
+      {
+        "name": "Kühllogistik",
+        "text": "Kühlkette, Temperaturführung und Lebensmitteltransport."
+      },
+      {
+        "name": "Transport und Recht",
+        "text": "Frachtdokumente, Lenkzeiten und Vorschriften verständlich erklärt."
+      },
+      {
+        "name": "Karriere als Fahrer",
+        "text": "Einstieg, Weiterbildung und Alltag hinter dem Steuer."
+      },
+      {
+        "name": "Aus dem Unternehmen",
+        "text": "Neue Standorte, Fahrzeuge und Projekte bei LTS Logistik."
+      }
     ],
     "comingSoon": "Die ersten Fachbeiträge erscheinen in Kürze. Schauen Sie bald wieder vorbei oder folgen Sie uns auf LinkedIn."
   },
@@ -331,11 +365,22 @@
     },
     "departmentsTitle": "Direkt zum richtigen Team",
     "departments": [
-      { "name": "Disposition und Transportanfragen", "text": "Angebote, laufende Transporte und Expressfahrten." },
-      { "name": "Bewerbungen", "text": "Fragen zu offenen Stellen und Ihrem Einstieg bei LTS Logistik." },
-      { "name": "Verwaltung und Buchhaltung", "text": "Rechnungen, Verträge und allgemeine Anliegen." }
+      {
+        "name": "Disposition und Transportanfragen",
+        "text": "Angebote, laufende Transporte und Expressfahrten."
+      },
+      {
+        "name": "Bewerbungen",
+        "text": "Fragen zu offenen Stellen und Ihrem Einstieg bei LTS Logistik."
+      },
+      {
+        "name": "Verwaltung und Buchhaltung",
+        "text": "Rechnungen, Verträge und allgemeine Anliegen."
+      }
     ],
-    "locationsTitle": "Unsere Standorte"
+    "locationsTitle": "Unsere Standorte",
+    "formTitle": "Schreiben Sie uns",
+    "formDescription": "Senden Sie uns Ihre Nachricht über das Formular. Wir antworten innerhalb von 2 Arbeitsstunden."
   },
   "inquiry": {
     "hero": {
@@ -357,6 +402,88 @@
     "phoneCta": "Disposition anrufen",
     "responseNote": "Anfragen, die uns Montag bis Freitag zwischen 08:00 und 16:00 Uhr erreichen, beantworten wir innerhalb von 2 Arbeitsstunden.",
     "emailSubject": "Transportanfrage"
+  },
+  "forms": {
+    "labels": {
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "name": "Name",
+      "email": "E-Mail-Adresse",
+      "phone": "Telefonnummer",
+      "company": "Firma",
+      "message": "Ihre Nachricht",
+      "submit": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "back": "Zurück",
+      "next": "Weiter",
+      "gdpr": "Ich habe die Datenschutzerklärung gelesen und willige in die Verarbeitung meiner Daten zur Bearbeitung meiner Anfrage ein."
+    },
+    "errors": {
+      "generic": "Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder rufen Sie uns an.",
+      "validation": "Bitte prüfen Sie Ihre Eingaben und versuchen Sie es erneut.",
+      "rateLimit": "Zu viele Anfragen. Bitte warten Sie einige Minuten und versuchen Sie es erneut.",
+      "file": "Eine Datei ist zu groß oder hat ein nicht unterstütztes Format. Erlaubt sind PDF, JPG und PNG bis 10 MB."
+    },
+    "inquiry": {
+      "steps": {
+        "route": "Strecke",
+        "cargo": "Ladung",
+        "contact": "Kontakt"
+      },
+      "pickupAddress": "Abholort (Adresse oder PLZ)",
+      "pickupCountry": "Land der Abholung",
+      "deliveryAddress": "Zielort (Adresse oder PLZ)",
+      "deliveryCountry": "Zielland",
+      "requestedDate": "Wunschtermin",
+      "cargoType": "Art der Ware",
+      "palletCount": "Anzahl Paletten",
+      "weightKg": "Gewicht (kg)",
+      "lengthM": "Länge (m)",
+      "widthM": "Breite (m)",
+      "heightM": "Höhe (m)",
+      "temperatureMin": "Temperatur min. (°C)",
+      "temperatureMax": "Temperatur max. (°C)",
+      "temperatureHint": "Nur bei temperaturgeführten Transporten ausfüllen.",
+      "submit": "Anfrage absenden",
+      "success": {
+        "title": "Ihre Anfrage ist eingegangen",
+        "text": "Vielen Dank. Ihre Referenznummer lautet {reference}. Unsere Disposition meldet sich innerhalb von 2 Arbeitsstunden bei Ihnen."
+      }
+    },
+    "application": {
+      "category": "Bereich",
+      "licenseClass": "Führerscheinklasse",
+      "cv": "Lebenslauf",
+      "licenseFile": "Führerschein",
+      "certificates": "Zertifikate",
+      "fileHint": "PDF, JPG oder PNG, max. 10 MB pro Datei.",
+      "submit": "Bewerbung absenden",
+      "success": {
+        "title": "Ihre Bewerbung ist eingegangen",
+        "text": "Vielen Dank für Ihr Interesse. Wir melden uns innerhalb von zwei Arbeitstagen bei Ihnen."
+      }
+    },
+    "contact": {
+      "department": "Abteilung",
+      "departments": {
+        "general": "Allgemeines Anliegen",
+        "dispo": "Disposition und Transport",
+        "hr": "Bewerbung und Personal",
+        "billing": "Verwaltung und Buchhaltung"
+      },
+      "success": {
+        "title": "Ihre Nachricht ist eingegangen",
+        "text": "Vielen Dank. Wir melden uns innerhalb von 2 Arbeitsstunden bei Ihnen."
+      }
+    },
+    "emails": {
+      "inquirySubject": "Ihre Transportanfrage {reference} bei LTS Logistik",
+      "inquiryBody": "Guten Tag {name},\n\nvielen Dank für Ihre Transportanfrage. Ihre Referenznummer lautet {reference}.\n\nUnsere Disposition prüft Ihre Anfrage und meldet sich innerhalb von 2 Arbeitsstunden bei Ihnen.\n\nMit freundlichen Grüßen\nLTS Logistik GmbH\n+49 30 81 72 20 10",
+      "applicationSubject": "Ihre Bewerbung bei LTS Logistik ({reference})",
+      "applicationBody": "Guten Tag {name},\n\nvielen Dank für Ihre Bewerbung bei LTS Logistik. Wir haben Ihre Unterlagen erhalten und melden uns innerhalb von zwei Arbeitstagen bei Ihnen.\n\nMit freundlichen Grüßen\nLTS Logistik GmbH",
+      "contactSubject": "Ihre Nachricht an LTS Logistik",
+      "contactBody": "Guten Tag {name},\n\nvielen Dank für Ihre Nachricht. Wir melden uns so schnell wie möglich bei Ihnen.\n\nMit freundlichen Grüßen\nLTS Logistik GmbH"
+    }
   },
   "notFound": {
     "title": "Seite nicht gefunden",

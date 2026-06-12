@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
+import { ContactForm } from "@/components/forms/contact-form";
 import { pageMetadata } from "@/lib/seo";
 import { JsonLdScript, organizationSchema } from "@/lib/schema";
 import { company } from "@/data/company";
@@ -100,14 +101,26 @@ export default async function ContactPage({ params }: Props) {
         </Container>
       </section>
 
-      {/* Abteilungen */}
+      {/* Kontaktformular */}
       <section className="bg-white py-16 sm:py-24">
+        <Container className="max-w-3xl">
+          <SectionHeading title={t("formTitle")} description={t("formDescription")} />
+          <Reveal className="mt-10">
+            <div className="rounded-3xl bg-mist-50 p-6 sm:p-10">
+              <ContactForm />
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/* Abteilungen */}
+      <section className="bg-mist-50 py-16 sm:py-24">
         <Container>
           <SectionHeading title={t("departmentsTitle")} />
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {departments.map((department, index) => (
               <Reveal key={department.name} delay={index * 0.07}>
-                <div className="h-full rounded-3xl bg-mist-50 p-6 sm:p-8">
+                <div className="h-full rounded-3xl bg-white p-6 shadow-card sm:p-8">
                   <h3 className="font-display text-lg font-bold text-night-900">
                     {department.name}
                   </h3>
