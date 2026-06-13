@@ -34,7 +34,8 @@ export function GeneralForm({ initial }: { initial: GeneralSettings }) {
         Allgemein
       </h2>
       <p className="mt-1 text-sm text-mist-500">
-        Name und Slogan der Website sowie die Kontaktnummern für Fahrer.
+        Name und Slogan erscheinen im Kopfbereich (neben dem Logo) und in der
+        Fußzeile. Dazu die Kontaktnummern für Fahrer auf den Stellenseiten.
       </p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <Field label="Website-Name" htmlFor="set-name">

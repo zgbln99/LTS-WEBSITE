@@ -6,11 +6,16 @@ import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/layout/logo";
 import { company } from "@/data/company";
 import { getServices } from "@/data/services";
-import { getFooterSettings, type FooterColumn } from "@/server/site-settings";
+import {
+  getFooterSettings,
+  getGeneralSettings,
+  type FooterColumn
+} from "@/server/site-settings";
 
 export async function Footer({ locale }: { locale: Locale }) {
   const t = await getTranslations("common");
   const settings = await getFooterSettings(locale);
+  const general = await getGeneralSettings();
 
   // Standard-Spalten (werden durch eigene Spalten aus dem Admin ersetzt)
   const defaultColumns: FooterColumn[] = [
@@ -45,7 +50,8 @@ export async function Footer({ locale }: { locale: Locale }) {
     settings.locale?.columns && settings.locale.columns.length > 0
       ? settings.locale.columns
       : defaultColumns;
-  const tagline = settings.locale?.tagline || t("footer.tagline");
+  const tagline =
+    settings.locale?.tagline || general.slogan || t("footer.tagline");
 
   const phone = settings.global?.phone || company.phone;
   const phoneHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
@@ -69,7 +75,7 @@ export async function Footer({ locale }: { locale: Locale }) {
       <Container className="py-14 lg:py-20">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Logo />
+            <Logo name={general.siteName} />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">{tagline}</p>
             {(facebook || linkedin) && (
               <div className="mt-5 flex gap-3">

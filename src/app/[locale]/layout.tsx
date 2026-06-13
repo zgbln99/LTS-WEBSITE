@@ -60,12 +60,17 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   const messages = await getMessages();
+  const general = await getGeneralSettings();
 
   return (
     <html lang={locale} className={`${inter.variable} ${manrope.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Header locale={locale as Locale} />
+          <Header
+            locale={locale as Locale}
+            siteName={general.siteName}
+            slogan={general.slogan}
+          />
           <main id="content">{children}</main>
           <Footer locale={locale as Locale} />
           <CookieConsent />

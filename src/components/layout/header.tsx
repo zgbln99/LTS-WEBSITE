@@ -27,7 +27,15 @@ const navItems: {
   { key: "contact", href: "/kontakt" }
 ];
 
-export function Header({ locale }: { locale: Locale }) {
+export function Header({
+  locale,
+  siteName,
+  slogan
+}: {
+  locale: Locale;
+  siteName: string;
+  slogan?: string;
+}) {
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
 
@@ -37,10 +45,15 @@ export function Header({ locale }: { locale: Locale }) {
         <Container className="flex h-16 items-center justify-between gap-4 lg:h-20">
           <Link
             href="/"
-            className="flex items-center"
+            className="flex items-center gap-3"
             onClick={() => setOpen(false)}
           >
-            <Logo />
+            <Logo name={siteName} />
+            {slogan ? (
+              <span className="hidden max-w-[18rem] border-l border-white/15 pl-3 text-xs font-medium leading-tight text-mist-400 xl:block">
+                {slogan}
+              </span>
+            ) : null}
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
@@ -81,6 +94,11 @@ export function Header({ locale }: { locale: Locale }) {
         )}
       >
         <Container className="flex flex-col gap-1 py-4">
+          {slogan ? (
+            <p className="px-4 pb-3 text-sm font-medium leading-snug text-mist-300">
+              {slogan}
+            </p>
+          ) : null}
           {navItems.map((item) => (
             <Link
               key={item.key}
