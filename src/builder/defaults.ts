@@ -622,7 +622,7 @@ export function generateDefaultData(
       }),
       block("Text", {
         theme: "light",
-        width: "narrow",
+        width: "normal",
         html:
           `<h2>Angaben gemäß § 5 TMG</h2><p>${company.legalName}<br/>${address}</p>` +
           `<h2>Kontakt</h2><p>Telefon: ${company.phone}<br/>E-Mail: ${company.email}</p>` +
@@ -643,7 +643,7 @@ export function generateDefaultData(
       }),
       block("Text", {
         theme: "light",
-        width: "narrow",
+        width: "normal",
         html:
           `<h2>1. Verantwortlicher</h2><p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Website ist die ${company.legalName}, ${company.address.street}, ${company.address.zip} ${company.address.city}, ${company.address.district}, E-Mail: ${company.email}, Telefon: ${company.phone}.</p>` +
           `<h2>2. Erhebung und Speicherung personenbezogener Daten</h2><p>Beim Aufruf dieser Website werden durch den Hostinganbieter automatisch Informationen in sogenannten Server-Logfiles gespeichert (IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser). Diese Daten dienen der Sicherstellung eines störungsfreien Betriebs und werden nach kurzer Zeit gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>` +
