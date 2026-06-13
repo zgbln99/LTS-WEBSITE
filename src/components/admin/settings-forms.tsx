@@ -53,6 +53,31 @@ export function GeneralForm({ initial }: { initial: GeneralSettings }) {
             placeholder="z.B. Ihr Partner für Transporte in Europa"
           />
         </Field>
+        <Field
+          label="Browser-Titel der Startseite (Tab / SEO)"
+          htmlFor="set-metatitle"
+          className="sm:col-span-2"
+        >
+          <Input
+            id="set-metatitle"
+            value={values.metaTitle}
+            onChange={(e) => update({ metaTitle: e.target.value })}
+            placeholder="leer = Website-Name + Slogan"
+          />
+        </Field>
+        <Field
+          label="Meta-Beschreibung der Startseite (SEO)"
+          htmlFor="set-metadesc"
+          className="sm:col-span-2"
+        >
+          <Textarea
+            id="set-metadesc"
+            value={values.metaDescription}
+            onChange={(e) => update({ metaDescription: e.target.value })}
+            placeholder="Kurzbeschreibung für Google und Social Media"
+            className="min-h-20"
+          />
+        </Field>
         <Field label="Recruiting-Telefon (Fuhrparkleitung)" htmlFor="set-phone">
           <Input
             id="set-phone"

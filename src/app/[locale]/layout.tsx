@@ -36,13 +36,16 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta.home" });
   const general = await getGeneralSettings();
   const siteName = general.siteName || "LTS Logistik";
+  const homeTitle = general.metaTitle
+    ? general.metaTitle
+    : `${siteName} | ${general.slogan || t("title")}`;
 
   return {
     title: {
       template: `%s | ${siteName}`,
-      default: `${siteName} | ${general.slogan || t("title")}`
+      default: homeTitle
     },
-    description: t("description")
+    description: general.metaDescription || t("description")
   };
 }
 

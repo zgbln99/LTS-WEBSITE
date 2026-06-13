@@ -93,6 +93,8 @@ export async function saveFooterAction(
 const generalSchema = z.object({
   siteName: z.string().trim().max(120),
   slogan: z.string().trim().max(300),
+  metaTitle: z.string().trim().max(200),
+  metaDescription: z.string().trim().max(320),
   recruitingPhone: z.string().trim().max(60),
   recruitingWhatsapp: z.string().trim().max(60)
 });

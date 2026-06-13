@@ -29,6 +29,8 @@ export interface FooterGlobalSettings {
 export interface GeneralSettings {
   siteName: string;
   slogan: string;
+  metaTitle: string;
+  metaDescription: string;
   recruitingPhone: string;
   recruitingWhatsapp: string;
 }
@@ -78,6 +80,8 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
   return {
     siteName: stored?.siteName || "LTS Logistik",
     slogan: stored?.slogan || "",
+    metaTitle: stored?.metaTitle || "",
+    metaDescription: stored?.metaDescription || "",
     recruitingPhone: stored?.recruitingPhone || "",
     recruitingWhatsapp: stored?.recruitingWhatsapp || ""
   };
