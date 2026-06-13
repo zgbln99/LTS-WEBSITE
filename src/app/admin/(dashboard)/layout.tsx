@@ -11,6 +11,7 @@ import {
   PanelBottom,
   PencilRuler,
   Quote,
+  SendHorizonal,
   Type,
   Users
 } from "lucide-react";
@@ -91,6 +92,12 @@ const navItems = [
     label: "Fußzeile",
     icon: PanelBottom,
     roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
+  },
+  {
+    href: "/admin/smtp",
+    label: "SMTP-Test",
+    icon: SendHorizonal,
+    roles: ["SUPER_ADMIN"] as Role[]
   }
 ];
 

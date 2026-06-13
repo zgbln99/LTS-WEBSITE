@@ -12,6 +12,25 @@ export function isMailConfigured() {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER);
 }
 
+// Zusammenfassung der aktiven SMTP-Einstellungen (ohne Passwort) für die Diagnose.
+export function getMailConfigSummary() {
+  return {
+    configured: isMailConfigured(),
+    host: process.env.SMTP_HOST ?? "",
+    port: Number(process.env.SMTP_PORT ?? 465),
+    secure: (process.env.SMTP_SECURE ?? "true") === "true",
+    user: process.env.SMTP_USER ?? "",
+    from: process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? ""
+  };
+}
+
+// Prüft Verbindung und Login beim SMTP-Server (ohne eine Mail zu senden).
+export async function verifyMailConnection() {
+  if (!isMailConfigured()) return false;
+  await getTransporter().verify();
+  return true;
+}
+
 function getTransporter(): Transporter {
   if (cached) return cached;
   cached = nodemailer.createTransport({
