@@ -22,7 +22,8 @@ import {
   StatsBlock,
   TestimonialsBlock,
   LeistungenBlock,
-  ArtikelBlock
+  ArtikelBlock,
+  HtmlBlock
 } from "@/builder/blocks";
 import { RichTextField } from "@/builder/rich-text-field";
 import { ImageField } from "@/builder/fields/image-field";
@@ -74,6 +75,21 @@ const paddingField = {
   ]
 };
 
+const spacingFields = {
+  padTopPx: {
+    type: "number" as const,
+    label: "Abstand oben in px (leer = Auswahl)",
+    min: 0,
+    max: 400
+  },
+  padBottomPx: {
+    type: "number" as const,
+    label: "Abstand unten in px (leer = Auswahl)",
+    min: 0,
+    max: 400
+  }
+};
+
 const textSizeField = {
   type: "select" as const,
   label: "Textgröße",
@@ -122,6 +138,7 @@ export const builderConfig: Config = {
         "BildText",
         "Bild",
         "Karten",
+        "HTMLCode",
         "Checkliste",
         "Statistiken",
         "FAQ",
@@ -242,6 +259,7 @@ export const builderConfig: Config = {
           ]
         },
         padding: paddingField,
+        ...spacingFields,
         customWidth: {
           type: "number",
           label: "Eigene Breite in px (leer = Auswahl oben)",
@@ -284,6 +302,7 @@ export const builderConfig: Config = {
         },
         size: textSizeField,
         padding: paddingField,
+        ...spacingFields,
         customWidth: {
           type: "number",
           label: "Eigene Breite in px (leer = Auswahl oben)",
@@ -321,7 +340,8 @@ export const builderConfig: Config = {
           ]
         },
         theme: themeField,
-        padding: paddingField
+        padding: paddingField,
+        ...spacingFields
       },
       defaultProps: {
         html: "<p>Ihr Text...</p>",
@@ -357,6 +377,7 @@ export const builderConfig: Config = {
       fields: {
         theme: themeField,
         padding: paddingField,
+        ...spacingFields,
         columns: {
           type: "select",
           label: "Spalten",
@@ -405,11 +426,29 @@ export const builderConfig: Config = {
       render: (props) => <CardsBlock {...(props as any)} />
     },
 
+    HTMLCode: {
+      label: "HTML (eigener Code)",
+      fields: {
+        html: {
+          type: "textarea",
+          label: "HTML-Code"
+        },
+        theme: themeField,
+        ...spacingFields
+      },
+      defaultProps: {
+        html: "<p>Eigener <strong>HTML</strong>-Inhalt...</p>",
+        theme: "white"
+      },
+      render: (props) => <HtmlBlock {...(props as any)} />
+    },
+
     Checkliste: {
       label: "Checkliste",
       fields: {
         theme: themeField,
         padding: paddingField,
+        ...spacingFields,
         items: {
           type: "array",
           label: "Punkte",

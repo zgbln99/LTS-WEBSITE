@@ -44,21 +44,35 @@ const sectionPadding: Record<Padding, string> = {
 function Section({
   theme,
   padding = "normal",
+  padTopPx,
+  padBottomPx,
   children,
   className
 }: {
   theme: Theme;
   padding?: Padding;
+  /** manueller Abstand oben/unten in px (überschreibt die Auswahl) */
+  padTopPx?: number;
+  padBottomPx?: number;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
     <section
+      style={{
+        paddingTop: padTopPx !== undefined && padTopPx !== null && `${padTopPx}px` || undefined,
+        paddingBottom: padBottomPx !== undefined && padBottomPx !== null && `${padBottomPx}px` || undefined
+      }}
       className={cn(sectionTheme[theme], sectionPadding[padding], className)}
     >
       <Container>{children}</Container>
     </section>
   );
+}
+
+export interface SpacingProps {
+  padTopPx?: number;
+  padBottomPx?: number;
 }
 
 export type TextSize = "normal" | "large" | "xl";
@@ -248,6 +262,8 @@ export interface HeadingProps {
   customFontSize?: number;
 }
 
+export interface HeadingPropsWithSpacing extends HeadingProps, SpacingProps {}
+
 const headingSizes = {
   normal: "text-3xl sm:text-4xl lg:text-5xl",
   large: "text-4xl sm:text-5xl lg:text-6xl",
@@ -260,12 +276,14 @@ const headingWidths = {
   full: "max-w-none"
 };
 
-export function HeadingBlock(props: HeadingProps) {
+export function HeadingBlock(props: HeadingPropsWithSpacing) {
   const dark = props.theme === "dark";
   return (
     <Section
       theme={props.theme}
       padding={props.padding ?? "small"}
+      padTopPx={props.padTopPx}
+      padBottomPx={props.padBottomPx}
       className="pb-4 sm:pb-6"
     >
       <div
@@ -322,7 +340,7 @@ export function HeadingBlock(props: HeadingProps) {
   );
 }
 
-export interface RichTextProps {
+export interface RichTextProps extends SpacingProps {
   html: string;
   theme: Theme;
   width: "narrow" | "normal" | "wide";
@@ -341,7 +359,12 @@ export function RichTextBlock(props: RichTextProps) {
     wide: "max-w-none"
   };
   return (
-    <Section theme={props.theme} padding={props.padding ?? "normal"}>
+    <Section
+      theme={props.theme}
+      padding={props.padding ?? "normal"}
+      padTopPx={props.padTopPx}
+      padBottomPx={props.padBottomPx}
+    >
       <div
         style={{
           maxWidth: props.customWidth ? `${props.customWidth}px` : undefined,
@@ -400,7 +423,7 @@ export function StatsBlock(props: StatsProps) {
 // Karten-Raster
 // ---------------------------------------------------------------------------
 
-export interface CardsProps {
+export interface CardsProps extends SpacingProps {
   theme: Theme;
   padding?: Padding;
   columns: "2" | "3" | "4";
@@ -422,7 +445,12 @@ export function CardsBlock(props: CardsProps) {
     "4": "sm:grid-cols-2 lg:grid-cols-4"
   };
   return (
-    <Section theme={props.theme} padding={props.padding ?? "normal"}>
+    <Section
+      theme={props.theme}
+      padding={props.padding ?? "normal"}
+      padTopPx={props.padTopPx}
+      padBottomPx={props.padBottomPx}
+    >
       <div className={cn("grid gap-4", cols[props.columns])}>
         {props.items.map((item, index) => {
           const inner = (
@@ -495,7 +523,7 @@ export function CardsBlock(props: CardsProps) {
 // Bild + Text
 // ---------------------------------------------------------------------------
 
-export interface SplitProps {
+export interface SplitProps extends SpacingProps {
   html: string;
   image: string;
   reverse: boolean;
@@ -505,7 +533,12 @@ export interface SplitProps {
 
 export function SplitBlock(props: SplitProps) {
   return (
-    <Section theme={props.theme} padding={props.padding ?? "normal"}>
+    <Section
+      theme={props.theme}
+      padding={props.padding ?? "normal"}
+      padTopPx={props.padTopPx}
+      padBottomPx={props.padBottomPx}
+    >
       <div className="grid items-center gap-10 lg:grid-cols-2">
         <div className={cn(props.reverse && "lg:order-2")}>
           <RichTextContent html={props.html} dark={props.theme === "dark"} />
@@ -847,15 +880,22 @@ export function ContactFormBlock({ title }: { title: string }) {
 export function ChecklistBlock({
   theme,
   items,
-  padding
+  padding,
+  padTopPx,
+  padBottomPx
 }: {
   theme: Theme;
   items: { text: string }[];
   padding?: Padding;
-}) {
+} & SpacingProps) {
   const dark = theme === "dark";
   return (
-    <Section theme={theme} padding={padding ?? "small"}>
+    <Section
+      theme={theme}
+      padding={padding ?? "small"}
+      padTopPx={padTopPx}
+      padBottomPx={padBottomPx}
+    >
       <ul className="max-w-3xl space-y-3">
         {items.map((item, index) => (
           <li
@@ -970,6 +1010,29 @@ export function ArtikelBlock() {
           </a>
         ))}
       </div>
+    </Section>
+  );
+}
+
+
+// Eigener HTML-Block: freier Code (serverseitig bereinigt).
+export function HtmlBlock({
+  html,
+  theme,
+  padTopPx,
+  padBottomPx
+}: {
+  html: string;
+  theme: Theme;
+} & SpacingProps) {
+  return (
+    <Section
+      theme={theme}
+      padding="normal"
+      padTopPx={padTopPx}
+      padBottomPx={padBottomPx}
+    >
+      <RichTextContent html={html} dark={theme === "dark"} />
     </Section>
   );
 }

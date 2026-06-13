@@ -26,7 +26,15 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     "span"
   ],
   allowedAttributes: {
-    a: ["href", "target", "rel"]
+    a: ["href", "target", "rel"],
+    p: ["style"],
+    h2: ["style"],
+    h3: ["style"],
+    h4: ["style"],
+    li: ["style"]
+  },
+  allowedStyles: {
+    "*": { "text-align": [/^left$|^center$|^right$/] }
   },
   allowedSchemes: ["http", "https", "mailto", "tel"]
 };

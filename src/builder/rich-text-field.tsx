@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
+  Code,
   Eraser,
   Heading2,
   Heading3,
@@ -13,7 +17,8 @@ import {
   Link2,
   Link2Off,
   List,
-  ListOrdered
+  ListOrdered,
+  Underline as UnderlineIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +51,15 @@ function ToolbarButton({
   );
 }
 
-function Toolbar({ editor }: { editor: Editor }) {
+function Toolbar({
+  editor,
+  htmlMode,
+  onToggleHtml
+}: {
+  editor: Editor;
+  htmlMode: boolean;
+  onToggleHtml: () => void;
+}) {
   const setLink = () => {
     const previous = editor.getAttributes("link").href as string | undefined;
     const url = window.prompt("Link-URL", previous ?? "https://");
@@ -80,6 +93,14 @@ function Toolbar({ editor }: { editor: Editor }) {
         <Italic className="h-3.5 w-3.5" />
       </ToolbarButton>
       <ToolbarButton
+        title="Unterstrichen"
+        active={editor.isActive("underline")}
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+      >
+        <UnderlineIcon className="h-3.5 w-3.5" />
+      </ToolbarButton>
+      <span className="mx-1 h-5 w-px bg-mist-200" />
+      <ToolbarButton
         title="Überschrift 2"
         active={editor.isActive("heading", { level: 2 })}
         onClick={() =>
@@ -97,6 +118,29 @@ function Toolbar({ editor }: { editor: Editor }) {
       >
         <Heading3 className="h-3.5 w-3.5" />
       </ToolbarButton>
+      <span className="mx-1 h-5 w-px bg-mist-200" />
+      <ToolbarButton
+        title="Linksbündig"
+        active={editor.isActive({ textAlign: "left" })}
+        onClick={() => editor.chain().focus().setTextAlign("left").run()}
+      >
+        <AlignLeft className="h-3.5 w-3.5" />
+      </ToolbarButton>
+      <ToolbarButton
+        title="Zentriert"
+        active={editor.isActive({ textAlign: "center" })}
+        onClick={() => editor.chain().focus().setTextAlign("center").run()}
+      >
+        <AlignCenter className="h-3.5 w-3.5" />
+      </ToolbarButton>
+      <ToolbarButton
+        title="Rechtsbündig"
+        active={editor.isActive({ textAlign: "right" })}
+        onClick={() => editor.chain().focus().setTextAlign("right").run()}
+      >
+        <AlignRight className="h-3.5 w-3.5" />
+      </ToolbarButton>
+      <span className="mx-1 h-5 w-px bg-mist-200" />
       <ToolbarButton
         title="Aufzählung"
         active={editor.isActive("bulletList")}
@@ -132,11 +176,19 @@ function Toolbar({ editor }: { editor: Editor }) {
       >
         <Eraser className="h-3.5 w-3.5" />
       </ToolbarButton>
+      <span className="mx-1 h-5 w-px bg-mist-200" />
+      <ToolbarButton
+        title="HTML-Quelltext bearbeiten"
+        active={htmlMode}
+        onClick={onToggleHtml}
+      >
+        <Code className="h-3.5 w-3.5" />
+      </ToolbarButton>
     </div>
   );
 }
 
-// Rich-Text-Feld für den Page-Builder (Puck Custom Field).
+// Rich-Text-Feld für den Page-Builder (Puck Custom Field) mit HTML-Modus.
 export function RichTextField({
   value,
   onChange
@@ -144,11 +196,18 @@ export function RichTextField({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const [htmlMode, setHtmlMode] = useState(false);
+  const [htmlDraft, setHtmlDraft] = useState(value ?? "");
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [2, 3, 4] } }),
-      Link.configure({ openOnClick: false })
+      // Link und Underline sind im StarterKit v3 bereits enthalten
+      StarterKit.configure({
+        heading: { levels: [2, 3, 4] },
+        link: { openOnClick: false }
+      }),
+      TextAlign.configure({ types: ["heading", "paragraph"] })
     ],
     content: value || "<p></p>",
     onUpdate: ({ editor: instance }) => {
@@ -164,11 +223,24 @@ export function RichTextField({
 
   // Externen Wert übernehmen (z.B. nach Zurücksetzen)
   useEffect(() => {
-    if (editor && value !== editor.getHTML() && !editor.isFocused) {
+    if (editor && value !== editor.getHTML() && !editor.isFocused && !htmlMode) {
       editor.commands.setContent(value || "<p></p>");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, editor]);
+
+  const toggleHtml = () => {
+    if (!editor) return;
+    if (htmlMode) {
+      // HTML übernehmen und zurück zur visuellen Bearbeitung
+      editor.commands.setContent(htmlDraft || "<p></p>");
+      onChange(htmlDraft);
+      setHtmlMode(false);
+    } else {
+      setHtmlDraft(editor.getHTML());
+      setHtmlMode(true);
+    }
+  };
 
   if (!editor) {
     return <div className="h-28 rounded-lg border border-mist-200 bg-white" />;
@@ -176,8 +248,20 @@ export function RichTextField({
 
   return (
     <div className="overflow-hidden rounded-lg border border-mist-300 bg-white">
-      <Toolbar editor={editor} />
-      <EditorContent editor={editor} />
+      <Toolbar editor={editor} htmlMode={htmlMode} onToggleHtml={toggleHtml} />
+      {htmlMode ? (
+        <textarea
+          value={htmlDraft}
+          onChange={(event) => {
+            setHtmlDraft(event.target.value);
+            onChange(event.target.value);
+          }}
+          spellCheck={false}
+          className="min-h-40 w-full resize-y bg-night-950 px-3 py-2 font-mono text-xs leading-relaxed text-mint-300 outline-none"
+        />
+      ) : (
+        <EditorContent editor={editor} />
+      )}
     </div>
   );
 }
