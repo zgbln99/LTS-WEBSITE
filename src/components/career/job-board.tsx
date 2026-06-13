@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Search } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Input, Select } from "@/components/ui/field";
 
@@ -16,6 +16,31 @@ export interface BoardJob {
   salary: string;
   salaryNote: string;
   licenseCategory: string;
+}
+
+// Gängige Schreibweisen für Deutschland in den Seitensprachen,
+// damit "Schönefeld, Niemcy" nicht zusätzlich "Deutschland" anzeigt.
+const GERMANY_ALIASES = [
+  "deutschland",
+  "germany",
+  "niemcy",
+  "almanya",
+  "німеччина",
+  "nimechchyna"
+];
+
+function formatLocation(job: BoardJob) {
+  const location = job.location.trim();
+  if (!job.country) return location;
+  const haystack = location.toLowerCase();
+  if (haystack.includes(job.country.toLowerCase())) return location;
+  if (
+    GERMANY_ALIASES.includes(job.country.toLowerCase()) &&
+    GERMANY_ALIASES.some((alias) => haystack.includes(alias))
+  ) {
+    return location;
+  }
+  return `${location}, ${job.country}`;
 }
 
 export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
@@ -93,11 +118,11 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
 
       {/* Tabelle (Desktop) / Karten (Mobil) */}
       <div className="mt-4 overflow-hidden rounded-3xl border border-mist-200 bg-white shadow-card">
-        <div className="hidden grid-cols-[1fr_240px_220px_200px] gap-4 border-b border-mist-100 bg-mist-50 px-7 py-4 text-xs font-semibold uppercase tracking-wider text-mist-400 lg:grid">
+        <div className="hidden grid-cols-[1.5fr_230px_180px_240px] gap-4 border-b border-mist-200 bg-mist-50 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.14em] text-mist-400 lg:grid">
           <span>{t("colPosition")}</span>
           <span>{t("colLocation")}</span>
           <span>{t("colSystem")}</span>
-          <span className="text-right">{t("colSalary")}</span>
+          <span className="pr-14 text-right">{t("colSalary")}</span>
         </div>
 
         {filtered.length === 0 ? (
@@ -113,34 +138,41 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
                     pathname: "/karriere/stelle/[slug]",
                     params: { slug: job.slug }
                   }}
-                  className="group grid gap-3 px-7 py-6 transition-colors hover:bg-mist-50 lg:grid-cols-[1fr_240px_220px_200px] lg:items-center lg:gap-4"
+                  className="group grid gap-4 px-5 py-6 transition-colors hover:bg-mist-50 sm:px-7 lg:grid-cols-[1.5fr_230px_180px_240px] lg:items-center lg:py-7"
                 >
-                  <div>
+                  <div className="min-w-0">
                     {job.licenseCategory ? (
-                      <span className="text-xs font-bold uppercase tracking-wider text-accent-600">
+                      <span className="inline-flex items-center rounded-full bg-accent-500/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-accent-600">
                         {t("categoryPrefix")} {job.licenseCategory}
                       </span>
                     ) : null}
-                    <h3 className="mt-1 font-display text-lg font-bold leading-snug text-night-900 transition-colors group-hover:text-accent-600">
+                    <h3 className="mt-2 font-display text-lg font-bold leading-snug text-night-900 transition-colors group-hover:text-accent-600">
                       {job.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-mist-500">
-                    {job.location}
-                    {job.country ? `, ${job.country}` : ""}
+                  <p className="flex items-center gap-2 text-sm font-medium text-night-700">
+                    <MapPin className="h-4 w-4 shrink-0 text-accent-500" />
+                    <span className="min-w-0">{formatLocation(job)}</span>
                   </p>
-                  <p className="text-sm text-mist-500">{job.system}</p>
-                  <div className="flex items-center justify-between gap-3 lg:justify-end">
-                    <p className="text-right">
-                      <span className="font-display text-lg font-extrabold text-night-900">
+                  <p>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-mist-200 bg-mist-50 px-3 py-1.5 text-xs font-semibold text-night-700">
+                      <Clock className="h-3.5 w-3.5 text-mist-400" />
+                      {job.system}
+                    </span>
+                  </p>
+                  <div className="flex items-center justify-between gap-4 lg:justify-end">
+                    <p className="text-right leading-tight">
+                      <span className="block whitespace-nowrap font-display text-lg font-extrabold tracking-tight text-night-900">
                         {job.salary}
-                      </span>{" "}
-                      <span className="text-xs text-mist-400">
-                        {job.salaryNote}
                       </span>
+                      {job.salaryNote ? (
+                        <span className="text-xs font-medium text-mist-400">
+                          {job.salaryNote}
+                        </span>
+                      ) : null}
                     </p>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-night-950 text-white transition-all group-hover:scale-105 group-hover:bg-accent-500">
-                      <ArrowRight className="h-4 w-4" />
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-night-950 text-white transition-all group-hover:scale-105 group-hover:bg-accent-500">
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:-rotate-45" />
                     </span>
                   </div>
                 </Link>
