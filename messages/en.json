@@ -310,6 +310,14 @@
       "submit": "Request a call",
       "successTitle": "Thanks, we got your number.",
       "successText": "We will get back to you within one working day."
+    },
+    "directContact": {
+      "eyebrow": "Direct line",
+      "title": "Prefer to talk directly?",
+      "text": "Message our fleet management on WhatsApp or call them directly. Quick reply, no form needed.",
+      "whatsapp": "WhatsApp fleet management",
+      "call": "Call directly",
+      "presetMessage": "Hello, I am interested in the position: "
     }
   },
   "driver": {

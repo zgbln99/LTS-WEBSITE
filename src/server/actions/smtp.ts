@@ -25,7 +25,7 @@ export async function testSmtpAction(recipient: string): Promise<SmtpTestResult>
   const session = await requireRole(["SUPER_ADMIN"]);
   if (!session) redirect("/admin/login");
 
-  const summary = getMailConfigSummary();
+  const summary = await getMailConfigSummary();
   if (!summary.configured) {
     return {
       ok: false,

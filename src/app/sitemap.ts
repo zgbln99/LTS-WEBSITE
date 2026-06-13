@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { locales, routing, type AppPathname } from "@/i18n/routing";
 import { getServiceSlug, serviceOrder } from "@/data/services";
 import { localizedUrl } from "@/lib/seo";
+import { prisma } from "@/server/db";
+import { safeQuery } from "@/server/safe";
 
 const staticPages: { pathname: AppPathname; priority: number }[] = [
   { pathname: "/", priority: 1 },
@@ -14,7 +16,7 @@ const staticPages: { pathname: AppPathname; priority: number }[] = [
   { pathname: "/kontakt", priority: 0.7 }
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   for (const page of staticPages) {
@@ -57,10 +59,52 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
+  // Veröffentlichte Stellenanzeigen je Sprache (mit hreflang-Alternativen).
+  const jobs =
+    (await safeQuery(() =>
+      prisma.jobPosting.findMany({
+        where: {
+          status: "PUBLISHED",
+          OR: [{ validThrough: null }, { validThrough: { gte: new Date() } }]
+        },
+        include: { translations: true }
+      })
+    )) ?? [];
+
+  for (const job of jobs) {
+    const slugByLocale = new Map(
+      job.translations.map((tr) => [tr.locale, tr.slug])
+    );
+    const availableLocales = locales.filter((l) => slugByLocale.has(l));
+    for (const locale of availableLocales) {
+      const slug = slugByLocale.get(locale)!;
+      entries.push({
+        url: localizedUrl(locale, {
+          pathname: "/karriere/stelle/[slug]",
+          params: { slug }
+        }),
+        lastModified: job.updatedAt,
+        changeFrequency: "daily",
+        priority: 0.7,
+        alternates: {
+          languages: Object.fromEntries(
+            availableLocales.map((l) => [
+              l,
+              localizedUrl(l, {
+                pathname: "/karriere/stelle/[slug]",
+                params: { slug: slugByLocale.get(l)! }
+              })
+            ])
+          )
+        }
+      });
+    }
+  }
+
   return entries;
 }
 
-export const dynamic = "force-static";
+export const revalidate = 3600;
 
 // Standardlocale wird von next-intl auf /de geprefixt, daher keine Sonderbehandlung nötig.
 void routing;

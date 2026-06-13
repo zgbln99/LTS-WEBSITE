@@ -90,6 +90,90 @@ export async function saveFooterAction(
   return { ok: true };
 }
 
+const generalSchema = z.object({
+  siteName: z.string().trim().max(120),
+  slogan: z.string().trim().max(300),
+  recruitingPhone: z.string().trim().max(60),
+  recruitingWhatsapp: z.string().trim().max(60)
+});
+
+export async function saveGeneralAction(values: unknown) {
+  const session = await requireRole(["SUPER_ADMIN", "MARKETING"]);
+  if (!session) redirect("/admin/login");
+
+  const parsed = generalSchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  await prisma.siteSetting.upsert({
+    where: { key: "general" },
+    update: { value: parsed.data },
+    create: { key: "general", value: parsed.data }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "GeneralSettings"
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePublic([
+    "",
+    "/unternehmen",
+    "/leistungen",
+    "/fuhrpark",
+    "/karriere",
+    "/karriere/lkw-fahrer",
+    "/wissen",
+    "/kontakt"
+  ]);
+  revalidatePath("/admin/einstellungen");
+  return { ok: true };
+}
+
+const smtpSchema = z.object({
+  host: z.string().trim().max(200),
+  port: z.coerce.number().int().min(1).max(65535),
+  secure: z.boolean(),
+  user: z.string().trim().max(200),
+  password: z.string().max(200),
+  from: z.string().trim().max(200),
+  hrRecipient: z.string().trim().max(200),
+  inquiriesRecipient: z.string().trim().max(200)
+});
+
+export async function saveSmtpAction(values: unknown) {
+  const session = await requireRole(["SUPER_ADMIN"]);
+  if (!session) redirect("/admin/login");
+
+  const parsed = smtpSchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  // Leeres Passwortfeld bedeutet: bisheriges Passwort beibehalten.
+  let password = parsed.data.password;
+  if (password === "") {
+    const existing = await prisma.siteSetting.findUnique({
+      where: { key: "smtp" }
+    });
+    const stored = existing?.value as { password?: string } | null;
+    password = stored?.password ?? "";
+  }
+
+  await prisma.siteSetting.upsert({
+    where: { key: "smtp" },
+    update: { value: { ...parsed.data, password } },
+    create: { key: "smtp", value: { ...parsed.data, password } }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "SmtpSettings"
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePath("/admin/einstellungen");
+  return { ok: true };
+}
+
 // Setzt die Fußzeile einer Sprache auf den Standard zurück.
 export async function resetFooterAction(locale: string) {
   const session = await requireRole(CONTENT_ROLES);

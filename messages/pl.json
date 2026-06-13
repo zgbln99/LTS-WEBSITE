@@ -310,6 +310,14 @@
       "submit": "Poproś o telefon",
       "successTitle": "Dzięki, mamy Twój numer.",
       "successText": "Odezwiemy się w ciągu jednego dnia roboczego."
+    },
+    "directContact": {
+      "eyebrow": "Bezpośredni kontakt",
+      "title": "Wolisz porozmawiać bezpośrednio?",
+      "text": "Napisz do naszego kierownika floty na WhatsApp lub zadzwoń bezpośrednio. Szybka odpowiedź, bez formularza.",
+      "whatsapp": "WhatsApp do kierownika floty",
+      "call": "Zadzwoń bezpośrednio",
+      "presetMessage": "Dzień dobry, interesuje mnie oferta: "
     }
   },
   "driver": {

@@ -310,6 +310,14 @@
       "submit": "Rückruf anfordern",
       "successTitle": "Danke, Ihre Nummer ist angekommen.",
       "successText": "Wir melden uns innerhalb eines Arbeitstages bei Ihnen."
+    },
+    "directContact": {
+      "eyebrow": "Direkter Draht",
+      "title": "Lieber direkt sprechen?",
+      "text": "Schreiben Sie unserer Fuhrparkleitung per WhatsApp oder rufen Sie direkt an. Schnelle Antwort, ganz ohne Formular.",
+      "whatsapp": "WhatsApp an die Fuhrparkleitung",
+      "call": "Direkt anrufen",
+      "presetMessage": "Hallo, ich interessiere mich für die Stelle: "
     }
   },
   "driver": {

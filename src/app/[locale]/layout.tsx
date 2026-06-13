@@ -4,6 +4,7 @@ import { Inter, Manrope } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
+import { getGeneralSettings } from "@/server/site-settings";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/consent/cookie-consent";
@@ -33,11 +34,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.home" });
+  const general = await getGeneralSettings();
+  const siteName = general.siteName || "LTS Logistik";
 
   return {
     title: {
-      template: "%s | LTS Logistik",
-      default: `LTS Logistik | ${t("title")}`
+      template: `%s | ${siteName}`,
+      default: `${siteName} | ${general.slogan || t("title")}`
     },
     description: t("description")
   };

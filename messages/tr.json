@@ -310,6 +310,14 @@
       "submit": "Aranma talep et",
       "successTitle": "Teşekkürler, numaranız bize ulaştı.",
       "successText": "Bir iş günü içinde size döneceğiz."
+    },
+    "directContact": {
+      "eyebrow": "Doğrudan hat",
+      "title": "Doğrudan konuşmayı mı tercih edersiniz?",
+      "text": "Filo yönetimimize WhatsApp üzerinden yazın veya doğrudan arayın. Hızlı yanıt, forma gerek yok.",
+      "whatsapp": "Filo yönetimine WhatsApp",
+      "call": "Doğrudan ara",
+      "presetMessage": "Merhaba, şu pozisyonla ilgileniyorum: "
     }
   },
   "driver": {

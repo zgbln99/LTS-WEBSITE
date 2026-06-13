@@ -1,4 +1,5 @@
 import nodemailer, { type Transporter } from "nodemailer";
+import { getSmtpSettings } from "@/server/site-settings";
 
 export interface MailAttachment {
   filename: string;
@@ -6,43 +7,54 @@ export interface MailAttachment {
   contentType?: string;
 }
 
-let cached: Transporter | null = null;
+let cached: { key: string; transporter: Transporter } | null = null;
 
-export function isMailConfigured() {
-  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER);
+// Liefert die internen Empfänger (HR / Anfragen) aus den Einstellungen.
+export async function getMailRecipients() {
+  const cfg = await getSmtpSettings();
+  return { hr: cfg.hrRecipient, inquiries: cfg.inquiriesRecipient };
 }
 
 // Zusammenfassung der aktiven SMTP-Einstellungen (ohne Passwort) für die Diagnose.
-export function getMailConfigSummary() {
+export async function getMailConfigSummary() {
+  const cfg = await getSmtpSettings();
   return {
-    configured: isMailConfigured(),
-    host: process.env.SMTP_HOST ?? "",
-    port: Number(process.env.SMTP_PORT ?? 465),
-    secure: (process.env.SMTP_SECURE ?? "true") === "true",
-    user: process.env.SMTP_USER ?? "",
-    from: process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? ""
+    configured: Boolean(cfg.host && cfg.user),
+    host: cfg.host,
+    port: cfg.port,
+    secure: cfg.secure,
+    user: cfg.user,
+    from: cfg.from,
+    hrRecipient: cfg.hrRecipient,
+    inquiriesRecipient: cfg.inquiriesRecipient
   };
 }
 
 // Prüft Verbindung und Login beim SMTP-Server (ohne eine Mail zu senden).
 export async function verifyMailConnection() {
-  if (!isMailConfigured()) return false;
-  await getTransporter().verify();
+  const cfg = await getSmtpSettings();
+  if (!cfg.host || !cfg.user) return false;
+  await getTransporter(cfg).verify();
   return true;
 }
 
-function getTransporter(): Transporter {
-  if (cached) return cached;
-  cached = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT ?? 465),
-    secure: (process.env.SMTP_SECURE ?? "true") === "true",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD
-    }
+function getTransporter(cfg: {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  password: string;
+}): Transporter {
+  const key = `${cfg.host}:${cfg.port}:${cfg.secure}:${cfg.user}`;
+  if (cached && cached.key === key) return cached.transporter;
+  const transporter = nodemailer.createTransport({
+    host: cfg.host,
+    port: cfg.port,
+    secure: cfg.secure,
+    auth: { user: cfg.user, pass: cfg.password }
   });
-  return cached;
+  cached = { key, transporter };
+  return transporter;
 }
 
 export async function sendMail(options: {
@@ -53,12 +65,13 @@ export async function sendMail(options: {
   replyTo?: string;
   attachments?: MailAttachment[];
 }) {
-  if (!isMailConfigured()) {
+  const cfg = await getSmtpSettings();
+  if (!cfg.host || !cfg.user) {
     console.warn("SMTP nicht konfiguriert, E-Mail wird übersprungen:", options.subject);
     return false;
   }
-  await getTransporter().sendMail({
-    from: process.env.EMAIL_FROM ?? process.env.SMTP_USER,
+  await getTransporter(cfg).sendMail({
+    from: cfg.from,
     ...options
   });
   return true;

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
-  Briefcase,
   BellRing,
+  Briefcase,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -12,9 +12,11 @@ import {
   PanelBottom,
   PencilRuler,
   Quote,
-  SendHorizonal,
+  Settings,
+  ShieldCheck,
   Type,
-  Users
+  Users,
+  type LucideIcon
 } from "lucide-react";
 import { auth } from "@/auth";
 import { logoutAction } from "@/server/actions/admin";
@@ -27,84 +29,122 @@ const roleLabels: Record<Role, string> = {
   EDITOR: "Redaktion"
 };
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  roles: Role[];
+}
+
+const navSections: { title: string | null; items: NavItem[] }[] = [
   {
-    href: "/admin",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    roles: ["SUPER_ADMIN", "HR", "MARKETING", "EDITOR"] as Role[]
+    title: null,
+    items: [
+      {
+        href: "/admin",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+        roles: ["SUPER_ADMIN", "HR", "MARKETING", "EDITOR"]
+      }
+    ]
   },
   {
-    href: "/admin/anfragen",
-    label: "Transportanfragen",
-    icon: Inbox,
-    roles: ["SUPER_ADMIN", "MARKETING"] as Role[]
+    title: "Anfragen",
+    items: [
+      {
+        href: "/admin/anfragen",
+        label: "Transportanfragen",
+        icon: Inbox,
+        roles: ["SUPER_ADMIN", "MARKETING"]
+      },
+      {
+        href: "/admin/kontaktanfragen",
+        label: "Kontaktanfragen",
+        icon: Mail,
+        roles: ["SUPER_ADMIN", "MARKETING"]
+      }
+    ]
   },
   {
-    href: "/admin/kontaktanfragen",
-    label: "Kontaktanfragen",
-    icon: Mail,
-    roles: ["SUPER_ADMIN", "MARKETING"] as Role[]
+    title: "Recruiting",
+    items: [
+      {
+        href: "/admin/bewerbungen",
+        label: "Bewerbungen",
+        icon: Users,
+        roles: ["SUPER_ADMIN", "HR"]
+      },
+      {
+        href: "/admin/stellen",
+        label: "Stellenanzeigen",
+        icon: Briefcase,
+        roles: ["SUPER_ADMIN", "HR"]
+      },
+      {
+        href: "/admin/benachrichtigungen",
+        label: "Benachrichtigungen",
+        icon: BellRing,
+        roles: ["SUPER_ADMIN", "HR", "MARKETING"]
+      }
+    ]
   },
   {
-    href: "/admin/bewerbungen",
-    label: "Bewerbungen",
-    icon: Users,
-    roles: ["SUPER_ADMIN", "HR"] as Role[]
+    title: "Inhalte",
+    items: [
+      {
+        href: "/admin/seiten",
+        label: "Seiten-Editor",
+        icon: PencilRuler,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/artikel",
+        label: "Wissenszentrum",
+        icon: Newspaper,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/testimonials",
+        label: "Testimonials",
+        icon: Quote,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/einsatzorte",
+        label: "Einsatzorte",
+        icon: MapPin,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/texte",
+        label: "Website-Texte",
+        icon: Type,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/fusszeile",
+        label: "Fußzeile",
+        icon: PanelBottom,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      }
+    ]
   },
   {
-    href: "/admin/benachrichtigungen",
-    label: "Benachrichtigungen",
-    icon: BellRing,
-    roles: ["SUPER_ADMIN", "HR", "MARKETING"] as Role[]
-  },
-  {
-    href: "/admin/stellen",
-    label: "Stellenanzeigen",
-    icon: Briefcase,
-    roles: ["SUPER_ADMIN", "HR"] as Role[]
-  },
-  {
-    href: "/admin/artikel",
-    label: "Wissenszentrum",
-    icon: Newspaper,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/testimonials",
-    label: "Testimonials",
-    icon: Quote,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/einsatzorte",
-    label: "Einsatzorte",
-    icon: MapPin,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/texte",
-    label: "Website-Texte",
-    icon: Type,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/seiten",
-    label: "Seiten-Editor",
-    icon: PencilRuler,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/fusszeile",
-    label: "Fußzeile",
-    icon: PanelBottom,
-    roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[]
-  },
-  {
-    href: "/admin/smtp",
-    label: "SMTP-Test",
-    icon: SendHorizonal,
-    roles: ["SUPER_ADMIN"] as Role[]
+    title: "System",
+    items: [
+      {
+        href: "/admin/einstellungen",
+        label: "Einstellungen",
+        icon: Settings,
+        roles: ["SUPER_ADMIN"]
+      },
+      {
+        href: "/admin/system",
+        label: "System",
+        icon: ShieldCheck,
+        roles: ["SUPER_ADMIN"]
+      }
+    ]
   }
 ];
 
@@ -116,9 +156,14 @@ export default async function AdminDashboardLayout({
   const session = await auth();
   if (!session?.user) redirect("/admin/login");
 
-  const items = navItems.filter((item) =>
-    item.roles.includes(session.user.role)
-  );
+  const role = session.user.role;
+  const sections = navSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => item.roles.includes(role))
+    }))
+    .filter((section) => section.items.length > 0);
+  const allItems = sections.flatMap((section) => section.items);
 
   return (
     <div className="flex min-h-svh">
@@ -130,16 +175,25 @@ export default async function AdminDashboardLayout({
           <span className="font-display text-base font-bold">Admin</span>
         </Link>
 
-        <nav className="mt-8 flex flex-1 flex-col gap-1">
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-mist-300 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </Link>
+        <nav className="mt-8 flex flex-1 flex-col gap-5 overflow-y-auto">
+          {sections.map((section, index) => (
+            <div key={section.title ?? `section-${index}`} className="flex flex-col gap-1">
+              {section.title ? (
+                <p className="px-3.5 pb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-mist-500">
+                  {section.title}
+                </p>
+              ) : null}
+              {section.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-mist-300 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           ))}
         </nav>
 
@@ -147,9 +201,7 @@ export default async function AdminDashboardLayout({
           <p className="truncate text-sm font-semibold text-white">
             {session.user.name}
           </p>
-          <p className="text-xs text-mist-400">
-            {roleLabels[session.user.role]}
-          </p>
+          <p className="text-xs text-mist-400">{roleLabels[role]}</p>
           <form action={logoutAction} className="mt-3">
             <button
               type="submit"
@@ -172,7 +224,7 @@ export default async function AdminDashboardLayout({
             <span className="font-display text-sm font-bold">Admin</span>
           </Link>
           <nav className="flex items-center gap-1 overflow-x-auto">
-            {items.map((item) => (
+            {allItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

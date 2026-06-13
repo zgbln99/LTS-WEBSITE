@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/server/db";
 import {
+  getMailRecipients,
   notificationHtml,
   notificationText,
   sendMail,
@@ -21,10 +22,6 @@ import {
   transportRequestSchema,
   type FormActionState
 } from "@/lib/forms";
-
-const INTERNAL_INQUIRIES =
-  process.env.EMAIL_INTERNAL_INQUIRIES ?? "info@ltslogistik.de";
-const INTERNAL_HR = process.env.EMAIL_INTERNAL_HR ?? "info@ltslogistik.de";
 
 function generateReference(prefix: string) {
   const random = Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -150,9 +147,10 @@ export async function submitTransportRequest(
     ["Sprache", data.locale]
   ];
 
+  const recipients = await getMailRecipients();
   const mailed = await sendInternalNotification({
     kind: "TRANSPORT",
-    to: INTERNAL_INQUIRIES,
+    to: recipients.inquiries,
     replyTo: data.email,
     reference,
     subject: `Neue Transportanfrage ${reference}: ${data.pickupCountry} nach ${data.deliveryCountry}`,
@@ -226,9 +224,10 @@ export async function submitContactRequest(
     ["Sprache", data.locale]
   ];
 
+  const recipients = await getMailRecipients();
   const mailed = await sendInternalNotification({
     kind: "CONTACT",
-    to: data.department === "hr" ? INTERNAL_HR : INTERNAL_INQUIRIES,
+    to: data.department === "hr" ? recipients.hr : recipients.inquiries,
     replyTo: data.email,
     subject: `Neue Kontaktanfrage über die Website (${data.department})`,
     text: notificationText("Neue Kontaktanfrage über die Website", rows),
@@ -293,9 +292,10 @@ export async function submitCallbackRequest(
     ["Sprache", data.locale]
   ];
 
+  const recipients = await getMailRecipients();
   const mailed = await sendInternalNotification({
     kind: "CALLBACK",
-    to: INTERNAL_HR,
+    to: recipients.hr,
     subject: `Neue Rückrufbitte: ${data.phone}`,
     text: notificationText("Neue Rückrufbitte von der Karriereseite", rows),
     html: notificationHtml("Neue Rückrufbitte von der Karriereseite", rows)
@@ -450,9 +450,10 @@ export async function submitApplication(
     contentType: file.mime
   }));
 
+  const recipients = await getMailRecipients();
   const mailed = await sendInternalNotification({
     kind: "APPLICATION",
-    to: INTERNAL_HR,
+    to: recipients.hr,
     replyTo: data.email,
     reference,
     subject: `Neue Bewerbung ${reference}: ${data.firstName} ${data.lastName} (${data.category})`,
