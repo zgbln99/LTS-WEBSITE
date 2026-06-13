@@ -9,6 +9,7 @@ import {
   type MailAttachment
 } from "@/server/mailer";
 import { getClientIpHash, isRateLimited } from "@/server/rate-limit";
+import { sendInternalNotification } from "@/server/notifications";
 import { isS3Configured, uploadApplicationFile } from "@/server/s3";
 import {
   ALLOWED_FILE_TYPES,
@@ -35,6 +36,16 @@ function isHoneypotFilled(formData: FormData) {
   return Boolean((formData.get("website") as string | null)?.trim());
 }
 
+// Zeitfalle: Ein echter Mensch braucht zum Ausfüllen länger als ein Bot.
+// Das Feld "renderedAt" wird per JavaScript beim Laden des Formulars gesetzt.
+// Fehlt es (kein JavaScript), wird nicht blockiert.
+const MIN_FILL_MS = 2500;
+function isSubmittedTooFast(formData: FormData) {
+  const renderedAt = Number(formData.get("renderedAt"));
+  if (!renderedAt || Number.isNaN(renderedAt)) return false;
+  return Date.now() - renderedAt < MIN_FILL_MS;
+}
+
 async function sendConfirmation(
   locale: string,
   to: string,
@@ -58,7 +69,7 @@ export async function submitTransportRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData)) {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
     return { status: "success", reference: generateReference("LTS") };
   }
 
@@ -139,18 +150,15 @@ export async function submitTransportRequest(
     ["Sprache", data.locale]
   ];
 
-  let mailed = false;
-  try {
-    mailed = await sendMail({
-      to: INTERNAL_INQUIRIES,
-      replyTo: data.email,
-      subject: `Neue Transportanfrage ${reference}: ${data.pickupCountry} nach ${data.deliveryCountry}`,
-      text: notificationText("Neue Transportanfrage über die Website", rows),
-      html: notificationHtml("Neue Transportanfrage über die Website", rows)
-    });
-  } catch (error) {
-    console.error("Benachrichtigung fehlgeschlagen:", error);
-  }
+  const mailed = await sendInternalNotification({
+    kind: "TRANSPORT",
+    to: INTERNAL_INQUIRIES,
+    replyTo: data.email,
+    reference,
+    subject: `Neue Transportanfrage ${reference}: ${data.pickupCountry} nach ${data.deliveryCountry}`,
+    text: notificationText("Neue Transportanfrage über die Website", rows),
+    html: notificationHtml("Neue Transportanfrage über die Website", rows)
+  });
 
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };
@@ -171,7 +179,7 @@ export async function submitContactRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData)) {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
     return { status: "success" };
   }
 
@@ -218,18 +226,14 @@ export async function submitContactRequest(
     ["Sprache", data.locale]
   ];
 
-  let mailed = false;
-  try {
-    mailed = await sendMail({
-      to: data.department === "hr" ? INTERNAL_HR : INTERNAL_INQUIRIES,
-      replyTo: data.email,
-      subject: `Neue Kontaktanfrage über die Website (${data.department})`,
-      text: notificationText("Neue Kontaktanfrage über die Website", rows),
-      html: notificationHtml("Neue Kontaktanfrage über die Website", rows)
-    });
-  } catch (error) {
-    console.error("Benachrichtigung fehlgeschlagen:", error);
-  }
+  const mailed = await sendInternalNotification({
+    kind: "CONTACT",
+    to: data.department === "hr" ? INTERNAL_HR : INTERNAL_INQUIRIES,
+    replyTo: data.email,
+    subject: `Neue Kontaktanfrage über die Website (${data.department})`,
+    text: notificationText("Neue Kontaktanfrage über die Website", rows),
+    html: notificationHtml("Neue Kontaktanfrage über die Website", rows)
+  });
 
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };
@@ -247,7 +251,7 @@ export async function submitCallbackRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData)) {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
     return { status: "success" };
   }
 
@@ -289,17 +293,13 @@ export async function submitCallbackRequest(
     ["Sprache", data.locale]
   ];
 
-  let mailed = false;
-  try {
-    mailed = await sendMail({
-      to: INTERNAL_HR,
-      subject: `Neue Rückrufbitte: ${data.phone}`,
-      text: notificationText("Neue Rückrufbitte von der Karriereseite", rows),
-      html: notificationHtml("Neue Rückrufbitte von der Karriereseite", rows)
-    });
-  } catch (error) {
-    console.error("Benachrichtigung fehlgeschlagen:", error);
-  }
+  const mailed = await sendInternalNotification({
+    kind: "CALLBACK",
+    to: INTERNAL_HR,
+    subject: `Neue Rückrufbitte: ${data.phone}`,
+    text: notificationText("Neue Rückrufbitte von der Karriereseite", rows),
+    html: notificationHtml("Neue Rückrufbitte von der Karriereseite", rows)
+  });
 
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };
@@ -317,7 +317,7 @@ export async function submitApplication(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData)) {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
     return { status: "success" };
   }
 
@@ -450,19 +450,16 @@ export async function submitApplication(
     contentType: file.mime
   }));
 
-  let mailed = false;
-  try {
-    mailed = await sendMail({
-      to: INTERNAL_HR,
-      replyTo: data.email,
-      subject: `Neue Bewerbung ${reference}: ${data.firstName} ${data.lastName} (${data.category})`,
-      text: notificationText("Neue Bewerbung über die Website", rows),
-      html: notificationHtml("Neue Bewerbung über die Website", rows),
-      attachments
-    });
-  } catch (error) {
-    console.error("HR-Benachrichtigung fehlgeschlagen:", error);
-  }
+  const mailed = await sendInternalNotification({
+    kind: "APPLICATION",
+    to: INTERNAL_HR,
+    replyTo: data.email,
+    reference,
+    subject: `Neue Bewerbung ${reference}: ${data.firstName} ${data.lastName} (${data.category})`,
+    text: notificationText("Neue Bewerbung über die Website", rows),
+    html: notificationHtml("Neue Bewerbung über die Website", rows),
+    attachments
+  });
 
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };

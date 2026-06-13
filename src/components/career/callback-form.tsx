@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HoneypotField } from "@/components/ui/field";
+import { TimeTrapField } from "@/components/ui/time-trap";
 import { submitCallbackRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 
@@ -48,6 +49,7 @@ export function CallbackPanel() {
         ) : (
           <form action={action} className="relative space-y-3">
             <HoneypotField />
+            <TimeTrapField />
             <input type="hidden" name="locale" value={locale} />
             <input
               name="name"

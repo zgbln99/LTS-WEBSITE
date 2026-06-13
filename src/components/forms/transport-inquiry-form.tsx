@@ -13,6 +13,7 @@ import {
   SuccessPanel,
   Textarea
 } from "@/components/ui/field";
+import { TimeTrapField } from "@/components/ui/time-trap";
 import { submitTransportRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 import { cn } from "@/lib/utils";
@@ -61,6 +62,7 @@ export function TransportInquiryForm() {
   return (
     <form ref={formRef} action={action} className="relative">
       <HoneypotField />
+      <TimeTrapField />
       <input type="hidden" name="locale" value={locale} />
 
       {/* Fortschritt */}

@@ -25,6 +25,9 @@ export function Logo() {
     <img
       src="/logo.png"
       alt="LTS Logistik GmbH"
+      width={140}
+      height={36}
+      decoding="async"
       className="h-9 w-auto"
       onError={() => setFailed(true)}
     />

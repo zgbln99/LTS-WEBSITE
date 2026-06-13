@@ -153,6 +153,8 @@ export function HeroBlock(props: HeroProps) {
         <img
           src={props.image}
           alt=""
+          decoding="async"
+          fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover opacity-50"
         />
       ) : null}
@@ -221,6 +223,8 @@ export function PageHeaderBlock(props: PageHeaderProps) {
           <img
             src={props.image}
             alt=""
+            decoding="async"
+            fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover opacity-35"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/70 to-night-950/40" />
@@ -469,6 +473,8 @@ export function CardsBlock(props: CardsProps) {
                   <img
                     src={item.image}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-night-950/60 to-transparent" />
@@ -552,6 +558,8 @@ export function SplitBlock(props: SplitProps) {
           <img
             src={props.image}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover"
           />
         </div>
@@ -580,6 +588,8 @@ export function ImageBlock(props: ImageProps) {
         <img
           src={props.image}
           alt={props.alt}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover"
         />
       </div>
@@ -952,6 +962,8 @@ export function LeistungenBlock({ ctaLabel }: { ctaLabel: string }) {
               <img
                 src={service.image}
                 alt={service.name}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>

@@ -576,6 +576,40 @@ model TextOverride {
   @@unique([locale, key])
 }
 
+// Art der internen Benachrichtigung (zur Filterung im Admin-Panel).
+enum NotificationKind {
+  APPLICATION
+  CONTACT
+  CALLBACK
+  TRANSPORT
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
+}
+
+// Protokoll und Wiederholungswarteschlange für interne E-Mail-Benachrichtigungen.
+// Schlägt der SMTP-Versand fehl, bleibt der Inhalt erhalten und kann im
+// Admin-Panel erneut gesendet werden, damit keine Bewerbung verloren geht.
+model MailNotification {
+  id        String             @id @default(cuid())
+  kind      NotificationKind
+  recipient String
+  subject   String
+  bodyText  String             @db.Text
+  bodyHtml  String?            @db.Text
+  replyTo   String?
+  reference String?
+  status    NotificationStatus
+  error     String?            @db.Text
+  attempts  Int                @default(1)
+  createdAt DateTime           @default(now())
+  sentAt    DateTime?
+
+  @@index([status, createdAt])
+}
+
 model NewsletterSubscriber {
   id             String    @id @default(cuid())
   email          String    @unique

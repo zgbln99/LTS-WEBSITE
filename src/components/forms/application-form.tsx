@@ -13,6 +13,7 @@ import {
   SuccessPanel,
   Textarea
 } from "@/components/ui/field";
+import { TimeTrapField } from "@/components/ui/time-trap";
 import { submitApplication } from "@/server/actions/forms";
 import { idleFormState, jobCategoryKeys } from "@/lib/forms";
 
@@ -47,6 +48,7 @@ export function ApplicationForm({
   return (
     <form action={action} className="relative space-y-5">
       <HoneypotField />
+      <TimeTrapField />
       <input type="hidden" name="locale" value={locale} />
 
       {presetCategory ? (

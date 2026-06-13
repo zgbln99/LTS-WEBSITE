@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   Briefcase,
+  BellRing,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -50,6 +51,12 @@ const navItems = [
     label: "Bewerbungen",
     icon: Users,
     roles: ["SUPER_ADMIN", "HR"] as Role[]
+  },
+  {
+    href: "/admin/benachrichtigungen",
+    label: "Benachrichtigungen",
+    icon: BellRing,
+    roles: ["SUPER_ADMIN", "HR", "MARKETING"] as Role[]
   },
   {
     href: "/admin/stellen",

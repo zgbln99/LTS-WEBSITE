@@ -13,6 +13,7 @@ import {
   SuccessPanel,
   Textarea
 } from "@/components/ui/field";
+import { TimeTrapField } from "@/components/ui/time-trap";
 import { submitContactRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 
@@ -38,6 +39,7 @@ export function ContactForm() {
   return (
     <form action={action} className="relative space-y-5">
       <HoneypotField />
+      <TimeTrapField />
       <input type="hidden" name="locale" value={locale} />
 
       <div className="grid gap-5 sm:grid-cols-2">
