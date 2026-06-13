@@ -14,10 +14,11 @@ import { StatBar } from "@/components/sections/stat-bar";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { CtaBanner } from "@/components/sections/cta-banner";
 import { EuropeMap } from "@/components/sections/europe-map";
-import { pageMetadata } from "@/lib/seo";
+import { buildAlternates, localizedUrl } from "@/lib/seo";
 import { company } from "@/data/company";
 import { cn } from "@/lib/utils";
 import { getPublishedTestimonials, getServiceCities } from "@/server/content";
+import { getGeneralSettings } from "@/server/site-settings";
 
 export const revalidate = 300;
 
@@ -26,7 +27,32 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.home" });
-  return pageMetadata(locale, "/", t("title"), t("description"));
+  const general = await getGeneralSettings();
+  const siteName = general.siteName || "LTS Logistik";
+
+  // Aus den Einstellungen änderbar: Browser-Titel und Meta-Beschreibung.
+  const title =
+    general.metaTitle || `${siteName} | ${general.slogan || t("title")}`;
+  const description = general.metaDescription || t("description");
+
+  return {
+    title: { absolute: title },
+    description,
+    alternates: buildAlternates(locale, "/"),
+    openGraph: {
+      title,
+      description,
+      url: localizedUrl(locale, "/"),
+      siteName,
+      locale,
+      type: "website"
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description
+    }
+  };
 }
 
 export default async function HomePage({ params }: Props) {
