@@ -112,9 +112,9 @@ const videoField = {
   }) => <VideoField value={value ?? ""} onChange={onChange} />
 };
 
-const richTextField = {
+const richText = (label: string) => ({
   type: "custom" as const,
-  label: "Text",
+  label,
   render: ({
     value,
     onChange
@@ -122,7 +122,9 @@ const richTextField = {
     value: string;
     onChange: (value: string) => void;
   }) => <RichTextField value={value ?? ""} onChange={onChange} />
-};
+});
+
+const richTextField = richText("Text");
 
 export const builderConfig: Config = {
   categories: {
@@ -166,8 +168,8 @@ export const builderConfig: Config = {
       label: "Hero (große Startfläche)",
       fields: {
         eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
-        title: { type: "textarea", label: "Überschrift", contentEditable: true },
-        subtitle: { type: "textarea", label: "Untertitel", contentEditable: true },
+        title: richText("Überschrift (formatierbar)"),
+        subtitle: richText("Untertitel (formatierbar)"),
         image: imageField("Hintergrundbild (auch Video-Vorschau)"),
         video: videoField,
         height: {
@@ -212,8 +214,8 @@ export const builderConfig: Config = {
       label: "Seitenkopf (Unterseite)",
       fields: {
         eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
-        title: { type: "textarea", label: "Überschrift", contentEditable: true },
-        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
+        title: richText("Überschrift (formatierbar)"),
+        description: richText("Beschreibung (formatierbar)"),
         image: imageField("Hintergrundbild")
       },
       defaultProps: {
@@ -229,8 +231,8 @@ export const builderConfig: Config = {
       label: "Überschrift",
       fields: {
         eyebrow: { type: "text", label: "Badge-Text", contentEditable: true },
-        title: { type: "textarea", label: "Überschrift", contentEditable: true },
-        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
+        title: richText("Überschrift (formatierbar)"),
+        description: richText("Beschreibung (formatierbar)"),
         theme: themeField,
         align: {
           type: "radio",
@@ -403,7 +405,7 @@ export const builderConfig: Config = {
           arrayFields: {
             title: { type: "text", label: "Titel" },
             specs: { type: "text", label: "Hervorgehobene Zeile (rot)" },
-            text: { type: "textarea", label: "Text" },
+            text: richText("Text (formatierbar)"),
             image: imageField("Bild"),
             href: linkField("Link (optional)")
           },
@@ -608,8 +610,8 @@ export const builderConfig: Config = {
     CTABanner: {
       label: "CTA-Banner (dunkel)",
       fields: {
-        title: { type: "textarea", label: "Überschrift", contentEditable: true },
-        description: { type: "textarea", label: "Beschreibung", contentEditable: true },
+        title: richText("Überschrift (formatierbar)"),
+        description: richText("Beschreibung (formatierbar)"),
         primaryLabel: { type: "text", label: "Button 1: Text", contentEditable: true },
         primaryHref: linkField("Button 1: Link"),
         secondaryLabel: { type: "text", label: "Button 2: Text (Telefon)" },

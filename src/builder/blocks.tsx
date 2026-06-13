@@ -173,13 +173,13 @@ export function HeroBlock(props: HeroProps) {
               ? "text-5xl sm:text-7xl lg:text-8xl"
               : "text-4xl sm:text-6xl lg:text-7xl"
           )}
-        >
-          {props.title}
-        </h1>
+          dangerouslySetInnerHTML={{ __html: props.title }}
+        />
         {props.subtitle ? (
-          <p className="mt-6 max-w-4xl text-base leading-relaxed text-mist-200 sm:text-lg lg:text-xl">
-            {props.subtitle}
-          </p>
+          <div
+            className="rt-prose mt-6 max-w-4xl text-base leading-relaxed text-mist-200 sm:text-lg lg:text-xl"
+            dangerouslySetInnerHTML={{ __html: props.subtitle }}
+          />
         ) : null}
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           {props.primaryLabel ? (
@@ -232,13 +232,15 @@ export function PageHeaderBlock(props: PageHeaderProps) {
             {props.eyebrow}
           </span>
         ) : null}
-        <h1 className="mt-5 max-w-5xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
-          {props.title}
-        </h1>
+        <h1
+          className="mt-5 max-w-5xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl"
+          dangerouslySetInnerHTML={{ __html: props.title }}
+        />
         {props.description ? (
-          <p className="mt-5 max-w-4xl text-base leading-relaxed text-mist-300 sm:text-lg">
-            {props.description}
-          </p>
+          <div
+            className="rt-prose mt-5 max-w-4xl text-base leading-relaxed text-mist-300 sm:text-lg"
+            dangerouslySetInnerHTML={{ __html: props.description }}
+          />
         ) : null}
       </Container>
     </section>
@@ -319,21 +321,19 @@ export function HeadingBlock(props: HeadingPropsWithSpacing) {
             !props.customFontSize && headingSizes[props.size ?? "normal"],
             dark ? "text-white" : "text-night-900"
           )}
-        >
-          {props.title}
-        </h2>
+          dangerouslySetInnerHTML={{ __html: props.title }}
+        />
         {props.description ? (
-          <p
+          <div
             className={cn(
-              "mt-4 leading-relaxed",
+              "rt-prose mt-4 leading-relaxed",
               textSizes[
                 (props.size ?? "normal") === "normal" ? "normal" : "large"
               ],
               dark ? "text-mist-300" : "text-mist-500"
             )}
-          >
-            {props.description}
-          </p>
+            dangerouslySetInnerHTML={{ __html: props.description }}
+          />
         ) : null}
       </div>
     </Section>
@@ -494,14 +494,13 @@ export function CardsBlock(props: CardsProps) {
                   </p>
                 ) : null}
                 {item.text ? (
-                  <p
+                  <div
                     className={cn(
-                      "mt-3 flex-1 text-sm leading-relaxed",
+                      "rt-prose mt-3 flex-1 text-sm leading-relaxed",
                       dark ? "text-mist-400" : "text-mist-500"
                     )}
-                  >
-                    {item.text}
-                  </p>
+                    dangerouslySetInnerHTML={{ __html: item.text }}
+                  />
                 ) : null}
               </div>
             </div>
@@ -610,13 +609,15 @@ export function CtaBlock(props: CtaProps) {
           aria-hidden
         />
         <div className="relative max-w-3xl">
-          <h2 className="font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            {props.title}
-          </h2>
+          <h2
+            className="font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl"
+            dangerouslySetInnerHTML={{ __html: props.title }}
+          />
           {props.description ? (
-            <p className="mt-4 text-base leading-relaxed text-mist-300 sm:text-lg">
-              {props.description}
-            </p>
+            <div
+              className="rt-prose mt-4 text-base leading-relaxed text-mist-300 sm:text-lg"
+              dangerouslySetInnerHTML={{ __html: props.description }}
+            />
           ) : null}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             {props.primaryLabel ? (
