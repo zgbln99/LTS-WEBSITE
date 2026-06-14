@@ -896,7 +896,7 @@ export function ApplicationFormBlock({
 export function ContactFormBlock({ title }: { title: string }) {
   return (
     <Section theme="white">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-4xl">
         {title ? (
           <h2 className="mb-8 font-display text-3xl font-extrabold text-night-900 sm:text-4xl">
             {title}

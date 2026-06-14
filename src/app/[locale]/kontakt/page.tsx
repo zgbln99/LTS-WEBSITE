@@ -116,7 +116,7 @@ export default async function ContactPage({ params }: Props) {
 
       {/* Kontaktformular */}
       <section className="bg-white py-16 sm:py-24">
-        <Container className="max-w-3xl">
+        <Container className="max-w-4xl">
           <SectionHeading title={t("formTitle")} description={t("formDescription")} />
           <Reveal className="mt-10">
             <div className="rounded-3xl bg-mist-50 p-6 sm:p-10">
