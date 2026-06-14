@@ -1,49 +1,97 @@
-import { getTranslationSettings } from "@/server/site-settings";
+import {
+  getTranslationSettings,
+  translationEnabled
+} from "@/server/site-settings";
 import { locales } from "@/i18n/routing";
 
-// Zuordnung interner Sprachkürzel zu DeepL-Codes.
-const TARGET_LANG: Record<string, string> = {
-  de: "DE",
-  en: "EN-GB",
-  pl: "PL",
-  tr: "TR",
-  uk: "UK"
-};
-const SOURCE_LANG: Record<string, string> = {
-  de: "DE",
-  en: "EN",
-  pl: "PL",
-  tr: "TR",
-  uk: "UK"
+const LANGUAGE_NAMES: Record<string, string> = {
+  de: "German",
+  en: "English",
+  pl: "Polish",
+  tr: "Turkish",
+  uk: "Ukrainian"
 };
 
 export async function isTranslationConfigured() {
-  const settings = await getTranslationSettings();
-  return Boolean(settings.deeplKey);
+  return translationEnabled(await getTranslationSettings());
 }
 
-function endpointFor(key: string) {
-  // Kostenlose DeepL-Schlüssel enden auf ":fx".
-  return key.trim().endsWith(":fx")
-    ? "https://api-free.deepl.com/v2/translate"
-    : "https://api.deepl.com/v2/translate";
+// Übersetzt eine Liste von Texten mit der OpenAI-API in eine Zielsprache.
+// Platzhalter ({name}, {reference}) und HTML-Tags bleiben erhalten.
+async function openaiTranslate(
+  apiKey: string,
+  model: string,
+  payload: string[],
+  targetLocale: string,
+  sourceLocale: string
+): Promise<string[] | null> {
+  const system =
+    "You are a professional translator for a German logistics company (truck transport, driver recruitment). " +
+    "Translate each string in the input array accurately and in a natural, professional tone. " +
+    "Keep placeholders like {name} and {reference} and any HTML tags exactly as they are. " +
+    'Reply ONLY with JSON of the form {"translations": ["...", "..."]} - same length and order as the input.';
+
+  try {
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model,
+          temperature: 0,
+          response_format: { type: "json_object" },
+          messages: [
+            { role: "system", content: system },
+            {
+              role: "user",
+              content: `Translate from ${
+                LANGUAGE_NAMES[sourceLocale] ?? sourceLocale
+              } to ${
+                LANGUAGE_NAMES[targetLocale] ?? targetLocale
+              }.\nInput: ${JSON.stringify(payload)}`
+            }
+          ]
+        })
+      }
+    );
+
+    if (!response.ok) {
+      console.error("OpenAI-Fehler:", response.status, await response.text());
+      return null;
+    }
+    const data = (await response.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) return null;
+    const parsed = JSON.parse(content) as { translations?: unknown };
+    const out = parsed.translations;
+    if (!Array.isArray(out) || out.length !== payload.length) return null;
+    return out.map((entry) => String(entry));
+  } catch (error) {
+    console.error("OpenAI-Anfrage fehlgeschlagen:", error);
+    return null;
+  }
 }
 
-// Übersetzt mehrere Texte in eine Zielsprache (eine DeepL-Anfrage).
+// Übersetzt mehrere Texte in eine Zielsprache (eine OpenAI-Anfrage).
 export async function translateBatch(
   texts: string[],
   targetLocale: string,
   sourceLocale: string,
-  options: { html?: boolean } = {}
+  // options bleibt für die Aufrufkompatibilität erhalten (HTML wird im Prompt behandelt).
+  _options: { html?: boolean } = {}
 ): Promise<string[] | null> {
+  void _options;
   const settings = await getTranslationSettings();
-  if (!settings.deeplKey) return null;
+  if (!settings.openaiKey) return null;
+  if (targetLocale === sourceLocale) return texts;
 
-  const target = TARGET_LANG[targetLocale];
-  const source = SOURCE_LANG[sourceLocale];
-  if (!target || target === TARGET_LANG[sourceLocale]) return texts;
-
-  // Leere Strings nicht senden, aber Positionen erhalten.
+  // Leere Strings nicht senden, Positionen aber erhalten.
   const indexMap: number[] = [];
   const payload: string[] = [];
   texts.forEach((text, index) => {
@@ -54,40 +102,23 @@ export async function translateBatch(
   });
   if (payload.length === 0) return texts;
 
-  try {
-    const response = await fetch(endpointFor(settings.deeplKey), {
-      method: "POST",
-      headers: {
-        Authorization: `DeepL-Auth-Key ${settings.deeplKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        text: payload,
-        target_lang: target,
-        source_lang: source,
-        ...(options.html ? { tag_handling: "html" } : {})
-      })
-    });
-    if (!response.ok) {
-      console.error("DeepL-Fehler:", response.status, await response.text());
-      return null;
-    }
-    const data = (await response.json()) as {
-      translations: { text: string }[];
-    };
-    const result = [...texts];
-    data.translations.forEach((translation, i) => {
-      result[indexMap[i]] = translation.text;
-    });
-    return result;
-  } catch (error) {
-    console.error("DeepL-Anfrage fehlgeschlagen:", error);
-    return null;
-  }
+  const translated = await openaiTranslate(
+    settings.openaiKey,
+    settings.openaiModel,
+    payload,
+    targetLocale,
+    sourceLocale
+  );
+  if (!translated) return null;
+
+  const result = [...texts];
+  translated.forEach((value, i) => {
+    result[indexMap[i]] = value;
+  });
+  return result;
 }
 
 // Übersetzt ein Feldset in alle Zielsprachen (außer der Quellsprache).
-// Liefert pro Sprache ein Objekt mit denselben Feldnamen.
 export async function translateFieldsToAll(
   fields: Record<string, string>,
   sourceLocale: string,

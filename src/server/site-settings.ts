@@ -46,9 +46,15 @@ export interface EmailTemplate {
 export type EmailTemplates = Record<string, Record<string, EmailTemplate>>;
 
 export interface TranslationSettings {
-  deeplKey: string;
+  openaiKey: string;
+  openaiModel: string;
   sourceLocale: string;
   autoTranslate: boolean;
+}
+
+// Übersetzung ist nutzbar, sobald ein OpenAI-Schlüssel hinterlegt ist.
+export function translationEnabled(settings: TranslationSettings) {
+  return Boolean(settings.openaiKey);
 }
 
 export interface AnalyticsSettings {
@@ -118,13 +124,17 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
   };
 }
 
-// Übersetzungseinstellungen (DeepL). Schlüssel kann aus .env stammen.
+// Übersetzungseinstellungen (OpenAI). Schlüssel/Modell können auch aus der
+// .env stammen (OPENAI_API_KEY, OPENAI_MODEL).
 export async function getTranslationSettings(): Promise<TranslationSettings> {
   const stored = (await loadSetting(
     "translation"
   )) as Partial<TranslationSettings> | null;
+
   return {
-    deeplKey: stored?.deeplKey || process.env.DEEPL_API_KEY || "",
+    openaiKey: stored?.openaiKey || process.env.OPENAI_API_KEY || "",
+    openaiModel:
+      stored?.openaiModel || process.env.OPENAI_MODEL || "gpt-4o-mini",
     sourceLocale: stored?.sourceLocale || "pl",
     autoTranslate: stored?.autoTranslate ?? true
   };

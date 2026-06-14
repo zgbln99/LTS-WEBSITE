@@ -184,7 +184,8 @@ export async function saveEmailTemplate(
 }
 
 const translationSchema = z.object({
-  deeplKey: z.string().trim().max(200),
+  openaiKey: z.string().trim().max(300),
+  openaiModel: z.string().trim().max(60),
   sourceLocale: z.enum(["de", "en", "pl", "tr", "uk"]),
   autoTranslate: z.boolean()
 });
@@ -197,19 +198,20 @@ export async function saveTranslationAction(values: unknown) {
   if (!parsed.success) return { ok: false };
 
   // Leeres Schlüsselfeld bedeutet: bisherigen Schlüssel beibehalten.
-  let deeplKey = parsed.data.deeplKey;
-  if (deeplKey === "") {
+  let openaiKey = parsed.data.openaiKey;
+  if (openaiKey === "") {
     const existing = await prisma.siteSetting.findUnique({
       where: { key: "translation" }
     });
-    const stored = existing?.value as { deeplKey?: string } | null;
-    deeplKey = stored?.deeplKey ?? "";
+    const stored = existing?.value as { openaiKey?: string } | null;
+    openaiKey = stored?.openaiKey ?? "";
   }
 
+  const model = parsed.data.openaiModel || "gpt-4o-mini";
   await prisma.siteSetting.upsert({
     where: { key: "translation" },
-    update: { value: { ...parsed.data, deeplKey } },
-    create: { key: "translation", value: { ...parsed.data, deeplKey } }
+    update: { value: { ...parsed.data, openaiKey, openaiModel: model } },
+    create: { key: "translation", value: { ...parsed.data, openaiKey, openaiModel: model } }
   });
 
   await writeAuditLog({

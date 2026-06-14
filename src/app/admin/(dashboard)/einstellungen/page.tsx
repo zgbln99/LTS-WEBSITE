@@ -49,9 +49,10 @@ export default async function SettingsPage() {
       <GeneralForm initial={general} />
       <TranslationForm
         initial={{
+          openaiModel: translation.openaiModel,
           sourceLocale: translation.sourceLocale,
           autoTranslate: translation.autoTranslate,
-          hasKey: Boolean(translation.deeplKey)
+          hasKey: Boolean(translation.openaiKey)
         }}
       />
       <AnalyticsForm initial={analytics} />

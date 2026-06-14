@@ -148,7 +148,7 @@ export async function saveJobPosting(formData: FormData) {
   }
 
   // Automatische Übersetzung der Stelle in die übrigen Sprachen.
-  if (trSettings.autoTranslate && trSettings.deeplKey) {
+  if (trSettings.autoTranslate && trSettings.openaiKey) {
     const suffix = jobId.slice(-5);
     const targets = locales.filter((locale) => locale !== sourceLocale);
     for (const locale of targets) {
@@ -572,7 +572,7 @@ export async function saveArticle(formData: FormData) {
   }
 
   // Automatische Übersetzung des Artikels in die übrigen Sprachen.
-  if (postId && trSettings.autoTranslate && trSettings.deeplKey) {
+  if (postId && trSettings.autoTranslate && trSettings.openaiKey) {
     const suffix = postId.slice(-5);
     const targets = locales.filter((locale) => locale !== sourceLocale);
     for (const locale of targets) {

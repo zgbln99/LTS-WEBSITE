@@ -128,44 +128,54 @@ export function GeneralForm({ initial }: { initial: GeneralSettings }) {
 export function TranslationForm({
   initial
 }: {
-  initial: Omit<TranslationSettings, "deeplKey"> & { hasKey: boolean };
+  initial: Omit<TranslationSettings, "openaiKey"> & { hasKey: boolean };
 }) {
   const [sourceLocale, setSourceLocale] = useState(initial.sourceLocale);
   const [autoTranslate, setAutoTranslate] = useState(initial.autoTranslate);
-  const [deeplKey, setDeeplKey] = useState("");
+  const [openaiModel, setOpenaiModel] = useState(initial.openaiModel);
+  const [openaiKey, setOpenaiKey] = useState("");
   const [note, setNote] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const save = () =>
     startTransition(async () => {
       const result = await saveTranslationAction({
-        deeplKey,
+        openaiKey,
+        openaiModel,
         sourceLocale,
         autoTranslate
       });
       setNote(result.ok ? "Gespeichert." : "Fehler beim Speichern.");
-      setDeeplKey("");
+      setOpenaiKey("");
       setTimeout(() => setNote(null), 4000);
     });
 
   return (
     <div className="rounded-2xl bg-white p-5 shadow-card sm:p-6">
       <h2 className="font-display text-base font-bold text-night-900">
-        Automatische Übersetzung (DeepL)
+        Automatische Übersetzung (OpenAI)
       </h2>
       <p className="mt-1 text-sm text-mist-500">
         Inhalte in der Ausgangssprache schreiben - die übrigen Sprachen werden
         automatisch übersetzt. Schlüsselfeld leer lassen = unverändert.
       </p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        <Field label="DeepL API-Schlüssel" htmlFor="tr-key">
+        <Field label="OpenAI API-Schlüssel" htmlFor="tr-key">
           <Input
             id="tr-key"
             type="password"
-            value={deeplKey}
-            onChange={(e) => setDeeplKey(e.target.value)}
-            placeholder={initial.hasKey ? "gespeichert - leer lassen" : "DeepL-Schlüssel"}
+            value={openaiKey}
+            onChange={(e) => setOpenaiKey(e.target.value)}
+            placeholder={initial.hasKey ? "gespeichert - leer lassen" : "sk-..."}
             autoComplete="new-password"
+          />
+        </Field>
+        <Field label="Modell" htmlFor="tr-model">
+          <Input
+            id="tr-model"
+            value={openaiModel}
+            onChange={(e) => setOpenaiModel(e.target.value)}
+            placeholder="gpt-4o-mini"
           />
         </Field>
         <Field label="Ausgangssprache" htmlFor="tr-src">
