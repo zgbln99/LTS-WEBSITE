@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   images: {
     formats: ["image/avif", "image/webp"],
+    // Bilder im Seiten-Editor können beliebige Quellen haben (Uploads sind
+    // gleicher Origin). Externe Hosts werden zur Optimierung freigegeben.
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com"
-      }
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" }
     ]
   },
   async headers() {

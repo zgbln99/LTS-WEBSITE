@@ -3,6 +3,7 @@
 // Bausteine des Page-Builders. Alle Blöcke nutzen das Design-System der
 // Website, damit bearbeitete Seiten exakt wie der Rest aussehen.
 
+import Image from "next/image";
 import { ArrowRight, Check, MapPin, Phone, Quote } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -150,12 +151,13 @@ export function HeroBlock(props: HeroProps) {
         </video>
       ) : props.image ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={props.image}
           alt=""
-          decoding="async"
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover opacity-50"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-50"
         />
       ) : null}
       {props.video || props.image ? (
@@ -220,12 +222,13 @@ export function PageHeaderBlock(props: PageHeaderProps) {
       {props.image ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={props.image}
             alt=""
-            decoding="async"
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover opacity-35"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-35"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-night-950 via-night-950/70 to-night-950/40" />
         </>
@@ -470,12 +473,12 @@ export function CardsBlock(props: CardsProps) {
               {props.style === "photo" && item.image ? (
                 <div className="relative h-44 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-night-950/60 to-transparent" />
                   <h3 className="absolute bottom-4 left-5 font-display text-xl font-bold text-white">
@@ -554,13 +557,12 @@ export function SplitBlock(props: SplitProps) {
             props.reverse && "lg:order-1"
           )}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={props.image}
             alt=""
-            loading="lazy"
-            decoding="async"
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
           />
         </div>
       </div>
@@ -584,13 +586,12 @@ export function ImageBlock(props: ImageProps) {
           heights[props.height]
         )}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={props.image}
           alt={props.alt}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover"
+          fill
+          sizes="100vw"
+          className="object-cover"
         />
       </div>
     </Section>
@@ -959,12 +960,12 @@ export function LeistungenBlock({ ctaLabel }: { ctaLabel: string }) {
           >
             <div className="relative h-40 overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={service.image}
                 alt={service.name}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
             <div className="flex flex-1 flex-col p-5">
