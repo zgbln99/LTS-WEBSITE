@@ -580,6 +580,14 @@
     "text": "Używamy plików cookie, aby ulepszać naszą stronę. Usługi analityczne i marketingowe ładujemy wyłącznie za Twoją zgodą. Szczegóły znajdziesz w",
     "acceptAll": "Akceptuję wszystkie",
     "necessaryOnly": "Tylko niezbędne",
-    "privacy": "polityce prywatności."
+    "privacy": "polityce prywatności.",
+    "customize": "Ustawienia",
+    "savePreferences": "Zapisz wybór",
+    "necessaryLabel": "Niezbędne",
+    "necessaryDesc": "Wymagane do działania strony. Zawsze aktywne.",
+    "analyticsLabel": "Statystyka",
+    "analyticsDesc": "Pomaga nam anonimowo rozumieć korzystanie ze strony.",
+    "marketingLabel": "Marketing",
+    "marketingDesc": "Do pomiaru zasięgu i reklam na innych platformach."
   }
 }

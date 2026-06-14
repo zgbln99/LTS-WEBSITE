@@ -611,6 +611,19 @@ model MailNotification {
   @@index([status, createdAt])
 }
 
+// Nachweis erteilter Cookie-Einwilligungen (DSGVO-Dokumentation).
+model ConsentLog {
+  id        String   @id @default(cuid())
+  analytics Boolean
+  marketing Boolean
+  locale    String   @default("de")
+  ipHash    String?
+  userAgent String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 model NewsletterSubscriber {
   id             String    @id @default(cuid())
   email          String    @unique

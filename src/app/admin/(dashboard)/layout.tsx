@@ -4,6 +4,7 @@ import {
   BarChart3,
   BellRing,
   Briefcase,
+  Cookie as CookieIcon,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -150,6 +151,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/einstellungen",
         label: "Einstellungen",
         icon: Settings,
+        roles: ["SUPER_ADMIN"]
+      },
+      {
+        href: "/admin/consent",
+        label: "Einwilligungen",
+        icon: CookieIcon,
         roles: ["SUPER_ADMIN"]
       },
       {

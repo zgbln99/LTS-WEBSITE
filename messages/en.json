@@ -580,6 +580,14 @@
     "text": "We use cookies to improve our website. Analytics and marketing services are only loaded with your consent. Details can be found in the",
     "acceptAll": "Accept all",
     "necessaryOnly": "Necessary only",
-    "privacy": "privacy policy."
+    "privacy": "privacy policy.",
+    "customize": "Settings",
+    "savePreferences": "Save selection",
+    "necessaryLabel": "Necessary",
+    "necessaryDesc": "Required for the website to work. Always active.",
+    "analyticsLabel": "Statistics",
+    "analyticsDesc": "Helps us understand site usage anonymously.",
+    "marketingLabel": "Marketing",
+    "marketingDesc": "For reach measurement and ads on other platforms."
   }
 }

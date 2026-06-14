@@ -580,6 +580,14 @@
     "text": "Web sitemizi iyileştirmek için çerezler kullanıyoruz. Analiz ve pazarlama hizmetleri yalnızca onayınızla yüklenir. Ayrıntılar için bkz.",
     "acceptAll": "Tümünü kabul et",
     "necessaryOnly": "Yalnızca gerekli",
-    "privacy": "gizlilik politikası."
+    "privacy": "gizlilik politikası.",
+    "customize": "Ayarlar",
+    "savePreferences": "Seçimi kaydet",
+    "necessaryLabel": "Gerekli",
+    "necessaryDesc": "Web sitesinin çalışması için gereklidir. Her zaman aktif.",
+    "analyticsLabel": "İstatistik",
+    "analyticsDesc": "Site kullanımını anonim olarak anlamamıza yardımcı olur.",
+    "marketingLabel": "Pazarlama",
+    "marketingDesc": "Erişim ölçümü ve diğer platformlardaki reklamlar için."
   }
 }

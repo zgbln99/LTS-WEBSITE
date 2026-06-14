@@ -580,6 +580,14 @@
     "text": "Wir verwenden Cookies, um unsere Website zu verbessern. Analyse- und Marketingdienste laden wir nur mit Ihrer Einwilligung. Details finden Sie in der",
     "acceptAll": "Alle akzeptieren",
     "necessaryOnly": "Nur notwendige",
-    "privacy": "Datenschutzerklärung."
+    "privacy": "Datenschutzerklärung.",
+    "customize": "Einstellungen",
+    "savePreferences": "Auswahl speichern",
+    "necessaryLabel": "Notwendig",
+    "necessaryDesc": "Für den Betrieb der Website erforderlich. Immer aktiv.",
+    "analyticsLabel": "Statistik",
+    "analyticsDesc": "Hilft uns, die Nutzung der Website anonym zu verstehen.",
+    "marketingLabel": "Marketing",
+    "marketingDesc": "Für Reichweitenmessung und Anzeigen auf anderen Plattformen."
   }
 }
