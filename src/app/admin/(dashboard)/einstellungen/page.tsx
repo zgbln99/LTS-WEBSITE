@@ -1,9 +1,17 @@
 import { redirect } from "next/navigation";
 import { requireRole } from "@/auth";
-import { GeneralForm, SmtpForm } from "@/components/admin/settings-forms";
+import {
+  AnalyticsForm,
+  GeneralForm,
+  SmtpForm
+} from "@/components/admin/settings-forms";
 import { SmtpTester } from "@/components/admin/smtp-tester";
 import { getMailConfigSummary } from "@/server/mailer";
-import { getGeneralSettings, getSmtpSettings } from "@/server/site-settings";
+import {
+  getAnalyticsSettings,
+  getGeneralSettings,
+  getSmtpSettings
+} from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +21,11 @@ export default async function SettingsPage() {
   const session = await requireRole(["SUPER_ADMIN"]);
   if (!session) redirect("/admin");
 
-  const [general, smtp, summary] = await Promise.all([
+  const [general, smtp, summary, analytics] = await Promise.all([
     getGeneralSettings(),
     getSmtpSettings(),
-    getMailConfigSummary()
+    getMailConfigSummary(),
+    getAnalyticsSettings()
   ]);
 
   // Passwort nie an den Client geben.
@@ -35,6 +44,7 @@ export default async function SettingsPage() {
       </div>
 
       <GeneralForm initial={general} />
+      <AnalyticsForm initial={analytics} />
       <SmtpForm initial={smtpWithoutPassword} />
       <SmtpTester
         configured={summary.configured}

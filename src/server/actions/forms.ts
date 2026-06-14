@@ -415,6 +415,13 @@ export async function submitApplication(
   }
   const data = parsed.data;
 
+  // Herkunftskanal (QR-Code, Flyer, Jobbörse) für die Auswertung.
+  const rawSrc = String(formData.get("src") ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]/g, "")
+    .slice(0, 40);
+  const channel = rawSrc || "website";
+
   // Dateien einsammeln und validieren
   const files: {
     type: "CV" | "LICENSE" | "CERTIFICATE";
@@ -489,7 +496,7 @@ export async function submitApplication(
         phone: data.phone,
         licenseClass: data.licenseClass ?? null,
         message: data.message ?? null,
-        source: `website:${data.category}`,
+        source: `${channel}:${data.category}`,
         locale: data.locale,
         gdprConsentAt: new Date(),
         files: { create: storedFiles },

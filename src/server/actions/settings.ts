@@ -132,6 +132,46 @@ export async function saveGeneralAction(values: unknown) {
   return { ok: true };
 }
 
+const analyticsSchema = z.object({
+  matomoUrl: z.string().trim().max(300),
+  matomoSiteId: z.string().trim().max(20),
+  gaId: z.string().trim().max(40),
+  pixelId: z.string().trim().max(40)
+});
+
+export async function saveAnalyticsAction(values: unknown) {
+  const session = await requireRole(["SUPER_ADMIN"]);
+  if (!session) redirect("/admin/login");
+
+  const parsed = analyticsSchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  await prisma.siteSetting.upsert({
+    where: { key: "analytics" },
+    update: { value: parsed.data },
+    create: { key: "analytics", value: parsed.data }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "AnalyticsSettings"
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  // Alle Seiten neu rendern, damit das Tracking-Skript greift.
+  revalidatePublic([
+    "",
+    "/unternehmen",
+    "/leistungen",
+    "/fuhrpark",
+    "/karriere",
+    "/wissen",
+    "/kontakt"
+  ]);
+  revalidatePath("/admin/einstellungen");
+  return { ok: true };
+}
+
 const seoEntrySchema = z.object({
   title: z.string().trim().max(200),
   description: z.string().trim().max(320)

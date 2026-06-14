@@ -4,7 +4,10 @@ import { Inter, Manrope } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
-import { getGeneralSettings } from "@/server/site-settings";
+import {
+  getAnalyticsSettings,
+  getGeneralSettings
+} from "@/server/site-settings";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/consent/cookie-consent";
@@ -64,6 +67,7 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
   const general = await getGeneralSettings();
+  const analytics = await getAnalyticsSettings();
 
   return (
     <html lang={locale} className={`${inter.variable} ${manrope.variable}`}>
@@ -77,7 +81,7 @@ export default async function LocaleLayout({
           <main id="content">{children}</main>
           <Footer locale={locale as Locale} />
           <CookieConsent />
-          <Analytics />
+          <Analytics config={analytics} />
         </NextIntlClientProvider>
       </body>
     </html>

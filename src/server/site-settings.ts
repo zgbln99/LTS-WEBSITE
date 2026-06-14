@@ -35,6 +35,13 @@ export interface GeneralSettings {
   recruitingWhatsapp: string;
 }
 
+export interface AnalyticsSettings {
+  matomoUrl: string;
+  matomoSiteId: string;
+  gaId: string;
+  pixelId: string;
+}
+
 export interface SeoEntry {
   title?: string;
   description?: string;
@@ -92,6 +99,21 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
     metaDescription: stored?.metaDescription || "",
     recruitingPhone: stored?.recruitingPhone || "",
     recruitingWhatsapp: stored?.recruitingWhatsapp || ""
+  };
+}
+
+// Analyse-Einstellungen: gespeicherte Werte haben Vorrang vor den .env-Variablen.
+// Ermöglicht eine selbst gehostete Matomo-Instanz ohne Google.
+export async function getAnalyticsSettings(): Promise<AnalyticsSettings> {
+  const stored = (await loadSetting(
+    "analytics"
+  )) as Partial<AnalyticsSettings> | null;
+  return {
+    matomoUrl: stored?.matomoUrl || process.env.NEXT_PUBLIC_MATOMO_URL || "",
+    matomoSiteId:
+      stored?.matomoSiteId || process.env.NEXT_PUBLIC_MATOMO_SITE_ID || "",
+    gaId: stored?.gaId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "",
+    pixelId: stored?.pixelId || process.env.NEXT_PUBLIC_META_PIXEL_ID || ""
   };
 }
 

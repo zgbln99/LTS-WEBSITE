@@ -14,6 +14,7 @@ import {
   Textarea
 } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
+import { SourceField } from "@/components/ui/source-field";
 import { submitApplication } from "@/server/actions/forms";
 import { idleFormState, jobCategoryKeys } from "@/lib/forms";
 
@@ -49,6 +50,7 @@ export function ApplicationForm({
     <form action={action} className="relative space-y-5">
       <HoneypotField />
       <TimeTrapField />
+      <SourceField />
       <input type="hidden" name="locale" value={locale} />
 
       {presetCategory ? (

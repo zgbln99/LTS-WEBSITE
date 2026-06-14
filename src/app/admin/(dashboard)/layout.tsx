@@ -15,6 +15,7 @@ import {
   PanelBottom,
   PencilRuler,
   Quote,
+  ScrollText,
   Search,
   Settings,
   ShieldCheck,
@@ -164,6 +165,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/consent",
         label: "Einwilligungen",
         icon: CookieIcon,
+        roles: ["SUPER_ADMIN"]
+      },
+      {
+        href: "/admin/audit",
+        label: "Protokoll",
+        icon: ScrollText,
         roles: ["SUPER_ADMIN"]
       },
       {

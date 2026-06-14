@@ -3,10 +3,15 @@
 import { useState, useTransition } from "react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import {
+  saveAnalyticsAction,
   saveGeneralAction,
   saveSmtpAction
 } from "@/server/actions/settings";
-import type { GeneralSettings, SmtpSettings } from "@/server/site-settings";
+import type {
+  AnalyticsSettings,
+  GeneralSettings,
+  SmtpSettings
+} from "@/server/site-settings";
 
 function StatusNote({ note }: { note: string | null }) {
   if (!note) return null;
@@ -92,6 +97,78 @@ export function GeneralForm({ initial }: { initial: GeneralSettings }) {
             value={values.recruitingWhatsapp}
             onChange={(e) => update({ recruitingWhatsapp: e.target.value })}
             placeholder="+49 ... (leer = ausgeblendet)"
+          />
+        </Field>
+      </div>
+      <div className="mt-5 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={save}
+          disabled={pending}
+          className="inline-flex h-11 items-center rounded-xl bg-accent-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-accent-600 disabled:opacity-50"
+        >
+          {pending ? "Speichert ..." : "Speichern"}
+        </button>
+        <StatusNote note={note} />
+      </div>
+    </div>
+  );
+}
+
+export function AnalyticsForm({ initial }: { initial: AnalyticsSettings }) {
+  const [values, setValues] = useState(initial);
+  const [note, setNote] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  const update = (patch: Partial<AnalyticsSettings>) =>
+    setValues((current) => ({ ...current, ...patch }));
+
+  const save = () =>
+    startTransition(async () => {
+      const result = await saveAnalyticsAction(values);
+      setNote(result.ok ? "Gespeichert." : "Fehler beim Speichern.");
+      setTimeout(() => setNote(null), 4000);
+    });
+
+  return (
+    <div className="rounded-2xl bg-white p-5 shadow-card sm:p-6">
+      <h2 className="font-display text-base font-bold text-night-900">
+        Analyse / Statistik
+      </h2>
+      <p className="mt-1 text-sm text-mist-500">
+        Datenschutzfreundlich mit selbst gehostetem Matomo. Skripte laden erst
+        nach Einwilligung. Felder leer lassen, um den Dienst zu deaktivieren.
+      </p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <Field label="Matomo-URL" htmlFor="an-matomo-url">
+          <Input
+            id="an-matomo-url"
+            value={values.matomoUrl}
+            onChange={(e) => update({ matomoUrl: e.target.value })}
+            placeholder="https://stats.ltslogistik.de"
+          />
+        </Field>
+        <Field label="Matomo Site-ID" htmlFor="an-matomo-id">
+          <Input
+            id="an-matomo-id"
+            value={values.matomoSiteId}
+            onChange={(e) => update({ matomoSiteId: e.target.value })}
+            placeholder="1"
+          />
+        </Field>
+        <Field label="Google Analytics ID (optional)" htmlFor="an-ga">
+          <Input
+            id="an-ga"
+            value={values.gaId}
+            onChange={(e) => update({ gaId: e.target.value })}
+            placeholder="G-XXXXXXX"
+          />
+        </Field>
+        <Field label="Meta-Pixel ID (optional)" htmlFor="an-pixel">
+          <Input
+            id="an-pixel"
+            value={values.pixelId}
+            onChange={(e) => update({ pixelId: e.target.value })}
           />
         </Field>
       </div>

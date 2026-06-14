@@ -23,10 +23,11 @@ export async function GET(
   const slug = job?.translations[0]?.slug;
   if (!slug) return new Response("Not found", { status: 404 });
 
-  const url = localizedUrl(routing.defaultLocale, {
+  // Quelle "qr" anhängen, damit Bewerbungen über den Code messbar sind.
+  const url = `${localizedUrl(routing.defaultLocale, {
     pathname: "/karriere/stelle/[slug]",
     params: { slug }
-  });
+  })}?src=qr`;
 
   const png = await QRCode.toBuffer(url, {
     width: 800,
