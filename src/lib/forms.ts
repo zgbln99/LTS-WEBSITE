@@ -65,6 +65,14 @@ export const callbackRequestSchema = z.object({
   consent: consentSchema
 });
 
+export const jobAlertSchema = z.object({
+  locale: localeSchema,
+  email: z.string().trim().email().max(254),
+  category: z.preprocess(emptyToUndefined, z.string().max(40).optional()),
+  region: z.preprocess(emptyToUndefined, z.string().max(120).optional()),
+  consent: consentSchema
+});
+
 export const appointmentRequestSchema = z.object({
   locale: localeSchema,
   name: z.string().trim().min(2).max(160),

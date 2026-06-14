@@ -240,6 +240,7 @@ model JobPosting {
   status         PublishStatus  @default(DRAFT)
   publishedAt    DateTime?
   validThrough   DateTime?
+  alertsSentAt   DateTime? // Zeitpunkt, an dem Job-Alerts versendet wurden
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
@@ -609,6 +610,22 @@ model MailNotification {
   sentAt    DateTime?
 
   @@index([status, createdAt])
+}
+
+// Job-Benachrichtigungen: Interessenten werden bei passenden neuen Stellen
+// per E-Mail informiert (Double-Opt-in über Token).
+model JobAlert {
+  id             String    @id @default(cuid())
+  email          String
+  category       String? // JobCategory-Schlüssel, leer = alle
+  region         String? // Stadt/Region, leer = überall
+  locale         String    @default("de")
+  token          String    @unique @default(cuid())
+  confirmedAt    DateTime?
+  unsubscribedAt DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([confirmedAt])
 }
 
 // Termin- und Probetag-Anfragen von Bewerbern.

@@ -9,6 +9,7 @@ import { writeAuditLog } from "@/server/audit";
 import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
+import { notifyJobAlerts } from "@/server/job-alerts";
 import { revalidatePublic } from "@/server/revalidate-public";
 import { revalidateTag } from "next/cache";
 import { TEXTS_CACHE_TAG } from "@/server/text-overrides";
@@ -144,6 +145,9 @@ export async function saveJobPosting(formData: FormData) {
     entityType: "JobPosting",
     entityId: jobId
   });
+  if (data.status === "PUBLISHED") {
+    await notifyJobAlerts(jobId);
+  }
   revalidatePath("/admin/stellen");
   revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
   redirect("/admin/stellen");
@@ -196,6 +200,9 @@ export async function toggleJobStatus(formData: FormData) {
     entityId: id,
     payload: { status: nextStatus }
   });
+  if (nextStatus === "PUBLISHED") {
+    await notifyJobAlerts(id);
+  }
   revalidatePath("/admin/stellen");
   revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
 }

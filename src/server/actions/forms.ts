@@ -21,9 +21,11 @@ import {
   appointmentRequestSchema,
   callbackRequestSchema,
   contactRequestSchema,
+  jobAlertSchema,
   transportRequestSchema,
   type FormActionState
 } from "@/lib/forms";
+import { sendJobAlertConfirmation } from "@/server/job-alerts";
 
 function generateReference(prefix: string) {
   const random = Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -317,6 +319,50 @@ export async function submitCallbackRequest(
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };
   }
+  return { status: "success" };
+}
+
+// Anmeldung zu Job-Benachrichtigungen (Double-Opt-in).
+export async function submitJobAlert(
+  _prev: FormActionState,
+  formData: FormData
+): Promise<FormActionState> {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
+    return { status: "success" };
+  }
+
+  const ipHash = await getClientIpHash();
+  if (isRateLimited("jobalert", ipHash)) {
+    return { status: "error", code: "rateLimit" };
+  }
+
+  const parsed = jobAlertSchema.safeParse(
+    Object.fromEntries(formData.entries())
+  );
+  if (!parsed.success) {
+    return { status: "error", code: "validation" };
+  }
+  const data = parsed.data;
+
+  try {
+    const alert = await prisma.jobAlert.create({
+      data: {
+        email: data.email,
+        category: data.category ?? null,
+        region: data.region ?? null,
+        locale: data.locale
+      }
+    });
+    await sendJobAlertConfirmation({
+      email: alert.email,
+      token: alert.token,
+      locale: alert.locale
+    });
+  } catch (error) {
+    console.error("Job-Alert-Anmeldung fehlgeschlagen:", error);
+    return { status: "error", code: "generic" };
+  }
+
   return { status: "success" };
 }
 

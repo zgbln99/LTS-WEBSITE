@@ -10,6 +10,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { JobBoard } from "@/components/career/job-board";
+import { JobAlertForm } from "@/components/career/job-alert-form";
 import { getPublishedJobs, getServiceCities } from "@/server/content";
 import { buildAlternates, localizedUrl } from "@/lib/seo";
 import { JsonLdScript } from "@/lib/schema";
@@ -166,6 +167,10 @@ export default async function CityLandingPage({ params }: Props) {
               </div>
             </div>
           ) : null}
+
+          <div className="mt-12">
+            <JobAlertForm defaultRegion={city.city} />
+          </div>
         </Container>
       </section>
 

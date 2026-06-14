@@ -618,5 +618,14 @@
     "message": "Message (optional)",
     "successTitle": "Request received",
     "successText": "We will contact you to confirm your appointment."
+  },
+  "jobAlert": {
+    "title": "Job alerts",
+    "text": "Get notified as soon as a matching position opens up.",
+    "email": "Email",
+    "region": "Region (optional)",
+    "submit": "Notify me",
+    "successTitle": "Almost done",
+    "successText": "Please confirm your sign-up via the link in your email."
   }
 }

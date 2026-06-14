@@ -618,5 +618,14 @@
     "message": "Nachricht (optional)",
     "successTitle": "Anfrage erhalten",
     "successText": "Wir melden uns zur Bestätigung Ihres Termins bei Ihnen."
+  },
+  "jobAlert": {
+    "title": "Job-Benachrichtigung",
+    "text": "Lassen Sie sich informieren, sobald eine passende Stelle frei wird.",
+    "email": "E-Mail",
+    "region": "Region (optional)",
+    "submit": "Benachrichtigen",
+    "successTitle": "Fast geschafft",
+    "successText": "Bitte bestätigen Sie die Anmeldung über den Link in Ihrer E-Mail."
   }
 }

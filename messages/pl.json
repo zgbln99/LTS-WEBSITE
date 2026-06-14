@@ -618,5 +618,14 @@
     "message": "Wiadomość (opcjonalnie)",
     "successTitle": "Zgłoszenie przyjęte",
     "successText": "Skontaktujemy się, aby potwierdzić termin."
+  },
+  "jobAlert": {
+    "title": "Powiadomienia o ofertach",
+    "text": "Otrzymaj informację, gdy tylko pojawi się pasująca oferta.",
+    "email": "E-mail",
+    "region": "Region (opcjonalnie)",
+    "submit": "Powiadom mnie",
+    "successTitle": "Prawie gotowe",
+    "successText": "Potwierdź zapis przez link w wiadomości e-mail."
   }
 }

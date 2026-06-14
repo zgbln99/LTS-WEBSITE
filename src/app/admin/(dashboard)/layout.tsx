@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   BarChart3,
+  BellPlus,
   BellRing,
   Briefcase,
   CalendarClock,
@@ -97,6 +98,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/benachrichtigungen",
         label: "Benachrichtigungen",
         icon: BellRing,
+        roles: ["SUPER_ADMIN", "HR", "MARKETING"]
+      },
+      {
+        href: "/admin/job-alerts",
+        label: "Job-Benachrichtigungen",
+        icon: BellPlus,
         roles: ["SUPER_ADMIN", "HR", "MARKETING"]
       },
       {

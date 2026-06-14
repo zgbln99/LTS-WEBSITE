@@ -618,5 +618,14 @@
     "message": "Mesaj (isteğe bağlı)",
     "successTitle": "Talep alındı",
     "successText": "Randevunuzu onaylamak için sizinle iletişime geçeceğiz."
+  },
+  "jobAlert": {
+    "title": "İş bildirimleri",
+    "text": "Uygun bir pozisyon açıldığında haberdar olun.",
+    "email": "E-posta",
+    "region": "Bölge (isteğe bağlı)",
+    "submit": "Beni bilgilendir",
+    "successTitle": "Neredeyse tamam",
+    "successText": "Lütfen e-postanızdaki bağlantıdan kaydınızı onaylayın."
   }
 }
