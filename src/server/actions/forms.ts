@@ -12,6 +12,7 @@ import {
 import { getClientIpHash, isRateLimited } from "@/server/rate-limit";
 import { sendInternalNotification } from "@/server/notifications";
 import { getEmailTemplates } from "@/server/site-settings";
+import { brandedEmail, htmlToText } from "@/lib/email-frame";
 import { isS3Configured, uploadApplicationFile } from "@/server/s3";
 import {
   ALLOWED_FILE_TYPES,
@@ -64,11 +65,21 @@ async function sendConfirmation(
   const subject = override?.subject
     ? interpolate(override.subject)
     : t(subjectKey, values);
-  const text = override?.body ? interpolate(override.body) : t(bodyKey, values);
-  // Eigene HTML-Vorlage hat Vorrang, sonst das schlichte Marken-Layout.
-  const html = override?.html?.trim()
-    ? interpolate(override.html)
-    : confirmationHtml(text);
+
+  // Reihenfolge: komplettes HTML > visueller Editor (in Marken-Layout) > Standard.
+  let html: string;
+  let text: string;
+  if (override?.html?.trim()) {
+    html = interpolate(override.html);
+    text = htmlToText(html);
+  } else if (override?.bodyHtml?.trim()) {
+    const content = interpolate(override.bodyHtml);
+    html = brandedEmail(content);
+    text = htmlToText(content);
+  } else {
+    text = t(bodyKey, values);
+    html = confirmationHtml(text);
+  }
   // Automatische Bestätigung an den Absender in seiner Sprache,
   // protokolliert und bei Bedarf erneut versendbar.
   await sendInternalNotification({

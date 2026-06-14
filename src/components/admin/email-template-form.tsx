@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Code, FileText, LayoutTemplate } from "lucide-react";
+import { Code2 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
+import { RichTextField } from "@/builder/rich-text-field";
 import { saveEmailTemplate } from "@/server/actions/settings";
-import { cn } from "@/lib/utils";
+import { brandedEmail, textToHtml } from "@/lib/email-frame";
 
 const SAMPLE: Record<string, string> = {
   name: "Max Mustermann",
@@ -15,36 +16,11 @@ function interpolate(value: string) {
   return value.replace(/\{(\w+)\}/g, (_, key) => SAMPLE[key] ?? `{${key}}`);
 }
 
-// Schlichtes, an den Absender gerichtetes Standard-HTML als Startpunkt.
-function defaultHtml(body: string) {
-  const paragraphs = (body || "Guten Tag {name},\n\nvielen Dank für Ihre Nachricht.")
-    .split(/\n\s*\n/)
-    .map(
-      (p) =>
-        `      <p style="margin:0 0 14px;color:#0b0f1a;font-size:15px;line-height:1.65">${p.replace(/\n/g, "<br/>")}</p>`
-    )
-    .join("\n");
-  return `<!doctype html>
-<html>
-  <body style="margin:0;background:#f7f8fa;font-family:Arial,Helvetica,sans-serif">
-    <div style="max-width:600px;margin:0 auto;padding:32px 16px">
-      <div style="background:#0b101d;border-radius:16px 16px 0 0;padding:22px 28px">
-        <span style="color:#ffffff;font-size:18px;font-weight:bold">LTS Logistik</span>
-      </div>
-      <div style="background:#ffffff;border-radius:0 0 16px 16px;padding:28px">
-${paragraphs}
-        <p style="margin:24px 0 0;color:#6b7585;font-size:13px">LTS Logistik GmbH · Hennickendorfer Str. 1 · 14947 Nuthe-Urstromtal</p>
-      </div>
-    </div>
-  </body>
-</html>`;
-}
-
 export function EmailTemplateForm({
   templateKey,
   locale,
   initialSubject,
-  initialBody,
+  initialBodyHtml,
   initialHtml,
   defaultSubject,
   defaultBody
@@ -52,34 +28,33 @@ export function EmailTemplateForm({
   templateKey: string;
   locale: string;
   initialSubject: string;
-  initialBody: string;
+  initialBodyHtml: string;
   initialHtml: string;
   defaultSubject: string;
   defaultBody: string;
 }) {
+  const defaultBodyHtml = useMemo(() => textToHtml(defaultBody), [defaultBody]);
   const [subject, setSubject] = useState(initialSubject);
-  const [body, setBody] = useState(initialBody);
+  const [bodyHtml, setBodyHtml] = useState(initialBodyHtml || defaultBodyHtml);
   const [html, setHtml] = useState(initialHtml);
-  const [tab, setTab] = useState<"text" | "html">(initialHtml ? "html" : "text");
+  const [advanced, setAdvanced] = useState(Boolean(initialHtml));
   const [note, setNote] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  const previewSubject = useMemo(
-    () => interpolate(subject || defaultSubject),
-    [subject, defaultSubject]
-  );
-  // Vorschau: eigenes HTML wenn vorhanden, sonst Text im Marken-Layout.
+  const previewSubject = interpolate(subject || defaultSubject);
   const previewHtml = useMemo(() => {
-    const source = html.trim() ? html : defaultHtml(body || defaultBody);
+    const source = html.trim()
+      ? html
+      : brandedEmail(bodyHtml || defaultBodyHtml);
     return interpolate(source);
-  }, [html, body, defaultBody]);
+  }, [html, bodyHtml, defaultBodyHtml]);
 
   const save = () =>
     startTransition(async () => {
       const result = await saveEmailTemplate(templateKey, locale, {
         subject,
-        body,
-        html
+        bodyHtml,
+        html: advanced ? html : ""
       });
       setNote(result.ok ? "Gespeichert." : "Fehler beim Speichern.");
       setTimeout(() => setNote(null), 4000);
@@ -97,82 +72,47 @@ export function EmailTemplateForm({
           />
         </Field>
 
-        <div className="mt-5 flex items-center gap-1 rounded-xl bg-mist-100 p-1">
-          <button
-            type="button"
-            onClick={() => setTab("text")}
-            className={cn(
-              "flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
-              tab === "text" ? "bg-white text-night-900 shadow-sm" : "text-mist-500"
-            )}
-          >
-            <FileText className="h-4 w-4" />
-            Textversion
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("html")}
-            className={cn(
-              "flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
-              tab === "html" ? "bg-white text-night-900 shadow-sm" : "text-mist-500"
-            )}
-          >
-            <Code className="h-4 w-4" />
-            HTML-Version
-          </button>
-        </div>
-
-        <p className="mt-3 text-xs text-mist-500">
+        <p className="mt-4 text-xs text-mist-500">
           Platzhalter: <code className="rounded bg-mist-100 px-1">{"{name}"}</code>{" "}
           und <code className="rounded bg-mist-100 px-1">{"{reference}"}</code>.
         </p>
 
-        {tab === "text" ? (
+        {advanced ? (
           <div className="mt-3">
-            <Textarea
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder={defaultBody}
-              className="min-h-64 font-mono text-xs"
-              aria-label="Textversion"
-            />
-            <p className="mt-1.5 text-xs text-mist-400">
-              Wird als reiner Text verschickt und als Grundlage genutzt, wenn
-              keine eigene HTML-Version gesetzt ist.
-            </p>
-          </div>
-        ) : (
-          <div className="mt-3">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs text-mist-400">
-                Vollständiges E-Mail-HTML (inline Styles empfohlen).
-              </span>
-              <button
-                type="button"
-                onClick={() => setHtml(defaultHtml(body || defaultBody))}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-mist-300 px-2.5 py-1 text-xs font-semibold text-night-900 hover:bg-mist-100"
-              >
-                <LayoutTemplate className="h-3.5 w-3.5" />
-                Standard-HTML einfügen
-              </button>
-            </div>
             <Textarea
               value={html}
               onChange={(e) => setHtml(e.target.value)}
-              placeholder="Leer = automatisches Marken-Layout aus der Textversion"
+              placeholder="Vollständiges E-Mail-HTML"
               spellCheck={false}
               className="min-h-72 bg-night-950 font-mono text-xs text-mint-300"
-              aria-label="HTML-Version"
+              aria-label="Komplettes HTML"
             />
-            {html.trim() ? (
-              <button
-                type="button"
-                onClick={() => setHtml("")}
-                className="mt-1.5 text-xs font-medium text-accent-600 hover:underline"
-              >
-                HTML entfernen (zurück zum Standard-Layout)
-              </button>
-            ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                setHtml("");
+                setAdvanced(false);
+              }}
+              className="mt-2 text-xs font-medium text-accent-600 hover:underline"
+            >
+              Zurück zum visuellen Editor
+            </button>
+          </div>
+        ) : (
+          <div className="mt-3 space-y-2">
+            <label className="text-sm font-medium text-night-900">Inhalt</label>
+            <RichTextField value={bodyHtml} onChange={setBodyHtml} />
+            <button
+              type="button"
+              onClick={() => {
+                setAdvanced(true);
+                if (!html) setHtml(brandedEmail(bodyHtml || defaultBodyHtml));
+              }}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-mist-500 hover:text-night-900"
+            >
+              <Code2 className="h-3.5 w-3.5" />
+              Erweitert: komplettes HTML bearbeiten
+            </button>
           </div>
         )}
 

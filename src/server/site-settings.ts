@@ -38,6 +38,7 @@ export interface GeneralSettings {
 export interface EmailTemplate {
   subject?: string;
   body?: string;
+  bodyHtml?: string;
   html?: string;
 }
 

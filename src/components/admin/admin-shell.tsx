@@ -1,107 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BarChart3,
-  BellPlus,
-  BellRing,
-  Briefcase,
-  CalendarClock,
-  Cookie as CookieIcon,
+  ChevronDown,
   ExternalLink,
-  Inbox,
-  LayoutDashboard,
   LogOut,
-  Mail,
-  MailCheck,
-  MapPin,
   Menu,
-  Newspaper,
-  PanelBottom,
-  PencilRuler,
-  Quote,
-  ScrollText,
   Search,
-  Settings,
-  ShieldCheck,
-  Shuffle,
-  Type,
-  Users,
-  X,
-  type LucideIcon
+  X
 } from "lucide-react";
 import type { Role } from "@prisma/client";
 import { logoutAction } from "@/server/actions/admin";
+import { CommandPalette } from "@/components/admin/command-palette";
+import { isActive, visibleSections } from "@/components/admin/nav-config";
 import { cn } from "@/lib/utils";
 
-interface NavItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  roles: Role[];
-}
-
-const navSections: { title: string | null; items: NavItem[] }[] = [
-  {
-    title: null,
-    items: [
-      {
-        href: "/admin",
-        label: "Dashboard",
-        icon: LayoutDashboard,
-        roles: ["SUPER_ADMIN", "HR", "MARKETING", "EDITOR"]
-      }
-    ]
-  },
-  {
-    title: "Anfragen",
-    items: [
-      { href: "/admin/anfragen", label: "Transportanfragen", icon: Inbox, roles: ["SUPER_ADMIN", "MARKETING"] },
-      { href: "/admin/kontaktanfragen", label: "Kontaktanfragen", icon: Mail, roles: ["SUPER_ADMIN", "MARKETING"] }
-    ]
-  },
-  {
-    title: "Recruiting",
-    items: [
-      { href: "/admin/bewerbungen", label: "Bewerbungen", icon: Users, roles: ["SUPER_ADMIN", "HR"] },
-      { href: "/admin/stellen", label: "Stellenanzeigen", icon: Briefcase, roles: ["SUPER_ADMIN", "HR"] },
-      { href: "/admin/termine", label: "Termine", icon: CalendarClock, roles: ["SUPER_ADMIN", "HR"] },
-      { href: "/admin/benachrichtigungen", label: "Benachrichtigungen", icon: BellRing, roles: ["SUPER_ADMIN", "HR", "MARKETING"] },
-      { href: "/admin/job-alerts", label: "Job-Benachrichtigungen", icon: BellPlus, roles: ["SUPER_ADMIN", "HR", "MARKETING"] },
-      { href: "/admin/kpi", label: "Auswertungen", icon: BarChart3, roles: ["SUPER_ADMIN", "HR", "MARKETING"] }
-    ]
-  },
-  {
-    title: "Inhalte",
-    items: [
-      { href: "/admin/seiten", label: "Seiten-Editor", icon: PencilRuler, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/artikel", label: "Wissenszentrum", icon: Newspaper, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/testimonials", label: "Testimonials", icon: Quote, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/einsatzorte", label: "Einsatzorte", icon: MapPin, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/texte", label: "Website-Texte", icon: Type, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/email-vorlagen", label: "E-Mail-Vorlagen", icon: MailCheck, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/seo", label: "SEO", icon: Search, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/fusszeile", label: "Fußzeile", icon: PanelBottom, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
-      { href: "/admin/redirects", label: "Weiterleitungen", icon: Shuffle, roles: ["SUPER_ADMIN", "MARKETING"] }
-    ]
-  },
-  {
-    title: "System",
-    items: [
-      { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings, roles: ["SUPER_ADMIN"] },
-      { href: "/admin/consent", label: "Einwilligungen", icon: CookieIcon, roles: ["SUPER_ADMIN"] },
-      { href: "/admin/audit", label: "Protokoll", icon: ScrollText, roles: ["SUPER_ADMIN"] },
-      { href: "/admin/system", label: "System", icon: ShieldCheck, roles: ["SUPER_ADMIN"] }
-    ]
-  }
-];
-
-function isActive(pathname: string, href: string) {
-  if (href === "/admin") return pathname === "/admin";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+const COLLAPSE_KEY = "lts-admin-collapsed";
 
 export function AdminShell({
   role,
@@ -116,19 +32,50 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState<string[]>([]);
+  const [ready, setReady] = useState(false);
 
-  const sections = navSections
-    .map((section) => ({
-      ...section,
-      items: section.items.filter((item) => item.roles.includes(role))
-    }))
-    .filter((section) => section.items.length > 0);
-
+  const sections = visibleSections(role);
   const allItems = sections.flatMap((section) => section.items);
   const active = [...allItems]
     .sort((a, b) => b.href.length - a.href.length)
     .find((item) => isActive(pathname, item.href));
   const pageTitle = active?.label ?? "Admin";
+
+  // Zustand der eingeklappten Gruppen aus dem Browser laden/speichern.
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(COLLAPSE_KEY);
+      if (stored) setCollapsed(JSON.parse(stored));
+    } catch {
+      // ignorieren
+    }
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (ready) localStorage.setItem(COLLAPSE_KEY, JSON.stringify(collapsed));
+  }, [collapsed, ready]);
+
+  // Tastenkürzel zum Öffnen der Befehlspalette (Ctrl/Cmd + K).
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen((value) => !value);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const toggleSection = (title: string) =>
+    setCollapsed((current) =>
+      current.includes(title)
+        ? current.filter((entry) => entry !== title)
+        : [...current, title]
+    );
 
   const sidebar = (
     <>
@@ -143,36 +90,57 @@ export function AdminShell({
         <span className="font-display text-base font-bold">Admin</span>
       </Link>
 
-      <nav className="mt-6 flex flex-1 flex-col gap-5 overflow-y-auto">
-        {sections.map((section, index) => (
-          <div key={section.title ?? `s-${index}`} className="flex flex-col gap-0.5">
-            {section.title ? (
-              <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-mist-500">
-                {section.title}
-              </p>
-            ) : null}
-            {section.items.map((item) => {
-              const activeItem = isActive(pathname, item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  aria-current={activeItem ? "page" : undefined}
-                  className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-                    activeItem
-                      ? "bg-accent-500 text-white shadow-sm"
-                      : "text-mist-300 hover:bg-white/10 hover:text-white"
-                  )}
+      <nav className="mt-6 flex flex-1 flex-col gap-4 overflow-y-auto pr-1">
+        {sections.map((section, index) => {
+          const isCollapsed = section.title
+            ? collapsed.includes(section.title)
+            : false;
+          const sectionActive = section.items.some((item) =>
+            isActive(pathname, item.href)
+          );
+          return (
+            <div key={section.title ?? `s-${index}`} className="flex flex-col gap-0.5">
+              {section.title ? (
+                <button
+                  type="button"
+                  onClick={() => toggleSection(section.title!)}
+                  className="flex items-center justify-between gap-2 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-mist-500 transition-colors hover:text-mist-300"
                 >
-                  <item.icon className="h-4 w-4 shrink-0" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-        ))}
+                  {section.title}
+                  <ChevronDown
+                    className={cn(
+                      "h-3.5 w-3.5 transition-transform",
+                      isCollapsed && "-rotate-90"
+                    )}
+                  />
+                </button>
+              ) : null}
+              {!isCollapsed || sectionActive
+                ? section.items.map((item) => {
+                    const activeItem = isActive(pathname, item.href);
+                    if (isCollapsed && !activeItem) return null;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        aria-current={activeItem ? "page" : undefined}
+                        className={cn(
+                          "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                          activeItem
+                            ? "bg-accent-500 text-white shadow-sm"
+                            : "text-mist-300 hover:bg-white/10 hover:text-white"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4 shrink-0" />
+                        {item.label}
+                      </Link>
+                    );
+                  })
+                : null}
+            </div>
+          );
+        })}
       </nav>
 
       <div className="mt-4 border-t border-white/10 pt-4">
@@ -200,12 +168,10 @@ export function AdminShell({
 
   return (
     <div className="flex min-h-svh bg-mist-50">
-      {/* Desktop-Sidebar */}
       <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col bg-night-950 p-4 lg:flex">
         {sidebar}
       </aside>
 
-      {/* Mobile-Drawer */}
       {open ? (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
@@ -243,19 +209,38 @@ export function AdminShell({
               {pageTitle}
             </h1>
           </div>
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-mist-300 px-3.5 py-1.5 text-sm font-medium text-night-900 transition-colors hover:bg-mist-100"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Website ansehen</span>
-          </a>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setPaletteOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-mist-300 bg-white px-3 py-1.5 text-sm text-mist-500 transition-colors hover:bg-mist-100"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Suchen</span>
+              <kbd className="hidden rounded border border-mist-200 px-1.5 text-[10px] font-semibold sm:inline">
+                ⌘K
+              </kbd>
+            </button>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-mist-300 px-3.5 py-1.5 text-sm font-medium text-night-900 transition-colors hover:bg-mist-100"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Website</span>
+            </a>
+          </div>
         </header>
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
+
+      <CommandPalette
+        items={allItems}
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+      />
     </div>
   );
 }
