@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { RotateCcw, Search } from "lucide-react";
+import { Languages, RotateCcw, Search } from "lucide-react";
 import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import {
   resetTextOverride,
-  saveTextOverride
+  saveTextOverride,
+  translateTextOverride
 } from "@/server/actions/content";
 import { flattenMessages } from "@/server/text-overrides";
+import { isTranslationConfigured } from "@/server/translate";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { locales } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -34,6 +36,8 @@ export default async function TextsAdminPage({
 }) {
   const session = await requireRole(["SUPER_ADMIN", "MARKETING", "EDITOR"]);
   if (!session) redirect("/admin");
+
+  const translationOn = await isTranslationConfigured();
 
   const params = await searchParams;
   const locale = locales.includes(params.sprache as never)
@@ -166,6 +170,17 @@ export default async function TextsAdminPage({
                   >
                     Speichern
                   </button>
+                  {translationOn ? (
+                    <button
+                      type="submit"
+                      formAction={translateTextOverride}
+                      title="In alle Sprachen übersetzen"
+                      className="flex items-center gap-1.5 rounded-full border border-accent-500 px-4 py-2 text-sm font-medium text-accent-600 hover:bg-accent-500/10"
+                    >
+                      <Languages className="h-3.5 w-3.5" />
+                      Übersetzen
+                    </button>
+                  ) : null}
                   {override !== undefined ? (
                     <button
                       type="submit"

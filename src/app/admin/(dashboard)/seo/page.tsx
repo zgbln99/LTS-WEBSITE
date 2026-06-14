@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { requireRole } from "@/auth";
 import { SeoForm } from "@/components/admin/seo-form";
 import { getSeoSettings } from "@/server/site-settings";
+import { isTranslationConfigured } from "@/server/translate";
 import { SEO_PAGES } from "@/server/seo";
 import { locales, type Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,7 @@ export default async function SeoAdminPage({
   const t = await getTranslations({ locale, namespace: page.namespace });
   const seo = await getSeoSettings();
   const stored = seo[page.key]?.[locale] ?? {};
+  const translationOn = await isTranslationConfigured();
 
   return (
     <div className="space-y-6">
@@ -93,6 +95,7 @@ export default async function SeoAdminPage({
         initialDescription={stored.description ?? ""}
         defaultTitle={t("title")}
         defaultDescription={t("description")}
+        translationOn={translationOn}
       />
     </div>
   );

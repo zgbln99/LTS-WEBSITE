@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { requireRole } from "@/auth";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { ArticleForm } from "@/components/admin/article-form";
+import { getTranslationSettings } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,8 @@ export const metadata = { title: "Neuer Artikel" };
 export default async function NewArticlePage() {
   const session = await requireRole(["SUPER_ADMIN", "MARKETING", "EDITOR"]);
   if (!session) redirect("/admin");
+
+  const { sourceLocale } = await getTranslationSettings();
 
   return (
     <div className="space-y-6">
@@ -28,7 +31,7 @@ export default async function NewArticlePage() {
         </h1>
       </div>
       <AdminCard>
-        <ArticleForm />
+        <ArticleForm sourceLocale={sourceLocale} />
       </AdminCard>
     </div>
   );

@@ -11,12 +11,14 @@ const statusOptions = [
 
 interface ArticleFormProps {
   article?: BlogPost & { translations: BlogPostTranslation[] };
+  sourceLocale?: string;
 }
 
-export function ArticleForm({ article }: ArticleFormProps) {
-  const translation = article?.translations.find(
-    (entry) => entry.locale === "de"
-  );
+export function ArticleForm({ article, sourceLocale = "de" }: ArticleFormProps) {
+  const translation =
+    article?.translations.find((entry) => entry.locale === sourceLocale) ??
+    article?.translations.find((entry) => entry.locale === "de") ??
+    article?.translations[0];
 
   return (
     <form action={saveArticle} className="space-y-5">

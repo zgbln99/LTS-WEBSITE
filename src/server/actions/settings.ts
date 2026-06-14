@@ -9,6 +9,8 @@ import { prisma } from "@/server/db";
 import { writeAuditLog } from "@/server/audit";
 import { revalidatePublic } from "@/server/revalidate-public";
 import { SETTINGS_CACHE_TAG } from "@/server/site-settings";
+import { translateBatch } from "@/server/translate";
+import { locales } from "@/i18n/routing";
 
 const CONTENT_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
 
@@ -312,6 +314,58 @@ export async function saveSeoAction(
     action: "UPDATE",
     entityType: "SeoSettings",
     entityId: `${pageKey}:${locale}`
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePublic([href]);
+  revalidatePath("/admin/seo");
+  return { ok: true };
+}
+
+// Übersetzt SEO-Titel/Beschreibung einer Seite in alle übrigen Sprachen.
+export async function translateSeoAction(
+  pageKey: string,
+  sourceLocale: string,
+  title: string,
+  description: string
+) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const href = SEO_HREFS[pageKey];
+  if (!href) return { ok: false };
+
+  const existing = await prisma.siteSetting.findUnique({
+    where: { key: "seo" }
+  });
+  const current =
+    (existing?.value as Record<
+      string,
+      Record<string, { title: string; description: string }>
+    > | null) ?? {};
+  const pageEntry: Record<string, { title: string; description: string }> = {
+    ...current[pageKey],
+    [sourceLocale]: { title, description }
+  };
+
+  const targets = locales.filter((locale) => locale !== sourceLocale);
+  for (const locale of targets) {
+    const out = await translateBatch([title, description], locale, sourceLocale);
+    if (!out) continue;
+    pageEntry[locale] = { title: out[0], description: out[1] };
+  }
+
+  const next: Prisma.InputJsonValue = { ...current, [pageKey]: pageEntry };
+  await prisma.siteSetting.upsert({
+    where: { key: "seo" },
+    update: { value: next },
+    create: { key: "seo", value: next }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "SeoSettings",
+    entityId: `${pageKey}:*`
   });
   revalidateTag(SETTINGS_CACHE_TAG);
   revalidatePublic([href]);

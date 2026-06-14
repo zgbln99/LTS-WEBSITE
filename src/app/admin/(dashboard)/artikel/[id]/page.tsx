@@ -6,6 +6,7 @@ import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { ArticleForm } from "@/components/admin/article-form";
+import { getTranslationSettings } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +44,10 @@ export default async function EditArticlePage({
         </h1>
       </div>
       <AdminCard>
-        <ArticleForm article={article} />
+        <ArticleForm
+          article={article}
+          sourceLocale={(await getTranslationSettings()).sourceLocale}
+        />
       </AdminCard>
     </div>
   );

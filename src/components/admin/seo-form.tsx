@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Languages } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
-import { saveSeoAction } from "@/server/actions/settings";
+import { saveSeoAction, translateSeoAction } from "@/server/actions/settings";
 
 export function SeoForm({
   pageKey,
@@ -10,7 +11,8 @@ export function SeoForm({
   initialTitle,
   initialDescription,
   defaultTitle,
-  defaultDescription
+  defaultDescription,
+  translationOn
 }: {
   pageKey: string;
   locale: string;
@@ -18,6 +20,7 @@ export function SeoForm({
   initialDescription: string;
   defaultTitle: string;
   defaultDescription: string;
+  translationOn?: boolean;
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
@@ -31,6 +34,22 @@ export function SeoForm({
         description
       });
       setNote(result.ok ? "Gespeichert." : "Fehler beim Speichern.");
+      setTimeout(() => setNote(null), 4000);
+    });
+
+  const translate = () =>
+    startTransition(async () => {
+      const effectiveTitle = title || defaultTitle;
+      const effectiveDescription = description || defaultDescription;
+      const result = await translateSeoAction(
+        pageKey,
+        locale,
+        effectiveTitle,
+        effectiveDescription
+      );
+      setNote(
+        result.ok ? "In alle Sprachen übersetzt." : "Fehler beim Übersetzen."
+      );
       setTimeout(() => setNote(null), 4000);
     });
 
@@ -71,6 +90,17 @@ export function SeoForm({
         >
           {pending ? "Speichert ..." : "Speichern"}
         </button>
+        {translationOn ? (
+          <button
+            type="button"
+            onClick={translate}
+            disabled={pending}
+            className="inline-flex h-11 items-center gap-2 rounded-xl border border-accent-500 px-4 text-sm font-semibold text-accent-600 transition-colors hover:bg-accent-500/10 disabled:opacity-50"
+          >
+            <Languages className="h-4 w-4" />
+            In alle Sprachen übersetzen
+          </button>
+        ) : null}
         {note ? (
           <span className="text-sm font-medium text-mint-500">{note}</span>
         ) : null}

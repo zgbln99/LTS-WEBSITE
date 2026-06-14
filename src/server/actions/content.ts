@@ -430,6 +430,43 @@ export async function saveTextOverride(formData: FormData) {
   revalidatePath("/admin/texte");
 }
 
+// Übersetzt einen Text automatisch in alle übrigen Sprachen und speichert ihn.
+export async function translateTextOverride(formData: FormData) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const sourceLocale = String(formData.get("locale") ?? "de");
+  const key = String(formData.get("key") ?? "");
+  const value = String(formData.get("value") ?? "").trim();
+  if (!key || !value) return;
+
+  const targets = locales.filter((locale) => locale !== sourceLocale);
+  for (const locale of targets) {
+    const out = await translateBatch([value], locale, sourceLocale);
+    if (!out) continue;
+    await prisma.textOverride.upsert({
+      where: { locale_key: { locale, key } },
+      update: { value: out[0] },
+      create: { locale, key, value: out[0] }
+    });
+  }
+  // Quelltext ebenfalls speichern, damit er als Override gilt.
+  await prisma.textOverride.upsert({
+    where: { locale_key: { locale: sourceLocale, key } },
+    update: { value },
+    create: { locale: sourceLocale, key, value }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "TextOverride",
+    entityId: `*:${key}`
+  });
+  revalidateAllPublic();
+  revalidatePath("/admin/texte");
+}
+
 export async function resetTextOverride(formData: FormData) {
   const session = await requireRole(CONTENT_ROLES);
   if (!session) redirect("/admin/login");
@@ -485,8 +522,11 @@ export async function saveArticle(formData: FormData) {
     Math.round(paragraphs.join(" ").split(/\s+/).length / 200)
   );
 
+  const trSettings = await getTranslationSettings();
+  const sourceLocale = trSettings.sourceLocale;
+
   const translation = {
-    locale: "de",
+    locale: sourceLocale,
     title: data.title,
     slug,
     excerpt: data.excerpt,
@@ -494,6 +534,7 @@ export async function saveArticle(formData: FormData) {
     readingTimeMin
   };
 
+  let postId = data.id;
   if (data.id) {
     const existing = await prisma.blogPost.findUnique({
       where: { id: data.id },
@@ -510,7 +551,7 @@ export async function saveArticle(formData: FormData) {
         translations: {
           upsert: {
             where: {
-              blogPostId_locale: { blogPostId: data.id, locale: "de" }
+              blogPostId_locale: { blogPostId: data.id, locale: sourceLocale }
             },
             update: translation,
             create: translation
@@ -519,7 +560,7 @@ export async function saveArticle(formData: FormData) {
       }
     });
   } else {
-    await prisma.blogPost.create({
+    const created = await prisma.blogPost.create({
       data: {
         status: data.status,
         createdById: session.user.id,
@@ -527,13 +568,37 @@ export async function saveArticle(formData: FormData) {
         translations: { create: translation }
       }
     });
+    postId = created.id;
+  }
+
+  // Automatische Übersetzung des Artikels in die übrigen Sprachen.
+  if (postId && trSettings.autoTranslate && trSettings.deeplKey) {
+    const suffix = postId.slice(-5);
+    const targets = locales.filter((locale) => locale !== sourceLocale);
+    for (const locale of targets) {
+      const payload = [data.title, data.excerpt, ...paragraphs];
+      const out = await translateBatch(payload, locale, sourceLocale);
+      if (!out) continue;
+      const translated = {
+        title: out[0],
+        slug: `${slugify(out[0]) || slug}-${suffix}`,
+        excerpt: out[1],
+        content: { paragraphs: out.slice(2) },
+        readingTimeMin
+      };
+      await prisma.blogPostTranslation.upsert({
+        where: { blogPostId_locale: { blogPostId: postId, locale } },
+        update: translated,
+        create: { blogPostId: postId, locale, ...translated }
+      });
+    }
   }
 
   await writeAuditLog({
     userId: session.user.id,
     action: data.id ? "UPDATE" : "CREATE",
     entityType: "BlogPost",
-    entityId: data.id
+    entityId: postId
   });
   revalidatePath("/admin/artikel");
   revalidatePublic(["/wissen", "/wissen/[slug]"]);
