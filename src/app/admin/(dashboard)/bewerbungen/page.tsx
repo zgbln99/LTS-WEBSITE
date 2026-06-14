@@ -1,28 +1,17 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Paperclip } from "lucide-react";
+import { Download } from "lucide-react";
 import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
+import { DbErrorBanner, formatDateTime } from "@/components/admin/admin-ui";
 import {
-  DbErrorBanner,
-  applicationStatusLabels,
-  formatDateTime
-} from "@/components/admin/admin-ui";
-import { ApplicationStatus } from "@prisma/client";
-import { cn } from "@/lib/utils";
+  ApplicationsBoard,
+  type ApplicationCard
+} from "@/components/admin/applications-board";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Bewerbungen" };
-
-const columnAccents: Record<ApplicationStatus, string> = {
-  NEW: "border-t-accent-500",
-  REVIEWED: "border-t-blue-500",
-  INTERVIEW: "border-t-violet-500",
-  REJECTED: "border-t-red-400",
-  HIRED: "border-t-mint-400"
-};
 
 export default async function ApplicationsBoardPage() {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
@@ -47,71 +36,36 @@ export default async function ApplicationsBoardPage() {
     );
   }
 
-  const columns = Object.values(ApplicationStatus).map((status) => ({
-    status,
-    items: applications.filter((application) => application.status === status)
+  const items: ApplicationCard[] = applications.map((application) => ({
+    id: application.id,
+    name: `${application.firstName} ${application.lastName}`,
+    meta: [
+      application.source?.replace("website:", ""),
+      application.licenseClass
+    ]
+      .filter(Boolean)
+      .join(" · "),
+    dateLabel: formatDateTime(application.createdAt),
+    status: application.status,
+    files: application._count.files
   }));
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-extrabold text-night-900">
-        Bewerbungen
-      </h1>
-
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {columns.map((column) => (
-          <div
-            key={column.status}
-            className={cn(
-              "rounded-2xl border-t-4 bg-white p-4 shadow-card",
-              columnAccents[column.status]
-            )}
-          >
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-display text-sm font-bold text-night-900">
-                {applicationStatusLabels[column.status]}
-              </h2>
-              <span className="rounded-full bg-mist-100 px-2 py-0.5 text-xs font-semibold text-mist-500">
-                {column.items.length}
-              </span>
-            </div>
-            <div className="space-y-2.5">
-              {column.items.length === 0 ? (
-                <p className="rounded-xl border border-dashed border-mist-200 px-3 py-5 text-center text-xs text-mist-400">
-                  Keine Einträge
-                </p>
-              ) : (
-                column.items.map((application) => (
-                  <Link
-                    key={application.id}
-                    href={`/admin/bewerbungen/${application.id}`}
-                    className="block rounded-xl border border-mist-100 bg-mist-50 p-3 transition-colors hover:border-accent-500/40 hover:bg-white"
-                  >
-                    <p className="text-sm font-semibold text-night-900">
-                      {application.firstName} {application.lastName}
-                    </p>
-                    <p className="mt-0.5 text-xs text-mist-500">
-                      {application.source?.replace("website:", "") ?? ""}
-                      {application.licenseClass
-                        ? ` · ${application.licenseClass}`
-                        : ""}
-                    </p>
-                    <div className="mt-2 flex items-center justify-between text-xs text-mist-400">
-                      <span>{formatDateTime(application.createdAt)}</span>
-                      {application._count.files > 0 ? (
-                        <span className="flex items-center gap-1">
-                          <Paperclip className="h-3 w-3" />
-                          {application._count.files}
-                        </span>
-                      ) : null}
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
-          </div>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="font-display text-2xl font-extrabold text-night-900">
+          Bewerbungen
+        </h1>
+        <a
+          href="/api/admin/bewerbungen/export"
+          className="inline-flex items-center gap-2 rounded-full border border-mist-300 px-4 py-2 text-sm font-semibold text-night-900 transition-colors hover:bg-mist-100"
+        >
+          <Download className="h-4 w-4" />
+          CSV exportieren
+        </a>
       </div>
+
+      <ApplicationsBoard items={items} />
     </div>
   );
 }

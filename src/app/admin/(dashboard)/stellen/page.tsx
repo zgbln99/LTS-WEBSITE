@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Plus, Trash2 } from "lucide-react";
+import { AlertTriangle, Copy, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
 import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
-import { deleteJobPosting } from "@/server/actions/content";
+import {
+  deleteJobPosting,
+  duplicateJobPosting,
+  toggleJobStatus
+} from "@/server/actions/content";
 import {
   DbErrorBanner,
   EmptyState,
@@ -27,6 +31,25 @@ const publishColors: Record<string, string> = {
   PUBLISHED: "HIRED",
   ARCHIVED: "CLOSED"
 };
+
+const DAY = 24 * 60 * 60 * 1000;
+
+// Hinweis zum Ablaufdatum: abgelaufen oder läuft in den nächsten 7 Tagen ab.
+function expiryHint(validThrough: Date | null) {
+  if (!validThrough) return null;
+  const diff = validThrough.getTime() - Date.now();
+  if (diff < 0) {
+    return { label: "Abgelaufen", className: "bg-red-50 text-red-700" };
+  }
+  if (diff < 7 * DAY) {
+    const days = Math.max(1, Math.ceil(diff / DAY));
+    return {
+      label: `Läuft in ${days} Tag${days === 1 ? "" : "en"} ab`,
+      className: "bg-amber-50 text-amber-700"
+    };
+  }
+  return null;
+}
 
 export default async function JobsAdminPage() {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
@@ -94,22 +117,65 @@ export default async function JobsAdminPage() {
                     {formatDateTime(job.createdAt)}
                   </td>
                   <td className="px-5 py-3">
-                    <StatusBadge
-                      status={publishColors[job.status]}
-                      label={publishLabels[job.status]}
-                    />
+                    <div className="flex flex-col items-start gap-1.5">
+                      <StatusBadge
+                        status={publishColors[job.status]}
+                        label={publishLabels[job.status]}
+                      />
+                      {(() => {
+                        const hint = expiryHint(job.validThrough);
+                        return hint ? (
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${hint.className}`}
+                          >
+                            <AlertTriangle className="h-3 w-3" />
+                            {hint.label}
+                          </span>
+                        ) : null;
+                      })()}
+                    </div>
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <form action={deleteJobPosting} className="inline">
-                      <input type="hidden" name="id" value={job.id} />
-                      <button
-                        type="submit"
-                        className="rounded-lg p-2 text-mist-400 hover:bg-red-50 hover:text-red-600"
-                        title="Löschen"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </form>
+                    <div className="flex items-center justify-end gap-1">
+                      <form action={toggleJobStatus} className="inline">
+                        <input type="hidden" name="id" value={job.id} />
+                        <button
+                          type="submit"
+                          className="rounded-lg p-2 text-mist-400 hover:bg-mist-100 hover:text-night-900"
+                          title={
+                            job.status === "PUBLISHED"
+                              ? "Auf Entwurf setzen"
+                              : "Veröffentlichen"
+                          }
+                        >
+                          {job.status === "PUBLISHED" ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </button>
+                      </form>
+                      <form action={duplicateJobPosting} className="inline">
+                        <input type="hidden" name="id" value={job.id} />
+                        <button
+                          type="submit"
+                          className="rounded-lg p-2 text-mist-400 hover:bg-mist-100 hover:text-night-900"
+                          title="Duplizieren"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                      </form>
+                      <form action={deleteJobPosting} className="inline">
+                        <input type="hidden" name="id" value={job.id} />
+                        <button
+                          type="submit"
+                          className="rounded-lg p-2 text-mist-400 hover:bg-red-50 hover:text-red-600"
+                          title="Löschen"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               ))}

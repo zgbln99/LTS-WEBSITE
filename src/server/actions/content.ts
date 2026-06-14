@@ -166,6 +166,94 @@ export async function deleteJobPosting(formData: FormData) {
   revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
 }
 
+// Veröffentlichungsstatus einer Stelle mit einem Klick umschalten.
+export async function toggleJobStatus(formData: FormData) {
+  const session = await requireRole(JOB_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  const job = await prisma.jobPosting.findUnique({ where: { id } });
+  if (!job) return;
+
+  const nextStatus =
+    job.status === "PUBLISHED" ? PublishStatus.DRAFT : PublishStatus.PUBLISHED;
+
+  await prisma.jobPosting.update({
+    where: { id },
+    data: {
+      status: nextStatus,
+      publishedAt:
+        nextStatus === "PUBLISHED" && !job.publishedAt
+          ? new Date()
+          : job.publishedAt
+    }
+  });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "JobPosting",
+    entityId: id,
+    payload: { status: nextStatus }
+  });
+  revalidatePath("/admin/stellen");
+  revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
+}
+
+// Stellenanzeige inklusive aller Übersetzungen als Entwurf duplizieren.
+export async function duplicateJobPosting(formData: FormData) {
+  const session = await requireRole(JOB_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  const job = await prisma.jobPosting.findUnique({
+    where: { id },
+    include: { translations: true }
+  });
+  if (!job) return;
+
+  const suffix = Math.random().toString(36).slice(2, 6);
+  await prisma.jobPosting.create({
+    data: {
+      categoryId: job.categoryId,
+      locationCity: job.locationCity,
+      locationRegion: job.locationRegion,
+      country: job.country,
+      workSystem: job.workSystem,
+      licenseCategory: job.licenseCategory,
+      employmentType: job.employmentType,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      salaryCurrency: job.salaryCurrency,
+      salaryPeriod: job.salaryPeriod,
+      salaryNote: job.salaryNote,
+      status: PublishStatus.DRAFT,
+      validThrough: job.validThrough,
+      translations: {
+        create: job.translations.map((tr) => ({
+          locale: tr.locale,
+          title: `${tr.title} (Kopie)`,
+          slug: `${tr.slug}-kopie-${suffix}`,
+          description: tr.description,
+          requirements: tr.requirements ?? [],
+          benefits: tr.benefits ?? [],
+          seoTitle: tr.seoTitle,
+          seoDescription: tr.seoDescription
+        }))
+      }
+    }
+  });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "CREATE",
+    entityType: "JobPosting",
+    entityId: id,
+    payload: { duplicatedFrom: id }
+  });
+  revalidatePath("/admin/stellen");
+}
+
 // ---------------------------------------------------------------------------
 // Einsatzorte
 // ---------------------------------------------------------------------------

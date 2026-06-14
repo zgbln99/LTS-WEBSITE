@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AlertTriangle, Clock } from "lucide-react";
 import { auth } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
@@ -21,18 +22,37 @@ export default async function AdminDashboardPage() {
   const session = await auth();
   if (!session?.user) redirect("/admin/login");
 
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const in7Days = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
   const data = await safeQuery(async () => {
     const [
       newTransport,
       newContact,
       applicationsByStatus,
-      latestTransport,
+      applicationsThisWeek,
+      openJobs,
+      failedNotifications,
+      expiringJobs,
+      latestContact,
       latestApplications
     ] = await Promise.all([
       prisma.transportRequest.count({ where: { status: "NEW" } }),
       prisma.contactRequest.count({ where: { status: "NEW" } }),
       prisma.application.groupBy({ by: ["status"], _count: { _all: true } }),
-      prisma.transportRequest.findMany({
+      prisma.application.count({ where: { createdAt: { gte: weekAgo } } }),
+      prisma.jobPosting.count({ where: { status: "PUBLISHED" } }),
+      prisma.mailNotification.count({ where: { status: "FAILED" } }),
+      prisma.jobPosting.findMany({
+        where: {
+          status: "PUBLISHED",
+          validThrough: { gte: new Date(), lt: in7Days }
+        },
+        orderBy: { validThrough: "asc" },
+        include: { translations: { where: { locale: "de" } } },
+        take: 5
+      }),
+      prisma.contactRequest.findMany({
         orderBy: { createdAt: "desc" },
         take: 5
       }),
@@ -45,7 +65,11 @@ export default async function AdminDashboardPage() {
       newTransport,
       newContact,
       applicationsByStatus,
-      latestTransport,
+      applicationsThisWeek,
+      openJobs,
+      failedNotifications,
+      expiringJobs,
+      latestContact,
       latestApplications
     };
   });
@@ -64,31 +88,27 @@ export default async function AdminDashboardPage() {
   const newApplications =
     data.applicationsByStatus.find((group) => group.status === "NEW")?._count
       ._all ?? 0;
-  const totalApplications = data.applicationsByStatus.reduce(
-    (sum, group) => sum + group._count._all,
-    0
-  );
 
   const stats = [
-    {
-      label: "Neue Transportanfragen",
-      value: data.newTransport,
-      href: "/admin/anfragen"
-    },
-    {
-      label: "Neue Kontaktanfragen",
-      value: data.newContact,
-      href: "/admin/kontaktanfragen"
-    },
     {
       label: "Neue Bewerbungen",
       value: newApplications,
       href: "/admin/bewerbungen"
     },
     {
-      label: "Bewerbungen gesamt",
-      value: totalApplications,
+      label: "Bewerbungen (7 Tage)",
+      value: data.applicationsThisWeek,
       href: "/admin/bewerbungen"
+    },
+    {
+      label: "Offene Stellen",
+      value: data.openJobs,
+      href: "/admin/stellen"
+    },
+    {
+      label: "Neue Kontaktanfragen",
+      value: data.newContact,
+      href: "/admin/kontaktanfragen"
     }
   ];
 
@@ -97,6 +117,41 @@ export default async function AdminDashboardPage() {
       <h1 className="font-display text-2xl font-extrabold text-night-900">
         Dashboard
       </h1>
+
+      {data.failedNotifications > 0 ? (
+        <Link
+          href="/admin/benachrichtigungen"
+          className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-100"
+        >
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          {data.failedNotifications} fehlgeschlagene Benachrichtigung
+          {data.failedNotifications === 1 ? "" : "en"} - bitte prüfen.
+        </Link>
+      ) : null}
+
+      {data.expiringJobs.length > 0 ? (
+        <div className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <div className="flex items-center gap-2 font-medium">
+            <Clock className="h-4 w-4 shrink-0" />
+            Stellen laufen demnächst ab:
+          </div>
+          <ul className="mt-1.5 space-y-1">
+            {data.expiringJobs.map((job) => (
+              <li key={job.id}>
+                <Link
+                  href={`/admin/stellen/${job.id}`}
+                  className="hover:underline"
+                >
+                  {job.translations[0]?.title ?? "Ohne Titel"} -{" "}
+                  {job.validThrough
+                    ? formatDateTime(job.validThrough)
+                    : ""}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
@@ -114,23 +169,24 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <AdminCard title="Neueste Transportanfragen">
-          {data.latestTransport.length === 0 ? (
-            <EmptyState text="Noch keine Transportanfragen." />
+        <AdminCard title="Neueste Kontaktanfragen">
+          {data.latestContact.length === 0 ? (
+            <EmptyState text="Noch keine Kontaktanfragen." />
           ) : (
             <ul className="divide-y divide-mist-100">
-              {data.latestTransport.map((request) => (
+              {data.latestContact.map((request) => (
                 <li key={request.id}>
                   <Link
-                    href={`/admin/anfragen/${request.id}`}
+                    href="/admin/kontaktanfragen"
                     className="flex items-center justify-between gap-3 py-3 hover:bg-mist-50"
                   >
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-night-900">
-                        {request.referenceNumber} · {request.company}
+                        {request.name}
+                        {request.company ? ` · ${request.company}` : ""}
                       </p>
                       <p className="truncate text-xs text-mist-500">
-                        {request.pickupCountry} nach {request.deliveryCountry} ·{" "}
+                        {request.department ?? "general"} ·{" "}
                         {formatDateTime(request.createdAt)}
                       </p>
                     </div>
