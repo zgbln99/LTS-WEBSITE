@@ -45,6 +45,23 @@ export async function uploadApplicationFile(
   return key;
 }
 
+// Generischer Upload (z.B. für Datenbank-Backups) in denselben Bucket.
+export async function uploadObject(
+  key: string,
+  body: Buffer | string,
+  contentType: string
+) {
+  await getClient().send(
+    new PutObjectCommand({
+      Bucket: process.env.S3_BUCKET_APPLICATIONS ?? "lts-applications",
+      Key: key,
+      Body: body,
+      ContentType: contentType
+    })
+  );
+  return key;
+}
+
 export async function getDownloadUrl(key: string, expiresInSeconds = 3600) {
   if (!isS3Configured()) return null;
   try {

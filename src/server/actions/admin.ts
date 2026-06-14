@@ -164,3 +164,37 @@ export async function addApplicationNote(formData: FormData) {
   });
   revalidatePath(`/admin/bewerbungen/${parsed.data.id}`);
 }
+
+// DSGVO: personenbezogene Daten anonymisieren (Dokumente und Inhalte bleiben
+// für die Statistik erhalten, aber ohne Personenbezug).
+export async function anonymizeApplication(formData: FormData) {
+  const session = await requireRole(APPLICATION_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await prisma.application.update({
+    where: { id },
+    data: {
+      firstName: "Anonymisiert",
+      lastName: "",
+      email: `anonym-${id}@example.invalid`,
+      phone: "",
+      message: null,
+      anonymizedAt: new Date(),
+      activities: {
+        create: { type: "ANONYMIZED", payload: { by: session.user.name } }
+      }
+    }
+  });
+  await prisma.applicationNote.deleteMany({ where: { applicationId: id } });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "ANONYMIZE",
+    entityType: "Application",
+    entityId: id
+  });
+  revalidatePath("/admin/bewerbungen");
+  revalidatePath(`/admin/bewerbungen/${id}`);
+}

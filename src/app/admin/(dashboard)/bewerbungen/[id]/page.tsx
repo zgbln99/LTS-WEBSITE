@@ -10,6 +10,7 @@ import {
   updateApplicationStatus
 } from "@/server/actions/admin";
 import { StatusSelect } from "@/components/admin/status-select";
+import { AnonymizeButton } from "@/components/admin/anonymize-button";
 import {
   AdminCard,
   applicationStatusLabels,
@@ -35,7 +36,8 @@ const activityLabels: Record<string, string> = {
   RECEIVED: "Bewerbung eingegangen",
   STATUS_CHANGE: "Status geändert",
   NOTE_ADDED: "Notiz hinzugefügt",
-  EMAIL_SENT: "E-Mail gesendet"
+  EMAIL_SENT: "E-Mail gesendet",
+  ANONYMIZED: "Daten anonymisiert"
 };
 
 export default async function ApplicationDetailPage({
@@ -122,7 +124,7 @@ export default async function ApplicationDetailPage({
                 {application.message}
               </p>
             ) : null}
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-wrap gap-3">
               <a
                 href={`mailto:${application.email}`}
                 className="rounded-full bg-accent-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-accent-600"
@@ -135,6 +137,25 @@ export default async function ApplicationDetailPage({
               >
                 Anrufen
               </a>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-mist-100 pt-4">
+              <span className="text-xs font-semibold uppercase tracking-wider text-mist-400">
+                DSGVO
+              </span>
+              <a
+                href={`/api/admin/bewerbungen/${application.id}/export`}
+                className="inline-flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-sm font-medium text-night-900 hover:border-night-900"
+              >
+                <Download className="h-4 w-4" />
+                Auskunft (JSON)
+              </a>
+              {application.anonymizedAt ? (
+                <span className="text-sm text-mist-400">
+                  Anonymisiert am {formatDateTime(application.anonymizedAt)}
+                </span>
+              ) : (
+                <AnonymizeButton id={application.id} />
+              )}
             </div>
           </AdminCard>
 
