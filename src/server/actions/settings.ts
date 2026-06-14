@@ -132,6 +132,54 @@ export async function saveGeneralAction(values: unknown) {
   return { ok: true };
 }
 
+const TEMPLATE_KEYS = ["inquiry", "application", "contact"];
+const emailTemplateSchema = z.object({
+  subject: z.string().trim().max(200),
+  body: z.string().trim().max(4000)
+});
+
+export async function saveEmailTemplate(
+  templateKey: string,
+  locale: string,
+  values: unknown
+) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+  if (!TEMPLATE_KEYS.includes(templateKey)) return { ok: false };
+
+  const parsed = emailTemplateSchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  const existing = await prisma.siteSetting.findUnique({
+    where: { key: "emailTemplates" }
+  });
+  const current =
+    (existing?.value as Record<
+      string,
+      Record<string, { subject: string; body: string }>
+    > | null) ?? {};
+  const next: Prisma.InputJsonValue = {
+    ...current,
+    [templateKey]: { ...current[templateKey], [locale]: parsed.data }
+  };
+
+  await prisma.siteSetting.upsert({
+    where: { key: "emailTemplates" },
+    update: { value: next },
+    create: { key: "emailTemplates", value: next }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "EmailTemplate",
+    entityId: `${templateKey}:${locale}`
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePath("/admin/email-vorlagen");
+  return { ok: true };
+}
+
 const analyticsSchema = z.object({
   matomoUrl: z.string().trim().max(300),
   matomoSiteId: z.string().trim().max(20),

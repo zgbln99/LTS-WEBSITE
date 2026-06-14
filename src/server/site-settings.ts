@@ -35,6 +35,14 @@ export interface GeneralSettings {
   recruitingWhatsapp: string;
 }
 
+export interface EmailTemplate {
+  subject?: string;
+  body?: string;
+}
+
+// templateKey (inquiry|application|contact) -> locale -> { subject, body }
+export type EmailTemplates = Record<string, Record<string, EmailTemplate>>;
+
 export interface AnalyticsSettings {
   matomoUrl: string;
   matomoSiteId: string;
@@ -100,6 +108,12 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
     recruitingPhone: stored?.recruitingPhone || "",
     recruitingWhatsapp: stored?.recruitingWhatsapp || ""
   };
+}
+
+// Im Admin angepasste E-Mail-Vorlagen (Bestätigungen an Absender).
+export async function getEmailTemplates(): Promise<EmailTemplates> {
+  const stored = (await loadSetting("emailTemplates")) as EmailTemplates | null;
+  return stored ?? {};
 }
 
 // Analyse-Einstellungen: gespeicherte Werte haben Vorrang vor den .env-Variablen.

@@ -11,6 +11,7 @@ import {
 } from "@/server/mailer";
 import { getClientIpHash, isRateLimited } from "@/server/rate-limit";
 import { sendInternalNotification } from "@/server/notifications";
+import { getEmailTemplates } from "@/server/site-settings";
 import { isS3Configured, uploadApplicationFile } from "@/server/s3";
 import {
   ALLOWED_FILE_TYPES,
@@ -52,8 +53,16 @@ async function sendConfirmation(
   values: Record<string, string>
 ) {
   const t = await getTranslations({ locale, namespace: "forms.emails" });
-  const subject = t(subjectKey, values);
-  const text = t(bodyKey, values);
+  // Im Admin angepasste Vorlage hat Vorrang vor dem Standardtext.
+  const templateKey = subjectKey.replace("Subject", "");
+  const templates = await getEmailTemplates();
+  const override = templates[templateKey]?.[locale];
+  const interpolate = (value: string) =>
+    value.replace(/\{(\w+)\}/g, (_, key) => values[key] ?? "");
+  const subject = override?.subject
+    ? interpolate(override.subject)
+    : t(subjectKey, values);
+  const text = override?.body ? interpolate(override.body) : t(bodyKey, values);
   // Automatische Bestätigung an den Absender in seiner Sprache,
   // protokolliert und bei Bedarf erneut versendbar.
   await sendInternalNotification({

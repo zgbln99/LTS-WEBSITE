@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MailCheck,
   MapPin,
   Newspaper,
   PanelBottom,
@@ -137,6 +138,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/texte",
         label: "Website-Texte",
         icon: Type,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/email-vorlagen",
+        label: "E-Mail-Vorlagen",
+        icon: MailCheck,
         roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
       },
       {
