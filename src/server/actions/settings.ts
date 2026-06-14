@@ -135,7 +135,8 @@ export async function saveGeneralAction(values: unknown) {
 const TEMPLATE_KEYS = ["inquiry", "application", "contact"];
 const emailTemplateSchema = z.object({
   subject: z.string().trim().max(200),
-  body: z.string().trim().max(4000)
+  body: z.string().trim().max(4000),
+  html: z.string().max(50000)
 });
 
 export async function saveEmailTemplate(

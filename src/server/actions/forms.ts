@@ -65,6 +65,10 @@ async function sendConfirmation(
     ? interpolate(override.subject)
     : t(subjectKey, values);
   const text = override?.body ? interpolate(override.body) : t(bodyKey, values);
+  // Eigene HTML-Vorlage hat Vorrang, sonst das schlichte Marken-Layout.
+  const html = override?.html?.trim()
+    ? interpolate(override.html)
+    : confirmationHtml(text);
   // Automatische Bestätigung an den Absender in seiner Sprache,
   // protokolliert und bei Bedarf erneut versendbar.
   await sendInternalNotification({
@@ -72,7 +76,7 @@ async function sendConfirmation(
     to,
     subject,
     text,
-    html: confirmationHtml(text),
+    html,
     reference: values.reference
   });
 }

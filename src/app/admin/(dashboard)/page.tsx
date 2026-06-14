@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AlertTriangle, Clock } from "lucide-react";
+import {
+  AlertTriangle,
+  Briefcase,
+  Clock,
+  PencilRuler,
+  Plus,
+  Settings,
+  Users,
+  type LucideIcon
+} from "lucide-react";
 import { auth } from "@/auth";
+import type { Role } from "@prisma/client";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import {
@@ -112,11 +122,44 @@ export default async function AdminDashboardPage() {
     }
   ];
 
+  const role = session.user.role;
+  const quickActions: {
+    href: string;
+    label: string;
+    icon: LucideIcon;
+    roles: Role[];
+  }[] = [
+    { href: "/admin/stellen/neu", label: "Neue Stelle", icon: Plus, roles: ["SUPER_ADMIN", "HR"] as Role[] },
+    { href: "/admin/bewerbungen", label: "Bewerbungen", icon: Users, roles: ["SUPER_ADMIN", "HR"] as Role[] },
+    { href: "/admin/stellen", label: "Stellen", icon: Briefcase, roles: ["SUPER_ADMIN", "HR"] as Role[] },
+    { href: "/admin/seiten", label: "Seiten bearbeiten", icon: PencilRuler, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] as Role[] },
+    { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings, roles: ["SUPER_ADMIN"] as Role[] }
+  ].filter((action) => action.roles.includes(role));
+
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-extrabold text-night-900">
-        Dashboard
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 className="font-display text-2xl font-extrabold text-night-900">
+            Willkommen zurück, {session.user.name.split(" ")[0]}
+          </h2>
+          <p className="mt-1 text-sm text-mist-500">
+            Überblick und Schnellzugriff auf die wichtigsten Bereiche.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {quickActions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="inline-flex items-center gap-2 rounded-full border border-mist-300 bg-white px-4 py-2 text-sm font-medium text-night-900 shadow-card transition-colors hover:bg-mist-100"
+            >
+              <action.icon className="h-4 w-4" />
+              {action.label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {data.failedNotifications > 0 ? (
         <Link

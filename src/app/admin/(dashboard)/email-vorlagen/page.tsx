@@ -99,6 +99,7 @@ export default async function EmailTemplatesPage({
         locale={locale}
         initialSubject={stored.subject ?? ""}
         initialBody={stored.body ?? ""}
+        initialHtml={stored.html ?? ""}
         defaultSubject={t(template.subjectKey, tokens)}
         defaultBody={t(template.bodyKey, tokens)}
       />
