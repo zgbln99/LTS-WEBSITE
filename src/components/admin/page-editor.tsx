@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Puck, type Data } from "@measured/puck";
 import "@measured/puck/puck.css";
 import { NextIntlClientProvider } from "next-intl";
-import { ArrowLeft, RotateCcw, Save } from "lucide-react";
+import { ArrowLeft, Languages, RotateCcw, Save } from "lucide-react";
 import { builderConfig } from "@/builder/config";
 import {
   DynamicDataProvider,
@@ -14,7 +14,8 @@ import {
 import {
   publishPageAction,
   resetPageAction,
-  saveDraftAction
+  saveDraftAction,
+  translatePageAction
 } from "@/server/actions/builder";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +36,7 @@ interface PageEditorProps {
   messages: Record<string, unknown>;
   dynamic: BuilderDynamicData;
   previewUrl: string;
+  translationOn?: boolean;
 }
 
 export function PageEditor({
@@ -45,7 +47,8 @@ export function PageEditor({
   initialData,
   messages,
   dynamic,
-  previewUrl
+  previewUrl,
+  translationOn
 }: PageEditorProps) {
   const latest = useRef<Data>(initialData);
   const dirty = useRef(false);
@@ -76,6 +79,28 @@ export function PageEditor({
     startTransition(async () => {
       const result = await saveDraftAction(pageKey, locale, latest.current);
       flash(result.ok ? "Entwurf gespeichert." : "Fehler beim Speichern.");
+    });
+
+  const translateAll = () =>
+    startTransition(async () => {
+      if (
+        !window.confirm(
+          `Diese Seite aus ${
+            localeLabels[locale] ?? locale.toUpperCase()
+          } automatisch in alle anderen Sprachen übersetzen und veröffentlichen?`
+        )
+      ) {
+        return;
+      }
+      setStatus("Übersetzt ...");
+      const result = await translatePageAction(pageKey, locale, latest.current);
+      flash(
+        result.ok
+          ? `In ${result.translated} Sprache(n) übersetzt und veröffentlicht.`
+          : result.error === "no-key"
+            ? "Kein OpenAI-Schlüssel in den Einstellungen hinterlegt."
+            : "Übersetzung fehlgeschlagen."
+      );
     });
 
   const reset = () =>
@@ -143,6 +168,17 @@ export function PageEditor({
               >
                 Seite ansehen
               </a>
+              {translationOn ? (
+                <button
+                  type="button"
+                  onClick={translateAll}
+                  disabled={pending}
+                  className="flex items-center gap-1.5 rounded-full border border-accent-500 px-4 py-1.5 text-xs font-semibold text-accent-400 hover:bg-accent-500/15 disabled:opacity-50"
+                >
+                  <Languages className="h-3.5 w-3.5" />
+                  In alle Sprachen übersetzen
+                </button>
+              ) : null}
               <button
                 type="button"
                 onClick={reset}

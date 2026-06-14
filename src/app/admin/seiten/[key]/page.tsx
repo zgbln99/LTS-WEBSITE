@@ -15,6 +15,7 @@ import {
   getServiceCities
 } from "@/server/content";
 import { getPathname } from "@/i18n/navigation";
+import { isTranslationConfigured } from "@/server/translate";
 import { getServices } from "@/data/services";
 import { locales, type Locale } from "@/i18n/routing";
 import { company } from "@/data/company";
@@ -55,6 +56,8 @@ export default async function PageEditorPage({
   // Entwurf > veröffentlichte Version > generiertes Standard-Layout
   const { data: stored } = await getEditorPageData(key, locale);
   const initialData = stored ?? generateDefaultData(key, locale, messages);
+
+  const translationOn = await isTranslationConfigured();
 
   // Echte Daten für die Vorschau dynamischer Blöcke
   const t = await getTranslations({ locale, namespace: "career" });
@@ -165,6 +168,7 @@ export default async function PageEditorPage({
       messages={messages}
       dynamic={dynamicData}
       previewUrl={previewUrl}
+      translationOn={translationOn}
     />
   );
 }

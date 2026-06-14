@@ -9,6 +9,9 @@ import { prisma } from "@/server/db";
 import { writeAuditLog } from "@/server/audit";
 import { revalidatePublic } from "@/server/revalidate-public";
 import { sanitizeBuilderData } from "@/server/builder";
+import { translatePageData } from "@/server/builder-translate";
+import { getTranslationSettings } from "@/server/site-settings";
+import { locales } from "@/i18n/routing";
 import { BUILDER_PAGES, isBuilderPageKey } from "@/builder/defaults";
 
 const BUILDER_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
@@ -105,6 +108,63 @@ export async function publishPageAction(
   revalidatePublic(pathsFor(key));
   revalidatePath("/admin/seiten");
   return { ok: true };
+}
+
+// Übersetzt die aktuelle Seite aus der Ausgangssprache automatisch in alle
+// übrigen Sprachen und veröffentlicht sie (OpenAI).
+export async function translatePageAction(
+  key: string,
+  sourceLocale: string,
+  data: Data
+) {
+  const session = await requireRole(BUILDER_ROLES);
+  if (!session) redirect("/admin/login");
+  if (!isBuilderPageKey(key)) return { ok: false, translated: 0 };
+
+  const settings = await getTranslationSettings();
+  if (!settings.openaiKey) {
+    return { ok: false, translated: 0, error: "no-key" as const };
+  }
+
+  const page = await ensureTranslation(key, sourceLocale);
+  // Ausgangssprache als veröffentlichten Stand sichern.
+  const cleanSource = sanitizeBuilderData(
+    data
+  ) as unknown as Prisma.InputJsonValue;
+  await prisma.pageTranslation.update({
+    where: { pageId_locale: { pageId: page.id, locale: sourceLocale } },
+    data: { content: cleanSource, draft: Prisma.JsonNull }
+  });
+
+  let translated = 0;
+  const targets = locales.filter((locale) => locale !== sourceLocale);
+  for (const locale of targets) {
+    const result = await translatePageData(data, locale, sourceLocale);
+    if (!result) continue;
+    const clean = sanitizeBuilderData(
+      result
+    ) as unknown as Prisma.InputJsonValue;
+    await ensureTranslation(key, locale);
+    await prisma.pageTranslation.update({
+      where: { pageId_locale: { pageId: page.id, locale } },
+      data: { content: clean, draft: Prisma.JsonNull }
+    });
+    translated += 1;
+  }
+
+  await prisma.page.update({
+    where: { id: page.id },
+    data: { status: "PUBLISHED" }
+  });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "PageTranslate",
+    entityId: `${key}:${sourceLocale}`
+  });
+  revalidatePublic(pathsFor(key));
+  revalidatePath("/admin/seiten");
+  return { ok: true, translated };
 }
 
 // Setzt eine Sprache auf das Standard-Layout aus dem Code zurück.
