@@ -278,7 +278,7 @@ const headingSizes = {
 };
 
 const headingWidths = {
-  normal: "max-w-4xl",
+  normal: "max-w-5xl",
   wide: "max-w-6xl",
   full: "max-w-none"
 };
