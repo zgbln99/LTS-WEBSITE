@@ -95,6 +95,30 @@ export async function updateContactRequestStatus(formData: FormData) {
   revalidatePath("/admin/kontaktanfragen");
 }
 
+export async function updateAppointmentStatus(formData: FormData) {
+  const session = await requireRole(["SUPER_ADMIN", "HR"]);
+  if (!session) redirect("/admin/login");
+
+  const parsed = requestStatusSchema.safeParse({
+    id: formData.get("id"),
+    status: formData.get("status")
+  });
+  if (!parsed.success) return;
+
+  await prisma.appointmentRequest.update({
+    where: { id: parsed.data.id },
+    data: { status: parsed.data.status }
+  });
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "STATUS_CHANGE",
+    entityType: "AppointmentRequest",
+    entityId: parsed.data.id,
+    payload: { status: parsed.data.status }
+  });
+  revalidatePath("/admin/termine");
+}
+
 const applicationStatusSchema = z.object({
   id: z.string().min(1),
   status: z.nativeEnum(ApplicationStatus)

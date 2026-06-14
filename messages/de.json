@@ -600,5 +600,23 @@
     "ctaText": "Senden Sie uns Ihre Initiativbewerbung. Wir melden uns, sobald eine passende Tour frei wird.",
     "ctaButton": "Jetzt bewerben",
     "allJobs": "Alle Stellenangebote ansehen"
+  },
+  "appointment": {
+    "title": "Termin oder Probetag vereinbaren",
+    "intro": "Lieber persönlich kennenlernen? Vereinbaren Sie ein Gespräch oder einen Probetag. Wir rufen Sie zur Bestätigung zurück.",
+    "name": "Name",
+    "phone": "Telefon",
+    "email": "E-Mail (optional)",
+    "type": "Anliegen",
+    "typeInterview": "Vorstellungsgespräch",
+    "typeTrial": "Probetag",
+    "date": "Wunschtermin (optional)",
+    "timeWindow": "Zeitfenster",
+    "windowMorning": "Vormittags",
+    "windowAfternoon": "Nachmittags",
+    "windowFlexible": "Flexibel",
+    "message": "Nachricht (optional)",
+    "successTitle": "Anfrage erhalten",
+    "successText": "Wir melden uns zur Bestätigung Ihres Termins bei Ihnen."
   }
 }

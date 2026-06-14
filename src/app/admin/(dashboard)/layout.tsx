@@ -4,6 +4,7 @@ import {
   BarChart3,
   BellRing,
   Briefcase,
+  CalendarClock,
   Cookie as CookieIcon,
   Inbox,
   LayoutDashboard,
@@ -81,6 +82,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/stellen",
         label: "Stellenanzeigen",
         icon: Briefcase,
+        roles: ["SUPER_ADMIN", "HR"]
+      },
+      {
+        href: "/admin/termine",
+        label: "Termine",
+        icon: CalendarClock,
         roles: ["SUPER_ADMIN", "HR"]
       },
       {

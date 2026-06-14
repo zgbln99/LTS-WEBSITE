@@ -600,5 +600,23 @@
     "ctaText": "Send us a speculative application. We will get in touch as soon as a matching route opens up.",
     "ctaButton": "Apply now",
     "allJobs": "View all job offers"
+  },
+  "appointment": {
+    "title": "Book an appointment or trial day",
+    "intro": "Prefer to meet in person? Arrange an interview or a trial day. We will call you back to confirm.",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email (optional)",
+    "type": "Request",
+    "typeInterview": "Interview",
+    "typeTrial": "Trial day",
+    "date": "Preferred date (optional)",
+    "timeWindow": "Time window",
+    "windowMorning": "Morning",
+    "windowAfternoon": "Afternoon",
+    "windowFlexible": "Flexible",
+    "message": "Message (optional)",
+    "successTitle": "Request received",
+    "successText": "We will contact you to confirm your appointment."
   }
 }

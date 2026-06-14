@@ -65,6 +65,18 @@ export const callbackRequestSchema = z.object({
   consent: consentSchema
 });
 
+export const appointmentRequestSchema = z.object({
+  locale: localeSchema,
+  name: z.string().trim().min(2).max(160),
+  phone: z.string().trim().min(5).max(40),
+  email: z.preprocess(emptyToUndefined, z.string().email().max(254).optional()),
+  type: z.enum(["interview", "trial_day"]),
+  preferredDate: z.preprocess(emptyToUndefined, z.string().max(20).optional()),
+  timeWindow: z.enum(["morning", "afternoon", "flexible"]),
+  message: z.preprocess(emptyToUndefined, z.string().max(2000).optional()),
+  consent: consentSchema
+});
+
 export const jobCategoryKeys = [
   "drivers",
   "dispatchers",

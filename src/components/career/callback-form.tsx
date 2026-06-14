@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Phone } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { HoneypotField } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
@@ -13,6 +14,7 @@ import { idleFormState } from "@/lib/forms";
 export function CallbackPanel() {
   const t = useTranslations("career.callback");
   const tForms = useTranslations("forms");
+  const tAppointment = useTranslations("appointment");
   const locale = useLocale();
   const [state, action, pending] = useActionState(
     submitCallbackRequest,
@@ -83,6 +85,12 @@ export function CallbackPanel() {
             <Button type="submit" size="lg" disabled={pending} className="w-full">
               {pending ? tForms("labels.sending") : t("submit")}
             </Button>
+            <Link
+              href="/karriere/termin"
+              className="block text-center text-sm font-medium text-mist-300 underline-offset-4 hover:text-white hover:underline"
+            >
+              {tAppointment("title")}
+            </Link>
           </form>
         )}
       </div>

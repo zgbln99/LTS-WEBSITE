@@ -611,6 +611,24 @@ model MailNotification {
   @@index([status, createdAt])
 }
 
+// Termin- und Probetag-Anfragen von Bewerbern.
+model AppointmentRequest {
+  id            String        @id @default(cuid())
+  name          String
+  phone         String
+  email         String?
+  type          String // interview | trial_day
+  preferredDate String? // freier Wunschtermin als Text
+  timeWindow    String // morning | afternoon | flexible
+  message       String?       @db.Text
+  locale        String        @default("de")
+  status        RequestStatus @default(NEW)
+  ipHash        String?
+  createdAt     DateTime      @default(now())
+
+  @@index([status, createdAt])
+}
+
 // Nachweis erteilter Cookie-Einwilligungen (DSGVO-Dokumentation).
 model ConsentLog {
   id        String   @id @default(cuid())

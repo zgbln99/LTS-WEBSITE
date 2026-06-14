@@ -17,6 +17,7 @@ import {
   MAX_FILE_SIZE,
   MAX_TOTAL_SIZE,
   applicationSchema,
+  appointmentRequestSchema,
   callbackRequestSchema,
   contactRequestSchema,
   transportRequestSchema,
@@ -302,6 +303,81 @@ export async function submitCallbackRequest(
     subject: `Neue Rückrufbitte: ${data.phone}`,
     text: notificationText("Neue Rückrufbitte von der Karriereseite", rows),
     html: notificationHtml("Neue Rückrufbitte von der Karriereseite", rows)
+  });
+
+  if (!stored && !mailed) {
+    return { status: "error", code: "generic" };
+  }
+  return { status: "success" };
+}
+
+// Termin- bzw. Probetag-Anfrage von der Karriereseite.
+export async function submitAppointmentRequest(
+  _prev: FormActionState,
+  formData: FormData
+): Promise<FormActionState> {
+  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
+    return { status: "success" };
+  }
+
+  const ipHash = await getClientIpHash();
+  if (isRateLimited("appointment", ipHash)) {
+    return { status: "error", code: "rateLimit" };
+  }
+
+  const parsed = appointmentRequestSchema.safeParse(
+    Object.fromEntries(formData.entries())
+  );
+  if (!parsed.success) {
+    return { status: "error", code: "validation" };
+  }
+  const data = parsed.data;
+
+  let stored = false;
+  try {
+    await prisma.appointmentRequest.create({
+      data: {
+        name: data.name,
+        phone: data.phone,
+        email: data.email ?? null,
+        type: data.type,
+        preferredDate: data.preferredDate ?? null,
+        timeWindow: data.timeWindow,
+        message: data.message ?? null,
+        locale: data.locale,
+        ipHash
+      }
+    });
+    stored = true;
+  } catch (error) {
+    console.error("Terminanfrage konnte nicht gespeichert werden:", error);
+  }
+
+  const typeLabel = data.type === "trial_day" ? "Probetag" : "Vorstellungsgespräch";
+  const windowLabel = {
+    morning: "Vormittags",
+    afternoon: "Nachmittags",
+    flexible: "Flexibel"
+  }[data.timeWindow];
+  const rows: [string, string][] = [
+    ["Name", data.name],
+    ["Telefon", data.phone],
+    ["E-Mail", data.email ?? ""],
+    ["Art", typeLabel],
+    ["Wunschtermin", data.preferredDate ?? ""],
+    ["Zeitfenster", windowLabel],
+    ["Nachricht", data.message ?? ""],
+    ["Sprache", data.locale]
+  ];
+
+  const recipients = await getMailRecipients();
+  const mailed = await sendInternalNotification({
+    kind: "CALLBACK",
+    to: recipients.hr,
+    replyTo: data.email,
+    subject: `Neue Terminanfrage (${typeLabel}): ${data.name}`,
+    text: notificationText("Neue Terminanfrage von der Karriereseite", rows),
+    html: notificationHtml("Neue Terminanfrage von der Karriereseite", rows)
   });
 
   if (!stored && !mailed) {

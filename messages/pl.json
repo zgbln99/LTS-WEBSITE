@@ -600,5 +600,23 @@
     "ctaText": "Wyślij nam zgłoszenie spontaniczne. Odezwiemy się, gdy tylko pojawi się pasująca trasa.",
     "ctaButton": "Aplikuj teraz",
     "allJobs": "Zobacz wszystkie oferty"
+  },
+  "appointment": {
+    "title": "Umów spotkanie lub dzień próbny",
+    "intro": "Wolisz poznać się osobiście? Umów rozmowę lub dzień próbny. Oddzwonimy, aby potwierdzić termin.",
+    "name": "Imię i nazwisko",
+    "phone": "Telefon",
+    "email": "E-mail (opcjonalnie)",
+    "type": "Sprawa",
+    "typeInterview": "Rozmowa kwalifikacyjna",
+    "typeTrial": "Dzień próbny",
+    "date": "Preferowany termin (opcjonalnie)",
+    "timeWindow": "Przedział czasu",
+    "windowMorning": "Przed południem",
+    "windowAfternoon": "Po południu",
+    "windowFlexible": "Elastycznie",
+    "message": "Wiadomość (opcjonalnie)",
+    "successTitle": "Zgłoszenie przyjęte",
+    "successText": "Skontaktujemy się, aby potwierdzić termin."
   }
 }

@@ -600,5 +600,23 @@
     "ctaText": "Bize ön başvurunuzu gönderin. Uygun bir güzergah açıldığında sizinle iletişime geçeceğiz.",
     "ctaButton": "Hemen başvur",
     "allJobs": "Tüm iş ilanlarını gör"
+  },
+  "appointment": {
+    "title": "Randevu veya deneme günü ayarlayın",
+    "intro": "Yüz yüze tanışmayı mı tercih edersiniz? Görüşme veya deneme günü ayarlayın. Onaylamak için sizi geri arayacağız.",
+    "name": "Ad Soyad",
+    "phone": "Telefon",
+    "email": "E-posta (isteğe bağlı)",
+    "type": "Talep",
+    "typeInterview": "Görüşme",
+    "typeTrial": "Deneme günü",
+    "date": "Tercih edilen tarih (isteğe bağlı)",
+    "timeWindow": "Zaman aralığı",
+    "windowMorning": "Sabah",
+    "windowAfternoon": "Öğleden sonra",
+    "windowFlexible": "Esnek",
+    "message": "Mesaj (isteğe bağlı)",
+    "successTitle": "Talep alındı",
+    "successText": "Randevunuzu onaylamak için sizinle iletişime geçeceğiz."
   }
 }
