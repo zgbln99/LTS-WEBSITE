@@ -192,3 +192,27 @@
     color: transparent;
   }
 }
+
+/* Ausgewogenes Karten-Raster: gleich gefüllte Reihen, letzte Reihe zentriert.
+   Die Spaltenzahl kommt aus --cards-cols (im Markup gesetzt). */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+.card-grid > * {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .card-grid > * {
+    width: calc(50% - 0.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  .card-grid > * {
+    width: calc(
+      (100% - (var(--cards-cols) - 1) * 1rem) / var(--cards-cols)
+    );
+  }
+}

@@ -3,6 +3,7 @@
 // Bausteine des Page-Builders. Alle Blöcke nutzen das Design-System der
 // Website, damit bearbeitete Seiten exakt wie der Rest aussehen.
 
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ArrowRight, Check, MapPin, Phone, Quote } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -446,11 +447,6 @@ export interface CardsProps extends SpacingProps {
 
 export function CardsBlock(props: CardsProps) {
   const dark = props.theme === "dark";
-  const cols = {
-    "2": "sm:grid-cols-2",
-    "3": "sm:grid-cols-2 lg:grid-cols-3",
-    "4": "sm:grid-cols-2 lg:grid-cols-4"
-  };
   // Leere Karten ausblenden, damit die Reihen ohne Lücken zusammenpassen.
   const items = props.items.filter((item) => {
     const textPlain = (item.text ?? "")
@@ -465,6 +461,13 @@ export function CardsBlock(props: CardsProps) {
     );
   });
   if (items.length === 0) return null;
+
+  // Spaltenzahl so wählen, dass die Reihen gleichmäßig gefüllt sind
+  // (z.B. 5 Karten -> 3 + 2 statt 4 + 1), letzte Reihe wird zentriert.
+  const maxCols = Number(props.columns) || 3;
+  const rows = Math.max(1, Math.ceil(items.length / maxCols));
+  const balancedCols = Math.ceil(items.length / rows);
+
   return (
     <Section
       theme={props.theme}
@@ -472,7 +475,10 @@ export function CardsBlock(props: CardsProps) {
       padTopPx={props.padTopPx}
       padBottomPx={props.padBottomPx}
     >
-      <div className={cn("grid items-stretch gap-4", cols[props.columns])}>
+      <div
+        className="card-grid"
+        style={{ "--cards-cols": balancedCols } as CSSProperties}
+      >
         {items.map((item, index) => {
           const hasPhoto = props.style === "photo" && Boolean(item.image);
           const inner = (
@@ -531,7 +537,7 @@ export function CardsBlock(props: CardsProps) {
             </div>
           );
           return item.href ? (
-            <a key={index} href={item.href}>
+            <a key={index} href={item.href} className="block">
               {inner}
             </a>
           ) : (
