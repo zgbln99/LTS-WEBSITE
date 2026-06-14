@@ -451,6 +451,20 @@ export function CardsBlock(props: CardsProps) {
     "3": "sm:grid-cols-2 lg:grid-cols-3",
     "4": "sm:grid-cols-2 lg:grid-cols-4"
   };
+  // Leere Karten ausblenden, damit die Reihen ohne Lücken zusammenpassen.
+  const items = props.items.filter((item) => {
+    const textPlain = (item.text ?? "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .trim();
+    return (
+      item.title?.trim() ||
+      item.specs?.trim() ||
+      item.image?.trim() ||
+      textPlain
+    );
+  });
+  if (items.length === 0) return null;
   return (
     <Section
       theme={props.theme}
@@ -458,8 +472,9 @@ export function CardsBlock(props: CardsProps) {
       padTopPx={props.padTopPx}
       padBottomPx={props.padBottomPx}
     >
-      <div className={cn("grid gap-4", cols[props.columns])}>
-        {props.items.map((item, index) => {
+      <div className={cn("grid items-stretch gap-4", cols[props.columns])}>
+        {items.map((item, index) => {
+          const hasPhoto = props.style === "photo" && Boolean(item.image);
           const inner = (
             <div
               className={cn(
@@ -470,7 +485,7 @@ export function CardsBlock(props: CardsProps) {
                 item.href && "hover:-translate-y-1 hover:shadow-card-hover"
               )}
             >
-              {props.style === "photo" && item.image ? (
+              {hasPhoto ? (
                 <div className="relative h-44 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <Image
@@ -487,7 +502,8 @@ export function CardsBlock(props: CardsProps) {
                 </div>
               ) : null}
               <div className="flex flex-1 flex-col p-6">
-                {props.style !== "photo" ? (
+                {/* Titel im Textbereich zeigen, wenn kein Foto über der Karte liegt. */}
+                {!hasPhoto && item.title ? (
                   <h3
                     className={cn(
                       "font-display text-lg font-bold",
