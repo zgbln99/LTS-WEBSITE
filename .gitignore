@@ -34,3 +34,9 @@ yarn-error.log*
 # hochgeladene Medien
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

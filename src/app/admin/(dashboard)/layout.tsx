@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
+  BarChart3,
   BellRing,
   Briefcase,
   Inbox,
@@ -85,6 +86,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/benachrichtigungen",
         label: "Benachrichtigungen",
         icon: BellRing,
+        roles: ["SUPER_ADMIN", "HR", "MARKETING"]
+      },
+      {
+        href: "/admin/kpi",
+        label: "Auswertungen",
+        icon: BarChart3,
         roles: ["SUPER_ADMIN", "HR", "MARKETING"]
       }
     ]
