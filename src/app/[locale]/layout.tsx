@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Inter, Manrope } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, type Locale } from "@/i18n/routing";
@@ -13,18 +12,6 @@ import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/consent/cookie-consent";
 import { Analytics } from "@/components/consent/analytics";
 import "../globals.css";
-
-const inter = Inter({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  variable: "--font-inter",
-  display: "swap"
-});
-
-const manrope = Manrope({
-  subsets: ["latin", "latin-ext", "cyrillic"],
-  variable: "--font-manrope",
-  display: "swap"
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -70,7 +57,7 @@ export default async function LocaleLayout({
   const analytics = await getAnalyticsSettings();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${manrope.variable}`}>
+    <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <Header

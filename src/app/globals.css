@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Cabinet Grotesk (Fontshare). Variable-Datei deckt alle Schnitte 100-900 ab.
+   Datei liegt im persistenten Upload-Volume: /opt/lts-website/public/uploads/.
+   Fehlt sie, fällt die Seite sauber auf Systemschriften zurück. */
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/uploads/CabinetGrotesk-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Farbsystem LTS Logistik */
   --color-night-950: #070b14;
@@ -23,10 +34,9 @@
   --color-mint-400: #2ee6a8;
   --color-mint-500: #17c98c;
 
-  /* Typografie */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
+  /* Typografie: Cabinet Grotesk für die gesamte Seite */
+  --font-sans: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
 
   /* Radius */
   --radius-card: 1.25rem;
