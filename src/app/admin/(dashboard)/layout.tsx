@@ -19,6 +19,7 @@ import {
   Search,
   Settings,
   ShieldCheck,
+  Shuffle,
   Type,
   Users,
   type LucideIcon
@@ -149,6 +150,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         label: "Fußzeile",
         icon: PanelBottom,
         roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/redirects",
+        label: "Weiterleitungen",
+        icon: Shuffle,
+        roles: ["SUPER_ADMIN", "MARKETING"]
       }
     ]
   },
