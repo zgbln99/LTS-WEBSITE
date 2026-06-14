@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import {
   AlignCenter,
+  AlignJustify,
   AlignLeft,
   AlignRight,
   Bold,
@@ -139,6 +140,13 @@ function Toolbar({
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
       >
         <AlignRight className="h-3.5 w-3.5" />
+      </ToolbarButton>
+      <ToolbarButton
+        title="Blocksatz"
+        active={editor.isActive({ textAlign: "justify" })}
+        onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+      >
+        <AlignJustify className="h-3.5 w-3.5" />
       </ToolbarButton>
       <span className="mx-1 h-5 w-px bg-mist-200" />
       <ToolbarButton

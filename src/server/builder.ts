@@ -34,7 +34,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     li: ["style"]
   },
   allowedStyles: {
-    "*": { "text-align": [/^left$|^center$|^right$/] }
+    "*": { "text-align": [/^left$|^center$|^right$|^justify$/] }
   },
   allowedSchemes: ["http", "https", "mailto", "tel"]
 };
