@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { CtaBanner } from "@/components/sections/cta-banner";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { getServiceCities } from "@/server/content";
 
 export const revalidate = 300;
@@ -19,7 +19,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.about" });
-  return pageMetadata(locale, "/unternehmen", t("title"), t("description"));
+  return seoMetadata("unternehmen", locale, "/unternehmen", t("title"), t("description"));
 }
 
 const valueIcons = [Award, Timer, Handshake, MapPin];

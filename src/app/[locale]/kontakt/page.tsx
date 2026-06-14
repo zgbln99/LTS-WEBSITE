@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { ContactForm } from "@/components/forms/contact-form";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { JsonLdScript, organizationSchema } from "@/lib/schema";
 import { company, fullAddress } from "@/data/company";
 import { getServiceCities } from "@/server/content";
@@ -21,7 +21,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.contact" });
-  return pageMetadata(locale, "/kontakt", t("title"), t("description"));
+  return seoMetadata("kontakt", locale, "/kontakt", t("title"), t("description"));
 }
 
 export default async function ContactPage({ params }: Props) {

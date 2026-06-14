@@ -10,7 +10,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ApplicationForm } from "@/components/forms/application-form";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { company } from "@/data/company";
 
 export const revalidate = 300;
@@ -20,7 +20,8 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.driver" });
-  return pageMetadata(
+  return seoMetadata(
+    "lkw-fahrer",
     locale,
     "/karriere/lkw-fahrer",
     t("title"),

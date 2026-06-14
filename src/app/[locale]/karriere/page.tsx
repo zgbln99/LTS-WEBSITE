@@ -26,7 +26,7 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { JobBoard } from "@/components/career/job-board";
 import { CallbackPanel } from "@/components/career/callback-form";
 import { getPublishedJobs } from "@/server/content";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { company } from "@/data/company";
 import { cn } from "@/lib/utils";
 
@@ -39,7 +39,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.career" });
-  return pageMetadata(locale, "/karriere", t("title"), t("description"));
+  return seoMetadata("karriere", locale, "/karriere", t("title"), t("description"));
 }
 
 const categoryIcons: LucideIcon[] = [

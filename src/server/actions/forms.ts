@@ -3,10 +3,10 @@
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/server/db";
 import {
+  confirmationHtml,
   getMailRecipients,
   notificationHtml,
   notificationText,
-  sendMail,
   type MailAttachment
 } from "@/server/mailer";
 import { getClientIpHash, isRateLimited } from "@/server/rate-limit";
@@ -50,16 +50,19 @@ async function sendConfirmation(
   bodyKey: "inquiryBody" | "applicationBody" | "contactBody",
   values: Record<string, string>
 ) {
-  try {
-    const t = await getTranslations({ locale, namespace: "forms.emails" });
-    await sendMail({
-      to,
-      subject: t(subjectKey, values),
-      text: t(bodyKey, values)
-    });
-  } catch (error) {
-    console.error("Bestätigungs-E-Mail fehlgeschlagen:", error);
-  }
+  const t = await getTranslations({ locale, namespace: "forms.emails" });
+  const subject = t(subjectKey, values);
+  const text = t(bodyKey, values);
+  // Automatische Bestätigung an den Absender in seiner Sprache,
+  // protokolliert und bei Bedarf erneut versendbar.
+  await sendInternalNotification({
+    kind: "CONFIRMATION",
+    to,
+    subject,
+    text,
+    html: confirmationHtml(text),
+    reference: values.reference
+  });
 }
 
 export async function submitTransportRequest(

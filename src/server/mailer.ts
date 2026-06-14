@@ -115,3 +115,28 @@ export function notificationText(title: string, rows: [string, string][]) {
       .map(([label, value]) => `${label}: ${value}`)
   ].join("\n");
 }
+
+// Freundliches, an den Absender gerichtetes Bestätigungs-Layout.
+// Wandelt den vorhandenen Textkörper in formatiertes HTML um.
+export function confirmationHtml(bodyText: string) {
+  const paragraphs = bodyText
+    .split(/\n\s*\n/)
+    .map(
+      (paragraph) =>
+        `<p style="margin:0 0 14px;color:#0b0f1a;font-size:15px;line-height:1.65">${escapeHtml(
+          paragraph
+        ).replace(/\n/g, "<br/>")}</p>`
+    )
+    .join("");
+
+  return `<!doctype html><html><body style="margin:0;background:#f7f8fa;font-family:Arial,Helvetica,sans-serif">
+  <div style="max-width:640px;margin:0 auto;padding:32px 16px">
+    <div style="background:#0b101d;border-radius:16px 16px 0 0;padding:22px 28px">
+      <span style="color:#ffffff;font-size:18px;font-weight:bold">LTS Logistik</span>
+    </div>
+    <div style="background:#ffffff;border-radius:0 0 16px 16px;padding:28px">
+      ${paragraphs}
+    </div>
+  </div>
+</body></html>`;
+}

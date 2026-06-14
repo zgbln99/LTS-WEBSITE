@@ -19,7 +19,8 @@ const kindLabels: Record<NotificationKind, string> = {
   APPLICATION: "Bewerbung",
   CONTACT: "Kontaktanfrage",
   CALLBACK: "Rückrufbitte",
-  TRANSPORT: "Transportanfrage"
+  TRANSPORT: "Transportanfrage",
+  CONFIRMATION: "Bestätigung an Absender"
 };
 
 export default async function NotificationsPage() {

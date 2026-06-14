@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import type { Role } from "@prisma/client";
+import { Prisma, type Role } from "@prisma/client";
 import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { writeAuditLog } from "@/server/audit";
@@ -129,6 +129,65 @@ export async function saveGeneralAction(values: unknown) {
     "/kontakt"
   ]);
   revalidatePath("/admin/einstellungen");
+  return { ok: true };
+}
+
+const seoEntrySchema = z.object({
+  title: z.string().trim().max(200),
+  description: z.string().trim().max(320)
+});
+
+const SEO_HREFS: Record<string, string> = {
+  unternehmen: "/unternehmen",
+  leistungen: "/leistungen",
+  fuhrpark: "/fuhrpark",
+  karriere: "/karriere",
+  "lkw-fahrer": "/karriere/lkw-fahrer",
+  wissen: "/wissen",
+  kontakt: "/kontakt"
+};
+
+export async function saveSeoAction(
+  pageKey: string,
+  locale: string,
+  values: unknown
+) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const href = SEO_HREFS[pageKey];
+  if (!href) return { ok: false };
+  const parsed = seoEntrySchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  const existing = await prisma.siteSetting.findUnique({
+    where: { key: "seo" }
+  });
+  const current =
+    (existing?.value as Record<
+      string,
+      Record<string, { title: string; description: string }>
+    > | null) ?? {};
+  const next: Prisma.InputJsonValue = {
+    ...current,
+    [pageKey]: { ...current[pageKey], [locale]: parsed.data }
+  };
+
+  await prisma.siteSetting.upsert({
+    where: { key: "seo" },
+    update: { value: next },
+    create: { key: "seo", value: next }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "SeoSettings",
+    entityId: `${pageKey}:${locale}`
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePublic([href]);
+  revalidatePath("/admin/seo");
   return { ok: true };
 }
 

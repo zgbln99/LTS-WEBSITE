@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { getPublishedArticles } from "@/server/content";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
@@ -21,7 +21,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.knowledge" });
-  return pageMetadata(locale, "/wissen", t("title"), t("description"));
+  return seoMetadata("wissen", locale, "/wissen", t("title"), t("description"));
 }
 
 const categoryIcons: LucideIcon[] = [Snowflake, Scale, BookOpen, Newspaper];

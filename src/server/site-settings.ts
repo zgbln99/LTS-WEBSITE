@@ -35,6 +35,14 @@ export interface GeneralSettings {
   recruitingWhatsapp: string;
 }
 
+export interface SeoEntry {
+  title?: string;
+  description?: string;
+}
+
+// pageKey -> locale -> { title, description }
+export type SeoSettings = Record<string, Record<string, SeoEntry>>;
+
 export interface SmtpSettings {
   host: string;
   port: number;
@@ -85,6 +93,12 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
     recruitingPhone: stored?.recruitingPhone || "",
     recruitingWhatsapp: stored?.recruitingWhatsapp || ""
   };
+}
+
+// SEO-Überschreibungen je Seite und Sprache (leer = Standardtexte).
+export async function getSeoSettings(): Promise<SeoSettings> {
+  const stored = (await loadSetting("seo")) as SeoSettings | null;
+  return stored ?? {};
 }
 
 // SMTP-Einstellungen: gespeicherte Werte haben Vorrang vor den .env-Variablen.

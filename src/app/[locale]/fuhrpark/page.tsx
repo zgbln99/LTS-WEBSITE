@@ -9,7 +9,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { StatBar } from "@/components/sections/stat-bar";
 import { CtaBanner } from "@/components/sections/cta-banner";
-import { pageMetadata } from "@/lib/seo";
+import { seoMetadata } from "@/server/seo";
 import { cn } from "@/lib/utils";
 
 // Bilder je Fahrzeugkategorie (Reihenfolge wie in messages fleetPage.categories)
@@ -28,7 +28,7 @@ type Props = { params: Promise<{ locale: Locale }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta.fleet" });
-  return pageMetadata(locale, "/fuhrpark", t("title"), t("description"));
+  return seoMetadata("fuhrpark", locale, "/fuhrpark", t("title"), t("description"));
 }
 
 export default async function FleetPage({ params }: Props) {

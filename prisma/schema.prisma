@@ -582,6 +582,7 @@ enum NotificationKind {
   CONTACT
   CALLBACK
   TRANSPORT
+  CONFIRMATION
 }
 
 enum NotificationStatus {

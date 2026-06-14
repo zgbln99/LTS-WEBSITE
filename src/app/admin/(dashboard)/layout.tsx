@@ -12,6 +12,7 @@ import {
   PanelBottom,
   PencilRuler,
   Quote,
+  Search,
   Settings,
   ShieldCheck,
   Type,
@@ -119,6 +120,12 @@ const navSections: { title: string | null; items: NavItem[] }[] = [
         href: "/admin/texte",
         label: "Website-Texte",
         icon: Type,
+        roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
+      },
+      {
+        href: "/admin/seo",
+        label: "SEO",
+        icon: Search,
         roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"]
       },
       {
