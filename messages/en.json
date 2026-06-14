@@ -589,5 +589,16 @@
     "analyticsDesc": "Helps us understand site usage anonymously.",
     "marketingLabel": "Marketing",
     "marketingDesc": "For reach measurement and ads on other platforms."
+  },
+  "cityLanding": {
+    "eyebrow": "Service area",
+    "title": "Truck driver jobs in {city}",
+    "intro": "We are looking for reliable professional drivers in the {city} area. Modern Mercedes-Benz Actros and Atego, fair pay and plannable routes. Apply directly online.",
+    "openJobs": "Open positions for {city}",
+    "noJobs": "No position is currently posted directly in {city}. Send us your application anyway, we are constantly looking for drivers in the region.",
+    "ctaTitle": "No suitable offer in {city}?",
+    "ctaText": "Send us a speculative application. We will get in touch as soon as a matching route opens up.",
+    "ctaButton": "Apply now",
+    "allJobs": "View all job offers"
   }
 }

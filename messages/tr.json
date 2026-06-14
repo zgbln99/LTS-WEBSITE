@@ -589,5 +589,16 @@
     "analyticsDesc": "Site kullanımını anonim olarak anlamamıza yardımcı olur.",
     "marketingLabel": "Pazarlama",
     "marketingDesc": "Erişim ölçümü ve diğer platformlardaki reklamlar için."
+  },
+  "cityLanding": {
+    "eyebrow": "Çalışma bölgesi",
+    "title": "{city} bölgesinde tır şoförü iş ilanları",
+    "intro": "{city} bölgesi için güvenilir profesyonel şoförler arıyoruz. Modern Mercedes-Benz Actros ve Atego, adil ücret ve planlanabilir güzergahlar. Doğrudan online başvurun.",
+    "openJobs": "{city} için açık pozisyonlar",
+    "noJobs": "Şu anda doğrudan {city} bölgesinde ilan bulunmuyor. Yine de başvurunuzu gönderin, bölgede sürekli şoför arıyoruz.",
+    "ctaTitle": "{city} bölgesinde uygun teklif yok mu?",
+    "ctaText": "Bize ön başvurunuzu gönderin. Uygun bir güzergah açıldığında sizinle iletişime geçeceğiz.",
+    "ctaButton": "Hemen başvur",
+    "allJobs": "Tüm iş ilanlarını gör"
   }
 }

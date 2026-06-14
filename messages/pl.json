@@ -589,5 +589,16 @@
     "analyticsDesc": "Pomaga nam anonimowo rozumieć korzystanie ze strony.",
     "marketingLabel": "Marketing",
     "marketingDesc": "Do pomiaru zasięgu i reklam na innych platformach."
+  },
+  "cityLanding": {
+    "eyebrow": "Obszar działania",
+    "title": "Praca dla kierowcy w {city}",
+    "intro": "Szukamy solidnych zawodowych kierowców w rejonie {city}. Nowoczesne Mercedes-Benz Actros i Atego, uczciwe wynagrodzenie i przewidywalne trasy. Aplikuj bezpośrednio online.",
+    "openJobs": "Otwarte oferty dla {city}",
+    "noJobs": "Obecnie brak oferty bezpośrednio w {city}. Wyślij nam mimo to swoje zgłoszenie, stale szukamy kierowców w regionie.",
+    "ctaTitle": "Brak pasującej oferty w {city}?",
+    "ctaText": "Wyślij nam zgłoszenie spontaniczne. Odezwiemy się, gdy tylko pojawi się pasująca trasa.",
+    "ctaButton": "Aplikuj teraz",
+    "allJobs": "Zobacz wszystkie oferty"
   }
 }

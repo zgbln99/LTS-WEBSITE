@@ -589,5 +589,16 @@
     "analyticsDesc": "Hilft uns, die Nutzung der Website anonym zu verstehen.",
     "marketingLabel": "Marketing",
     "marketingDesc": "Für Reichweitenmessung und Anzeigen auf anderen Plattformen."
+  },
+  "cityLanding": {
+    "eyebrow": "Einsatzort",
+    "title": "LKW-Fahrer Jobs in {city}",
+    "intro": "Wir suchen zuverlässige Berufskraftfahrer für den Raum {city}. Moderne Mercedes-Benz Actros und Atego, faire Bezahlung und planbare Touren. Bewerben Sie sich direkt online.",
+    "openJobs": "Offene Stellen für {city}",
+    "noJobs": "Aktuell keine Stelle direkt in {city} ausgeschrieben. Senden Sie uns trotzdem Ihre Bewerbung, wir suchen laufend Fahrer in der Region.",
+    "ctaTitle": "Kein passendes Angebot in {city}?",
+    "ctaText": "Senden Sie uns Ihre Initiativbewerbung. Wir melden uns, sobald eine passende Tour frei wird.",
+    "ctaButton": "Jetzt bewerben",
+    "allJobs": "Alle Stellenangebote ansehen"
   }
 }

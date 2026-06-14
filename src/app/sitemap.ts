@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { locales, routing, type AppPathname } from "@/i18n/routing";
 import { getServiceSlug, serviceOrder } from "@/data/services";
 import { localizedUrl } from "@/lib/seo";
+import { getServiceCities } from "@/server/content";
+import { slugify } from "@/lib/slug";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 
@@ -95,6 +97,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 params: { slug: slugByLocale.get(l)! }
               })
             ])
+          )
+        }
+      });
+    }
+  }
+
+  // Einsatzort-Landingpages (LKW-Fahrer Jobs in {Stadt}) je Sprache.
+  const cities = await getServiceCities();
+  for (const city of cities) {
+    const stadt = slugify(city.city);
+    for (const locale of locales) {
+      const href = {
+        pathname: "/karriere/orte/[stadt]" as const,
+        params: { stadt }
+      };
+      entries.push({
+        url: localizedUrl(locale, href),
+        changeFrequency: "weekly",
+        priority: 0.7,
+        alternates: {
+          languages: Object.fromEntries(
+            locales.map((l) => [l, localizedUrl(l, href)])
           )
         }
       });

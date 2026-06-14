@@ -58,6 +58,13 @@ export const routing = defineRouting({
       tr: "/kariyer/ilan/[slug]",
       uk: "/karyera/vakansiya/[slug]"
     },
+    "/karriere/orte/[stadt]": {
+      de: "/karriere/orte/[stadt]",
+      en: "/careers/locations/[stadt]",
+      pl: "/kariera/lokalizacje/[stadt]",
+      tr: "/kariyer/lokasyonlar/[stadt]",
+      uk: "/karyera/lokatsiyi/[stadt]"
+    },
     "/wissen": {
       de: "/wissen",
       en: "/knowledge",

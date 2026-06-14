@@ -16,7 +16,10 @@ const navItems: {
   key: string;
   href: Exclude<
     AppPathname,
-    "/leistungen/[slug]" | "/karriere/stelle/[slug]" | "/wissen/[slug]"
+    | "/leistungen/[slug]"
+    | "/karriere/stelle/[slug]"
+    | "/karriere/orte/[stadt]"
+    | "/wissen/[slug]"
   >;
 }[] = [
   { key: "about", href: "/unternehmen" },
