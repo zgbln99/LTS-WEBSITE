@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { requireRole } from "@/auth";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { JobForm } from "@/components/admin/job-form";
+import { getTranslationSettings } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,8 @@ export const metadata = { title: "Neue Stelle" };
 export default async function NewJobPage() {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
   if (!session) redirect("/admin");
+
+  const { sourceLocale } = await getTranslationSettings();
 
   return (
     <div className="space-y-6">
@@ -28,7 +31,7 @@ export default async function NewJobPage() {
         </h1>
       </div>
       <AdminCard>
-        <JobForm />
+        <JobForm sourceLocale={sourceLocale} />
       </AdminCard>
     </div>
   );

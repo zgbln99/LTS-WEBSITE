@@ -3,14 +3,16 @@ import { requireRole } from "@/auth";
 import {
   AnalyticsForm,
   GeneralForm,
-  SmtpForm
+  SmtpForm,
+  TranslationForm
 } from "@/components/admin/settings-forms";
 import { SmtpTester } from "@/components/admin/smtp-tester";
 import { getMailConfigSummary } from "@/server/mailer";
 import {
   getAnalyticsSettings,
   getGeneralSettings,
-  getSmtpSettings
+  getSmtpSettings,
+  getTranslationSettings
 } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
@@ -21,11 +23,12 @@ export default async function SettingsPage() {
   const session = await requireRole(["SUPER_ADMIN"]);
   if (!session) redirect("/admin");
 
-  const [general, smtp, summary, analytics] = await Promise.all([
+  const [general, smtp, summary, analytics, translation] = await Promise.all([
     getGeneralSettings(),
     getSmtpSettings(),
     getMailConfigSummary(),
-    getAnalyticsSettings()
+    getAnalyticsSettings(),
+    getTranslationSettings()
   ]);
 
   // Passwort nie an den Client geben.
@@ -44,6 +47,13 @@ export default async function SettingsPage() {
       </div>
 
       <GeneralForm initial={general} />
+      <TranslationForm
+        initial={{
+          sourceLocale: translation.sourceLocale,
+          autoTranslate: translation.autoTranslate,
+          hasKey: Boolean(translation.deeplKey)
+        }}
+      />
       <AnalyticsForm initial={analytics} />
       <SmtpForm initial={smtpWithoutPassword} />
       <SmtpTester

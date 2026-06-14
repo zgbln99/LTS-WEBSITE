@@ -5,13 +5,23 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import {
   saveAnalyticsAction,
   saveGeneralAction,
-  saveSmtpAction
+  saveSmtpAction,
+  saveTranslationAction
 } from "@/server/actions/settings";
 import type {
   AnalyticsSettings,
   GeneralSettings,
-  SmtpSettings
+  SmtpSettings,
+  TranslationSettings
 } from "@/server/site-settings";
+
+const LOCALE_NAMES: Record<string, string> = {
+  de: "Deutsch",
+  en: "English",
+  pl: "Polski",
+  tr: "Türkçe",
+  uk: "Українська"
+};
 
 function StatusNote({ note }: { note: string | null }) {
   if (!note) return null;
@@ -100,6 +110,88 @@ export function GeneralForm({ initial }: { initial: GeneralSettings }) {
           />
         </Field>
       </div>
+      <div className="mt-5 flex items-center gap-4">
+        <button
+          type="button"
+          onClick={save}
+          disabled={pending}
+          className="inline-flex h-11 items-center rounded-xl bg-accent-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-accent-600 disabled:opacity-50"
+        >
+          {pending ? "Speichert ..." : "Speichern"}
+        </button>
+        <StatusNote note={note} />
+      </div>
+    </div>
+  );
+}
+
+export function TranslationForm({
+  initial
+}: {
+  initial: Omit<TranslationSettings, "deeplKey"> & { hasKey: boolean };
+}) {
+  const [sourceLocale, setSourceLocale] = useState(initial.sourceLocale);
+  const [autoTranslate, setAutoTranslate] = useState(initial.autoTranslate);
+  const [deeplKey, setDeeplKey] = useState("");
+  const [note, setNote] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  const save = () =>
+    startTransition(async () => {
+      const result = await saveTranslationAction({
+        deeplKey,
+        sourceLocale,
+        autoTranslate
+      });
+      setNote(result.ok ? "Gespeichert." : "Fehler beim Speichern.");
+      setDeeplKey("");
+      setTimeout(() => setNote(null), 4000);
+    });
+
+  return (
+    <div className="rounded-2xl bg-white p-5 shadow-card sm:p-6">
+      <h2 className="font-display text-base font-bold text-night-900">
+        Automatische Übersetzung (DeepL)
+      </h2>
+      <p className="mt-1 text-sm text-mist-500">
+        Inhalte in der Ausgangssprache schreiben - die übrigen Sprachen werden
+        automatisch übersetzt. Schlüsselfeld leer lassen = unverändert.
+      </p>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <Field label="DeepL API-Schlüssel" htmlFor="tr-key">
+          <Input
+            id="tr-key"
+            type="password"
+            value={deeplKey}
+            onChange={(e) => setDeeplKey(e.target.value)}
+            placeholder={initial.hasKey ? "gespeichert - leer lassen" : "DeepL-Schlüssel"}
+            autoComplete="new-password"
+          />
+        </Field>
+        <Field label="Ausgangssprache" htmlFor="tr-src">
+          <select
+            id="tr-src"
+            value={sourceLocale}
+            onChange={(e) => setSourceLocale(e.target.value)}
+            className="h-12 w-full appearance-none rounded-xl border border-mist-300 bg-white px-4 text-sm text-night-900 outline-none focus:border-accent-500"
+          >
+            {Object.entries(LOCALE_NAMES).map(([code, name]) => (
+              <option key={code} value={code}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      <label className="mt-4 flex cursor-pointer items-center gap-2.5 text-sm text-night-900">
+        <input
+          type="checkbox"
+          checked={autoTranslate}
+          onChange={(e) => setAutoTranslate(e.target.checked)}
+          className="h-4 w-4 rounded border-mist-300 accent-[#e11d24]"
+        />
+        Beim Speichern automatisch in alle Sprachen übersetzen
+      </label>
       <div className="mt-5 flex items-center gap-4">
         <button
           type="button"

@@ -6,6 +6,7 @@ import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { JobForm } from "@/components/admin/job-form";
+import { getTranslationSettings } from "@/server/site-settings";
 import { localizedUrl } from "@/lib/seo";
 import { routing } from "@/i18n/routing";
 
@@ -29,6 +30,8 @@ export default async function EditJobPage({
     })
   );
   if (!job) notFound();
+
+  const { sourceLocale } = await getTranslationSettings();
 
   const deSlug = job.translations.find(
     (translation) => translation.locale === routing.defaultLocale
@@ -55,7 +58,7 @@ export default async function EditJobPage({
         </h1>
       </div>
       <AdminCard>
-        <JobForm job={job} />
+        <JobForm job={job} sourceLocale={sourceLocale} />
       </AdminCard>
 
       <AdminCard title="QR-Code">

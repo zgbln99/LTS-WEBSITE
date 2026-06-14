@@ -45,6 +45,12 @@ export interface EmailTemplate {
 // templateKey (inquiry|application|contact) -> locale -> { subject, body }
 export type EmailTemplates = Record<string, Record<string, EmailTemplate>>;
 
+export interface TranslationSettings {
+  deeplKey: string;
+  sourceLocale: string;
+  autoTranslate: boolean;
+}
+
 export interface AnalyticsSettings {
   matomoUrl: string;
   matomoSiteId: string;
@@ -109,6 +115,18 @@ export async function getGeneralSettings(): Promise<GeneralSettings> {
     metaDescription: stored?.metaDescription || "",
     recruitingPhone: stored?.recruitingPhone || "",
     recruitingWhatsapp: stored?.recruitingWhatsapp || ""
+  };
+}
+
+// Übersetzungseinstellungen (DeepL). Schlüssel kann aus .env stammen.
+export async function getTranslationSettings(): Promise<TranslationSettings> {
+  const stored = (await loadSetting(
+    "translation"
+  )) as Partial<TranslationSettings> | null;
+  return {
+    deeplKey: stored?.deeplKey || process.env.DEEPL_API_KEY || "",
+    sourceLocale: stored?.sourceLocale || "pl",
+    autoTranslate: stored?.autoTranslate ?? true
   };
 }
 

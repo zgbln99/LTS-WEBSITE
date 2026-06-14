@@ -181,6 +181,45 @@ export async function saveEmailTemplate(
   return { ok: true };
 }
 
+const translationSchema = z.object({
+  deeplKey: z.string().trim().max(200),
+  sourceLocale: z.enum(["de", "en", "pl", "tr", "uk"]),
+  autoTranslate: z.boolean()
+});
+
+export async function saveTranslationAction(values: unknown) {
+  const session = await requireRole(["SUPER_ADMIN"]);
+  if (!session) redirect("/admin/login");
+
+  const parsed = translationSchema.safeParse(values);
+  if (!parsed.success) return { ok: false };
+
+  // Leeres Schlüsselfeld bedeutet: bisherigen Schlüssel beibehalten.
+  let deeplKey = parsed.data.deeplKey;
+  if (deeplKey === "") {
+    const existing = await prisma.siteSetting.findUnique({
+      where: { key: "translation" }
+    });
+    const stored = existing?.value as { deeplKey?: string } | null;
+    deeplKey = stored?.deeplKey ?? "";
+  }
+
+  await prisma.siteSetting.upsert({
+    where: { key: "translation" },
+    update: { value: { ...parsed.data, deeplKey } },
+    create: { key: "translation", value: { ...parsed.data, deeplKey } }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "TranslationSettings"
+  });
+  revalidateTag(SETTINGS_CACHE_TAG);
+  revalidatePath("/admin/einstellungen");
+  return { ok: true };
+}
+
 const analyticsSchema = z.object({
   matomoUrl: z.string().trim().max(300),
   matomoSiteId: z.string().trim().max(20),

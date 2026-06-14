@@ -10,6 +10,9 @@ import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
 import { notifyJobAlerts } from "@/server/job-alerts";
+import { getTranslationSettings } from "@/server/site-settings";
+import { translateBatch } from "@/server/translate";
+import { locales } from "@/i18n/routing";
 import { revalidatePublic } from "@/server/revalidate-public";
 import { revalidateTag } from "next/cache";
 import { TEXTS_CACHE_TAG } from "@/server/text-overrides";
@@ -76,6 +79,9 @@ export async function saveJobPosting(formData: FormData) {
   const benefits = lines(formData.get("benefits"));
   const slug = slugify(String(formData.get("slug") || data.title));
 
+  const trSettings = await getTranslationSettings();
+  const sourceLocale = trSettings.sourceLocale;
+
   const category = await prisma.jobCategory.upsert({
     where: { key: data.categoryKey },
     update: {},
@@ -97,7 +103,7 @@ export async function saveJobPosting(formData: FormData) {
   };
 
   const translation = {
-    locale: "de",
+    locale: sourceLocale,
     title: data.title,
     slug,
     description: data.description,
@@ -121,7 +127,9 @@ export async function saveJobPosting(formData: FormData) {
             : existing?.publishedAt,
         translations: {
           upsert: {
-            where: { jobPostingId_locale: { jobPostingId: jobId, locale: "de" } },
+            where: {
+              jobPostingId_locale: { jobPostingId: jobId, locale: sourceLocale }
+            },
             update: translation,
             create: translation
           }
@@ -137,6 +145,34 @@ export async function saveJobPosting(formData: FormData) {
       }
     });
     jobId = created.id;
+  }
+
+  // Automatische Übersetzung der Stelle in die übrigen Sprachen.
+  if (trSettings.autoTranslate && trSettings.deeplKey) {
+    const suffix = jobId.slice(-5);
+    const targets = locales.filter((locale) => locale !== sourceLocale);
+    for (const locale of targets) {
+      const payload = [data.title, data.description, ...requirements, ...benefits];
+      const out = await translateBatch(payload, locale, sourceLocale);
+      if (!out) continue;
+      const tTitle = out[0];
+      const tDescription = out[1];
+      const tRequirements = out.slice(2, 2 + requirements.length);
+      const tBenefits = out.slice(2 + requirements.length);
+      const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;
+      const translated = {
+        title: tTitle,
+        slug: localeSlug,
+        description: tDescription,
+        requirements: tRequirements,
+        benefits: tBenefits
+      };
+      await prisma.jobPostingTranslation.upsert({
+        where: { jobPostingId_locale: { jobPostingId: jobId, locale } },
+        update: translated,
+        create: { jobPostingId: jobId, locale, ...translated }
+      });
+    }
   }
 
   await writeAuditLog({

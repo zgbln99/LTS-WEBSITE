@@ -28,10 +28,15 @@ interface JobFormProps {
     translations: JobPostingTranslation[];
     category: { key: string };
   };
+  sourceLocale?: string;
 }
 
-export function JobForm({ job }: JobFormProps) {
-  const translation = job?.translations.find((entry) => entry.locale === "de");
+export function JobForm({ job, sourceLocale = "de" }: JobFormProps) {
+  // Inhalte in der Ausgangssprache laden (Fallback Deutsch / erste Sprache).
+  const translation =
+    job?.translations.find((entry) => entry.locale === sourceLocale) ??
+    job?.translations.find((entry) => entry.locale === "de") ??
+    job?.translations[0];
   const toLines = (value: unknown) =>
     Array.isArray(value) ? value.join("\n") : "";
 
