@@ -80,7 +80,7 @@ export default async function SystemPage() {
       label: "Medien-Speicher (MEGA S4)",
       state: media ? "ok" : "warn",
       detail: media
-        ? `Öffentlicher Bucket aktiv. Editor-Bilder werden hier abgelegt.`
+        ? "Aktiv. Editor-Bilder liegen im Bucket und werden über /api/media ausgeliefert."
         : "Nicht konfiguriert. Bilder liegen lokal unter /uploads."
     },
     {

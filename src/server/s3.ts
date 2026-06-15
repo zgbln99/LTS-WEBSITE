@@ -63,10 +63,13 @@ export async function uploadObject(
   return key;
 }
 
-// --- Öffentliche Medien (Bilder/Videos aus dem Seiten-Editor) ---
-// Eigener, öffentlich lesbarer Bucket (MEGA S4 / S3). Liefert direkte URLs,
-// die in <img src> verwendet werden können - der VPS muss die Dateien dann
-// nicht mehr selbst ausliefern.
+// --- Medien (Bilder/Videos aus dem Seiten-Editor) ---
+// Speicherung in einem MEGA-S4-/S3-Bucket. MEGA S4 unterstützt KEINE
+// öffentlichen Buckets (weder Canned-ACL noch Bucket-Policy), daher werden die
+// Dateien nicht direkt von MEGA, sondern über die eigene Proxy-Route
+// /api/media/<key> ausgeliefert (der Server ist der einzige authentifizierte
+// Leser). Ist eine echte öffentliche CDN-Domain vorhanden, kann sie über
+// S3_PUBLIC_URL gesetzt werden und wird dann direkt verwendet.
 
 function mediaBucket() {
   return process.env.S3_BUCKET_MEDIA ?? "lts-media";
@@ -81,19 +84,12 @@ export function isMediaStorageConfigured() {
   );
 }
 
-// Öffentliche URL für ein Medienobjekt zusammensetzen. Bevorzugt eine eigene
-// CDN-/Public-Domain (S3_PUBLIC_URL). Sonst Virtual-Hosted-Style (Bucket als
-// Subdomain) - MEGA S4 weist Path-Style beim öffentlichen Abruf mit
-// "Invalid URL segment" ab und akzeptiert nur den Bucket-Host.
-export function mediaPublicUrl(key: string) {
+// URL, unter der ein Medienobjekt im Frontend abrufbar ist. Standardmäßig die
+// eigene Proxy-Route; mit S3_PUBLIC_URL eine direkte öffentliche CDN-URL.
+export function mediaUrl(key: string) {
   const base = process.env.S3_PUBLIC_URL?.replace(/\/+$/, "");
   if (base) return `${base}/${key}`;
-  const endpoint = (process.env.S3_ENDPOINT ?? "").replace(/\/+$/, "");
-  const host = endpoint.replace(
-    /^(https?:\/\/)/,
-    (_match, scheme: string) => `${scheme}${mediaBucket()}.`
-  );
-  return `${host}/${key}`;
+  return `/api/media/${key}`;
 }
 
 export async function uploadMedia(
@@ -107,11 +103,17 @@ export async function uploadMedia(
       Key: key,
       Body: body,
       ContentType: contentType,
-      ACL: "public-read",
       CacheControl: "public, max-age=31536000, immutable"
     })
   );
-  return mediaPublicUrl(key);
+  return mediaUrl(key);
+}
+
+// Ein Medienobjekt zum Streamen über die Proxy-Route abrufen.
+export async function getMediaObject(key: string) {
+  return getClient().send(
+    new GetObjectCommand({ Bucket: mediaBucket(), Key: key })
+  );
 }
 
 // Bereits hochgeladene Medien auflisten (neueste zuerst), für die Mediathek.
@@ -132,7 +134,7 @@ export async function listMedia(limit = 60) {
         (b.LastModified?.getTime() ?? 0) - (a.LastModified?.getTime() ?? 0)
     )
     .slice(0, limit);
-  return objects.map((entry) => mediaPublicUrl(entry.Key ?? ""));
+  return objects.map((entry) => mediaUrl(entry.Key ?? ""));
 }
 
 export async function getDownloadUrl(key: string, expiresInSeconds = 3600) {
