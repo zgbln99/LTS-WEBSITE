@@ -100,14 +100,11 @@ export async function publishPageAction(
     data: { status: "PUBLISHED" }
   });
 
-  // Beim Veröffentlichen der Ausgangssprache automatisch alle anderen Sprachen
-  // übersetzen und ebenfalls veröffentlichen.
+  // Beim Veröffentlichen wird die gerade bearbeitete Sprache als Quelle
+  // genommen und automatisch in alle anderen Sprachen übersetzt - egal
+  // welche Sprache veröffentlicht wird.
   const settings = await getTranslationSettings();
-  if (
-    locale === settings.sourceLocale &&
-    settings.autoTranslate &&
-    settings.openaiKey
-  ) {
+  if (settings.autoTranslate && settings.openaiKey) {
     const targets = locales.filter((entry) => entry !== locale);
     for (const target of targets) {
       const translatedData = await translatePageData(data, target, locale);
