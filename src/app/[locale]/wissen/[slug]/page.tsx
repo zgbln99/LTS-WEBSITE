@@ -80,7 +80,7 @@ export default async function ArticlePage({ params }: Props) {
       </PageHero>
 
       <section className="bg-mist-50 py-16 sm:py-24">
-        <Container className="max-w-3xl">
+        <Container className="max-w-4xl">
           {coverImage ? (
             <div className="mb-10 overflow-hidden rounded-3xl">
               {/* eslint-disable-next-line @next/next/no-img-element */}
