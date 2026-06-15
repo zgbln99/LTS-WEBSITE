@@ -52,7 +52,9 @@ export function ImageField({
         setError(
           response.status === 413
             ? "Datei zu groß (max. 8 MB)."
-            : "Upload fehlgeschlagen."
+            : response.status === 502
+              ? "Speicher (MEGA S4) nicht erreichbar."
+              : "Upload fehlgeschlagen."
         );
         return;
       }

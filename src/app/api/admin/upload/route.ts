@@ -3,6 +3,11 @@ import { randomBytes } from "node:crypto";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { requireRole } from "@/auth";
+import {
+  isMediaStorageConfigured,
+  listMedia,
+  uploadMedia
+} from "@/server/s3";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const ALLOWED = new Set([
@@ -55,13 +60,23 @@ export async function POST(request: Request) {
     .slice(0, 40)
     .toLowerCase();
   const name = `${base || "bild"}-${randomBytes(4).toString("hex")}.${extensionFor[file.type]}`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  // Bevorzugt MEGA S4 / S3 (öffentlicher Bucket -> direkte CDN-URL). Fällt auf
+  // das lokale Verzeichnis zurück, wenn kein Object-Storage konfiguriert ist.
+  if (isMediaStorageConfigured()) {
+    try {
+      const url = await uploadMedia(`uploads/${name}`, buffer, file.type);
+      return NextResponse.json({ url });
+    } catch (error) {
+      console.error("Medien-Upload (S3/MEGA S4) fehlgeschlagen:", error);
+      return NextResponse.json({ error: "storage" }, { status: 502 });
+    }
+  }
 
   try {
     await mkdir(UPLOAD_DIR, { recursive: true });
-    await writeFile(
-      path.join(UPLOAD_DIR, name),
-      Buffer.from(await file.arrayBuffer())
-    );
+    await writeFile(path.join(UPLOAD_DIR, name), buffer);
   } catch (error) {
     // Häufigste Ursache in Produktion: das gemountete Upload-Verzeichnis
     // gehört root, der Container läuft aber als Benutzer "nextjs" (uid 1001).
@@ -84,6 +99,15 @@ export async function GET() {
   const session = await requireRole(["SUPER_ADMIN", "MARKETING", "EDITOR"]);
   if (!session) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  if (isMediaStorageConfigured()) {
+    try {
+      return NextResponse.json({ images: await listMedia(60) });
+    } catch (error) {
+      console.error("Mediathek (S3/MEGA S4) konnte nicht geladen werden:", error);
+      return NextResponse.json({ images: [] });
+    }
   }
 
   try {

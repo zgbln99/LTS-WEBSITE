@@ -5,7 +5,7 @@ import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import { getMailConfigSummary } from "@/server/mailer";
-import { isS3Configured } from "@/server/s3";
+import { isMediaStorageConfigured, isS3Configured } from "@/server/s3";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +36,7 @@ export default async function SystemPage() {
 
   const summary = await getMailConfigSummary();
   const s3 = isS3Configured();
+  const media = isMediaStorageConfigured();
   const mapbox = Boolean(process.env.NEXT_PUBLIC_MAPBOX_TOKEN);
 
   const checks: {
@@ -74,6 +75,13 @@ export default async function SystemPage() {
       detail: s3
         ? "Konfiguriert. Bewerbungsdateien werden gespeichert."
         : "Nicht konfiguriert. Anhänge nur per E-Mail."
+    },
+    {
+      label: "Medien-Speicher (MEGA S4)",
+      state: media ? "ok" : "warn",
+      detail: media
+        ? `Öffentlicher Bucket aktiv. Editor-Bilder werden hier abgelegt.`
+        : "Nicht konfiguriert. Bilder liegen lokal unter /uploads."
     },
     {
       label: "Karte (Mapbox)",
