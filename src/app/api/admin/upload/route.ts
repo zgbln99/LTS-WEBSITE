@@ -49,17 +49,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "size" }, { status: 413 });
   }
 
-  await mkdir(UPLOAD_DIR, { recursive: true });
   const base = file.name
     .replace(/\.[^.]+$/, "")
     .replace(/[^a-zA-Z0-9-_]/g, "-")
     .slice(0, 40)
     .toLowerCase();
   const name = `${base || "bild"}-${randomBytes(4).toString("hex")}.${extensionFor[file.type]}`;
-  await writeFile(
-    path.join(UPLOAD_DIR, name),
-    Buffer.from(await file.arrayBuffer())
-  );
+
+  try {
+    await mkdir(UPLOAD_DIR, { recursive: true });
+    await writeFile(
+      path.join(UPLOAD_DIR, name),
+      Buffer.from(await file.arrayBuffer())
+    );
+  } catch (error) {
+    // Häufigste Ursache in Produktion: das gemountete Upload-Verzeichnis
+    // gehört root, der Container läuft aber als Benutzer "nextjs" (uid 1001).
+    const code = (error as NodeJS.ErrnoException)?.code;
+    console.error("Upload fehlgeschlagen:", code, error);
+    if (code === "EACCES" || code === "EPERM" || code === "EROFS") {
+      return NextResponse.json(
+        { error: "permission", detail: code },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ error: "write", detail: code }, { status: 500 });
+  }
 
   return NextResponse.json({ url: `/uploads/${name}` });
 }
