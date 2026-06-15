@@ -650,8 +650,11 @@ export async function saveTestimonial(formData: FormData) {
   if (!parsed.success) redirect("/admin/testimonials?fehler=validierung");
 
   const data = parsed.data;
-  const translation = { locale: "de", quote: data.quote };
+  const trSettings = await getTranslationSettings();
+  const sourceLocale = trSettings.sourceLocale;
+  const translation = { locale: sourceLocale, quote: data.quote };
 
+  let testimonialId = data.id;
   if (data.id) {
     await prisma.testimonial.update({
       where: { id: data.id },
@@ -663,7 +666,10 @@ export async function saveTestimonial(formData: FormData) {
         translations: {
           upsert: {
             where: {
-              testimonialId_locale: { testimonialId: data.id, locale: "de" }
+              testimonialId_locale: {
+                testimonialId: data.id,
+                locale: sourceLocale
+              }
             },
             update: translation,
             create: translation
@@ -672,7 +678,7 @@ export async function saveTestimonial(formData: FormData) {
       }
     });
   } else {
-    await prisma.testimonial.create({
+    const created = await prisma.testimonial.create({
       data: {
         authorName: data.authorName,
         authorCompany: data.authorCompany ?? null,
@@ -681,13 +687,30 @@ export async function saveTestimonial(formData: FormData) {
         translations: { create: translation }
       }
     });
+    testimonialId = created.id;
+  }
+
+  // Zitat automatisch in die übrigen Sprachen übersetzen.
+  if (testimonialId && trSettings.autoTranslate && trSettings.openaiKey) {
+    const targets = locales.filter((locale) => locale !== sourceLocale);
+    for (const locale of targets) {
+      const out = await translateBatch([data.quote], locale, sourceLocale);
+      if (!out) continue;
+      await prisma.testimonialTranslation.upsert({
+        where: {
+          testimonialId_locale: { testimonialId, locale }
+        },
+        update: { quote: out[0] },
+        create: { testimonialId, locale, quote: out[0] }
+      });
+    }
   }
 
   await writeAuditLog({
     userId: session.user.id,
     action: data.id ? "UPDATE" : "CREATE",
     entityType: "Testimonial",
-    entityId: data.id
+    entityId: testimonialId
   });
   revalidatePath("/admin/testimonials");
   revalidatePublic([""]);

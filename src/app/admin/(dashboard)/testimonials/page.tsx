@@ -14,6 +14,7 @@ import {
   StatusBadge
 } from "@/components/admin/admin-ui";
 import { Field, Input, Textarea } from "@/components/ui/field";
+import { getTranslationSettings } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -23,12 +24,20 @@ export default async function TestimonialsAdminPage() {
   const session = await requireRole(["SUPER_ADMIN", "MARKETING", "EDITOR"]);
   if (!session) redirect("/admin");
 
+  const { sourceLocale } = await getTranslationSettings();
   const testimonials = await safeQuery(() =>
     prisma.testimonial.findMany({
       orderBy: { createdAt: "desc" },
-      include: { translations: { where: { locale: "de" } } }
+      include: { translations: true }
     })
   );
+
+  // Zitat in der Ausgangssprache laden (Fallback Deutsch / erste Sprache).
+  const sourceQuote = (t: { translations: { locale: string; quote: string }[] }) =>
+    t.translations.find((entry) => entry.locale === sourceLocale)?.quote ??
+    t.translations.find((entry) => entry.locale === "de")?.quote ??
+    t.translations[0]?.quote ??
+    "";
 
   return (
     <div className="space-y-6">
@@ -118,7 +127,7 @@ export default async function TestimonialsAdminPage() {
                     id={`quote-${testimonial.id}`}
                     name="quote"
                     required
-                    defaultValue={testimonial.translations[0]?.quote ?? ""}
+                    defaultValue={sourceQuote(testimonial)}
                   />
                 </Field>
                 <div className="flex items-center justify-between gap-3">

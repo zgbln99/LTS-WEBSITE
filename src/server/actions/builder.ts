@@ -99,6 +99,30 @@ export async function publishPageAction(
     where: { id: page.id },
     data: { status: "PUBLISHED" }
   });
+
+  // Beim Veröffentlichen der Ausgangssprache automatisch alle anderen Sprachen
+  // übersetzen und ebenfalls veröffentlichen.
+  const settings = await getTranslationSettings();
+  if (
+    locale === settings.sourceLocale &&
+    settings.autoTranslate &&
+    settings.openaiKey
+  ) {
+    const targets = locales.filter((entry) => entry !== locale);
+    for (const target of targets) {
+      const translatedData = await translatePageData(data, target, locale);
+      if (!translatedData) continue;
+      const translatedClean = sanitizeBuilderData(
+        translatedData
+      ) as unknown as Prisma.InputJsonValue;
+      await ensureTranslation(key, target);
+      await prisma.pageTranslation.update({
+        where: { pageId_locale: { pageId: page.id, locale: target } },
+        data: { content: translatedClean, draft: Prisma.JsonNull }
+      });
+    }
+  }
+
   await writeAuditLog({
     userId: session.user.id,
     action: "UPDATE",
