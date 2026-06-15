@@ -82,12 +82,18 @@ export function isMediaStorageConfigured() {
 }
 
 // Öffentliche URL für ein Medienobjekt zusammensetzen. Bevorzugt eine eigene
-// CDN-/Public-Domain (S3_PUBLIC_URL), sonst Path-Style am Endpoint.
+// CDN-/Public-Domain (S3_PUBLIC_URL). Sonst Virtual-Hosted-Style (Bucket als
+// Subdomain) - MEGA S4 weist Path-Style beim öffentlichen Abruf mit
+// "Invalid URL segment" ab und akzeptiert nur den Bucket-Host.
 export function mediaPublicUrl(key: string) {
   const base = process.env.S3_PUBLIC_URL?.replace(/\/+$/, "");
   if (base) return `${base}/${key}`;
   const endpoint = (process.env.S3_ENDPOINT ?? "").replace(/\/+$/, "");
-  return `${endpoint}/${mediaBucket()}/${key}`;
+  const host = endpoint.replace(
+    /^(https?:\/\/)/,
+    (_match, scheme: string) => `${scheme}${mediaBucket()}.`
+  );
+  return `${host}/${key}`;
 }
 
 export async function uploadMedia(
