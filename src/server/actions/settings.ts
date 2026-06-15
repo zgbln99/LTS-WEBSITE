@@ -28,7 +28,8 @@ const footerLocaleSchema = z.object({
         links: z.array(linkSchema).max(12)
       })
     )
-    .max(2)
+    .max(2),
+  legalLinks: z.array(linkSchema).max(6).optional()
 });
 
 const footerGlobalSchema = z.object({
@@ -86,6 +87,55 @@ export async function saveFooterAction(
     userId: session.user.id,
     action: "UPDATE",
     entityType: "FooterSettings",
+    entityId: locale
+  });
+  revalidateEverything();
+  return { ok: true };
+}
+
+const navSchema = z.array(linkSchema).max(12);
+
+// Kopfmenü (Navigation) je Sprache speichern.
+export async function saveNavAction(locale: string, items: unknown) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const parsed = navSchema.safeParse(items);
+  if (!parsed.success) return { ok: false };
+
+  const cleaned = parsed.data.filter(
+    (item) => item.label.trim() && item.href.trim()
+  );
+
+  await prisma.siteSetting.upsert({
+    where: { key: `nav:${locale}` },
+    update: { value: { items: cleaned } },
+    create: { key: `nav:${locale}`, value: { items: cleaned } }
+  });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "NavSettings",
+    entityId: locale
+  });
+  revalidateEverything();
+  return { ok: true };
+}
+
+// Kopfmenü einer Sprache auf den Standard zurücksetzen.
+export async function resetNavAction(locale: string) {
+  const session = await requireRole(CONTENT_ROLES);
+  if (!session) redirect("/admin/login");
+
+  await prisma.siteSetting
+    .delete({ where: { key: `nav:${locale}` } })
+    .catch(() => undefined);
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "DELETE",
+    entityType: "NavSettings",
     entityId: locale
   });
   revalidateEverything();

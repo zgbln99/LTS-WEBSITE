@@ -4,40 +4,25 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Menu, Phone, X } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import type { AppPathname, Locale } from "@/i18n/routing";
+import type { Locale } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { Logo } from "@/components/layout/logo";
+import type { NavLink } from "@/server/site-settings";
 import { company } from "@/data/company";
 import { cn } from "@/lib/utils";
-
-const navItems: {
-  key: string;
-  href: Exclude<
-    AppPathname,
-    | "/leistungen/[slug]"
-    | "/karriere/stelle/[slug]"
-    | "/karriere/orte/[stadt]"
-    | "/wissen/[slug]"
-  >;
-}[] = [
-  { key: "about", href: "/unternehmen" },
-  { key: "services", href: "/leistungen" },
-  { key: "fleet", href: "/fuhrpark" },
-  { key: "career", href: "/karriere" },
-  { key: "knowledge", href: "/wissen" },
-  { key: "contact", href: "/kontakt" }
-];
 
 export function Header({
   locale,
   siteName,
-  slogan
+  slogan,
+  navItems
 }: {
   locale: Locale;
   siteName: string;
   slogan?: string;
+  navItems: NavLink[];
 }) {
   const t = useTranslations("common");
   const [open, setOpen] = useState(false);
@@ -61,13 +46,13 @@ export function Header({
 
           <nav className="hidden items-center gap-1 lg:flex">
             {navItems.map((item) => (
-              <Link
-                key={item.key}
-                href={item.href}
+              <a
+                key={`${item.href}-${item.label}`}
+                href={item.href || "#"}
                 className="rounded-full px-4 py-2 text-sm font-medium text-mist-300 transition-colors hover:bg-white/10 hover:text-white"
               >
-                {t(`nav.${item.key}`)}
-              </Link>
+                {item.label}
+              </a>
             ))}
           </nav>
 
@@ -103,14 +88,14 @@ export function Header({
             </p>
           ) : null}
           {navItems.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
+            <a
+              key={`${item.href}-${item.label}`}
+              href={item.href || "#"}
               className="rounded-xl px-4 py-3 text-base font-medium text-mist-200 hover:bg-white/10 hover:text-white"
               onClick={() => setOpen(false)}
             >
-              {t(`nav.${item.key}`)}
-            </Link>
+              {item.label}
+            </a>
           ))}
           <div className="mt-3 flex flex-col gap-3 border-t border-white/10 pt-4">
             <LanguageSwitcher locale={locale} />

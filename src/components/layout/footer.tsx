@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Facebook, Linkedin, Mail, MapPin, Phone } from "lucide-react";
-import { Link, getPathname } from "@/i18n/navigation";
+import { getPathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/layout/logo";
@@ -67,6 +67,20 @@ export async function Footer({ locale }: { locale: Locale }) {
         ];
   const facebook = settings.global?.facebook ?? company.social.facebook;
   const linkedin = settings.global?.linkedin ?? company.social.linkedin;
+
+  const legalLinks =
+    settings.locale?.legalLinks && settings.locale.legalLinks.length > 0
+      ? settings.locale.legalLinks
+      : [
+          {
+            label: t("footer.imprint"),
+            href: getPathname({ locale, href: "/impressum" })
+          },
+          {
+            label: t("footer.privacy"),
+            href: getPathname({ locale, href: "/datenschutz" })
+          }
+        ];
 
   const year = new Date().getFullYear();
 
@@ -164,13 +178,16 @@ export async function Footer({ locale }: { locale: Locale }) {
           <p>
             © {year} {company.legalName}. {t("footer.rights")}
           </p>
-          <div className="flex gap-5">
-            <Link href="/impressum" className="hover:text-white">
-              {t("footer.imprint")}
-            </Link>
-            <Link href="/datenschutz" className="hover:text-white">
-              {t("footer.privacy")}
-            </Link>
+          <div className="flex flex-wrap gap-5">
+            {legalLinks.map((link, index) => (
+              <a
+                key={`${link.href}-${index}`}
+                href={link.href || "#"}
+                className="hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </Container>

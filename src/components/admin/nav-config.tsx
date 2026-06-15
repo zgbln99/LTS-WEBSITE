@@ -10,6 +10,7 @@ import {
   Mail,
   MailCheck,
   MapPin,
+  Menu,
   Newspaper,
   PanelBottom,
   PencilRuler,
@@ -77,6 +78,7 @@ export const navSections: NavSection[] = [
       { href: "/admin/texte", label: "Website-Texte", icon: Type, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
       { href: "/admin/email-vorlagen", label: "E-Mail-Vorlagen", icon: MailCheck, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
       { href: "/admin/seo", label: "SEO", icon: Search, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
+      { href: "/admin/menue", label: "Menü / Navigation", icon: Menu, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
       { href: "/admin/fusszeile", label: "Fußzeile", icon: PanelBottom, roles: ["SUPER_ADMIN", "MARKETING", "EDITOR"] },
       { href: "/admin/redirects", label: "Weiterleitungen", icon: Shuffle, roles: ["SUPER_ADMIN", "MARKETING"] }
     ]

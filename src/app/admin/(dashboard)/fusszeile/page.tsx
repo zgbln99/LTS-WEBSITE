@@ -67,12 +67,21 @@ export default async function FooterAdminPage({
     }
   ];
 
+  const defaultLegalLinks = [
+    { label: t("footer.imprint"), href: getPathname({ locale, href: "/impressum" }) },
+    { label: t("footer.privacy"), href: getPathname({ locale, href: "/datenschutz" }) }
+  ];
+
   const initialLocale = {
     tagline: settings.locale?.tagline ?? t("footer.tagline"),
     columns:
       settings.locale?.columns && settings.locale.columns.length > 0
         ? settings.locale.columns
-        : defaultColumns
+        : defaultColumns,
+    legalLinks:
+      settings.locale?.legalLinks && settings.locale.legalLinks.length > 0
+        ? settings.locale.legalLinks
+        : defaultLegalLinks
   };
 
   const initialGlobal = {

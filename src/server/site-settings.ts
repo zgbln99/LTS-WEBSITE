@@ -16,6 +16,12 @@ export interface FooterColumn {
 export interface FooterLocaleSettings {
   tagline?: string;
   columns?: FooterColumn[];
+  legalLinks?: FooterLink[];
+}
+
+export interface NavLink {
+  label: string;
+  href: string;
 }
 
 export interface FooterGlobalSettings {
@@ -109,6 +115,17 @@ export async function getFooterSettings(locale: string): Promise<{
     locale: localeSettings as FooterLocaleSettings | null,
     global: globalSettings as FooterGlobalSettings | null
   };
+}
+
+// Eigene Navigationspunkte (Kopfmenü) je Sprache. Null = Standard verwenden.
+export async function getNavSettings(
+  locale: string
+): Promise<NavLink[] | null> {
+  const stored = (await loadSetting(`nav:${locale}`)) as {
+    items?: NavLink[];
+  } | null;
+  if (stored?.items && stored.items.length > 0) return stored.items;
+  return null;
 }
 
 // Allgemeine Einstellungen mit sinnvollen Standardwerten.

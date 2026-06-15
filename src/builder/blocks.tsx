@@ -431,7 +431,7 @@ export function StatsBlock(props: StatsProps) {
 export interface CardsProps extends SpacingProps {
   theme: Theme;
   padding?: Padding;
-  columns: "2" | "3" | "4";
+  columns: "2" | "3" | "4" | "5" | "6";
   style: "icon" | "photo" | "plain";
   items: {
     title: string;

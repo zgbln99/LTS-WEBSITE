@@ -39,6 +39,11 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedSchemes: ["http", "https", "mailto", "tel"]
 };
 
+// Bereinigt einen einzelnen Rich-Text-HTML-String (z.B. Artikelinhalt).
+export function sanitizeRichText(html: string): string {
+  return sanitizeHtml(html, SANITIZE_OPTIONS);
+}
+
 // Bereinigt alle HTML-Strings in den Builder-Daten (XSS-Schutz).
 export function sanitizeBuilderData<T>(node: T): T {
   if (typeof node === "string") {

@@ -9,6 +9,7 @@ import { writeAuditLog } from "@/server/audit";
 import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
+import { sanitizeRichText } from "@/server/builder";
 import { notifyJobAlerts } from "@/server/job-alerts";
 import { getTranslationSettings } from "@/server/site-settings";
 import { translateBatch } from "@/server/translate";
@@ -494,7 +495,8 @@ const articleSchema = z.object({
   id: z.string().optional(),
   title: z.string().trim().min(3).max(180),
   excerpt: z.string().trim().min(10).max(500),
-  content: z.string().trim().min(20),
+  content: z.string().trim().min(8),
+  image: z.string().trim().max(500).optional(),
   status: z.nativeEnum(PublishStatus)
 });
 
@@ -507,19 +509,20 @@ export async function saveArticle(formData: FormData) {
     title: formData.get("title"),
     excerpt: formData.get("excerpt"),
     content: formData.get("content"),
+    image: formData.get("image") || undefined,
     status: formData.get("status")
   });
   if (!parsed.success) redirect("/admin/artikel?fehler=validierung");
 
   const data = parsed.data;
   const slug = slugify(String(formData.get("slug") || data.title));
-  const paragraphs = String(data.content)
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
+  // Formatiertes HTML aus dem Editor bereinigen (XSS-Schutz).
+  const html = sanitizeRichText(data.content);
+  const image = data.image ?? "";
+  const plainText = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
   const readingTimeMin = Math.max(
     1,
-    Math.round(paragraphs.join(" ").split(/\s+/).length / 200)
+    Math.round(plainText.split(/\s+/).filter(Boolean).length / 200)
   );
 
   const trSettings = await getTranslationSettings();
@@ -530,7 +533,7 @@ export async function saveArticle(formData: FormData) {
     title: data.title,
     slug,
     excerpt: data.excerpt,
-    content: { paragraphs },
+    content: { html, image },
     readingTimeMin
   };
 
@@ -576,14 +579,14 @@ export async function saveArticle(formData: FormData) {
     const suffix = postId.slice(-5);
     const targets = locales.filter((locale) => locale !== sourceLocale);
     for (const locale of targets) {
-      const payload = [data.title, data.excerpt, ...paragraphs];
+      const payload = [data.title, data.excerpt, html];
       const out = await translateBatch(payload, locale, sourceLocale);
       if (!out) continue;
       const translated = {
         title: out[0],
         slug: `${slugify(out[0]) || slug}-${suffix}`,
         excerpt: out[1],
-        content: { paragraphs: out.slice(2) },
+        content: { html: sanitizeRichText(out[2] ?? html), image },
         readingTimeMin
       };
       await prisma.blogPostTranslation.upsert({

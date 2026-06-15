@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import type { BlogPost, BlogPostTranslation } from "@prisma/client";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { saveArticle } from "@/server/actions/content";
-import { articleParagraphs } from "@/server/content";
+import { RichTextField } from "@/builder/rich-text-field";
+import { ImageField } from "@/builder/fields/image-field";
 
 const statusOptions = [
   { value: "DRAFT", label: "Entwurf" },
@@ -12,17 +16,29 @@ const statusOptions = [
 interface ArticleFormProps {
   article?: BlogPost & { translations: BlogPostTranslation[] };
   sourceLocale?: string;
+  initialHtml?: string;
+  initialImage?: string;
 }
 
-export function ArticleForm({ article, sourceLocale = "de" }: ArticleFormProps) {
+export function ArticleForm({
+  article,
+  sourceLocale = "de",
+  initialHtml = "",
+  initialImage = ""
+}: ArticleFormProps) {
   const translation =
     article?.translations.find((entry) => entry.locale === sourceLocale) ??
     article?.translations.find((entry) => entry.locale === "de") ??
     article?.translations[0];
 
+  const [content, setContent] = useState(initialHtml || "<p></p>");
+  const [image, setImage] = useState(initialImage);
+
   return (
     <form action={saveArticle} className="space-y-5">
       {article ? <input type="hidden" name="id" value={article.id} /> : null}
+      <input type="hidden" name="content" value={content} />
+      <input type="hidden" name="image" value={image} />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Titel" htmlFor="article-title" required>
@@ -55,20 +71,16 @@ export function ArticleForm({ article, sourceLocale = "de" }: ArticleFormProps) 
         />
       </Field>
 
-      <Field
-        label="Inhalt (Absätze durch Leerzeile trennen)"
-        htmlFor="article-content"
-        required
-      >
-        <Textarea
-          id="article-content"
-          name="content"
-          required
-          minLength={20}
-          className="min-h-72"
-          defaultValue={articleParagraphs(translation?.content).join("\n\n")}
-        />
+      <Field label="Titelbild (optional)" htmlFor="article-image">
+        <ImageField value={image} onChange={setImage} />
       </Field>
+
+      <div>
+        <span className="mb-1.5 block text-sm font-medium text-night-900">
+          Inhalt
+        </span>
+        <RichTextField value={content} onChange={setContent} />
+      </div>
 
       <Field label="Status" htmlFor="article-status" required>
         <Select

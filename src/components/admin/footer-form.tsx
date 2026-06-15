@@ -10,6 +10,7 @@ import {
 import type {
   FooterColumn,
   FooterGlobalSettings,
+  FooterLink,
   FooterLocaleSettings
 } from "@/server/site-settings";
 
@@ -30,6 +31,9 @@ export function FooterForm({
   const [columns, setColumns] = useState<FooterColumn[]>(
     initialLocale.columns
   );
+  const [legalLinks, setLegalLinks] = useState<FooterLink[]>(
+    initialLocale.legalLinks
+  );
   const [global, setGlobal] = useState(initialGlobal);
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -44,7 +48,7 @@ export function FooterForm({
     startTransition(async () => {
       const result = await saveFooterAction(
         locale,
-        { tagline, columns },
+        { tagline, columns, legalLinks },
         global
       );
       setStatus(result.ok ? "Gespeichert. Änderungen sind online." : "Fehler beim Speichern.");
@@ -216,6 +220,69 @@ export function FooterForm({
               }
             />
           </Field>
+        </div>
+      </div>
+
+      <div className="rounded-2xl bg-white p-5 shadow-card sm:p-6">
+        <h2 className="mb-1 font-display text-base font-bold text-night-900">
+          Rechtliche Links ({locale.toUpperCase()})
+        </h2>
+        <p className="mb-4 text-xs text-mist-400">
+          Untere Zeile der Fußzeile (z.B. Impressum, Datenschutz).
+        </p>
+        <div className="space-y-2">
+          {legalLinks.map((link, index) => (
+            <div key={index} className="flex gap-2">
+              <Input
+                value={link.label}
+                placeholder="Impressum"
+                onChange={(event) =>
+                  setLegalLinks((current) =>
+                    current.map((entry, i) =>
+                      i === index
+                        ? { ...entry, label: event.target.value }
+                        : entry
+                    )
+                  )
+                }
+              />
+              <Input
+                value={link.href}
+                placeholder="/de/impressum"
+                onChange={(event) =>
+                  setLegalLinks((current) =>
+                    current.map((entry, i) =>
+                      i === index
+                        ? { ...entry, href: event.target.value }
+                        : entry
+                    )
+                  )
+                }
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setLegalLinks((current) =>
+                    current.filter((_, i) => i !== index)
+                  )
+                }
+                className="shrink-0 rounded-lg p-2.5 text-mist-400 hover:bg-red-50 hover:text-red-600"
+                title="Link entfernen"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setLegalLinks((current) => [...current, { label: "", href: "" }])
+            }
+            className="flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-xs font-medium text-night-900 hover:border-night-900"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Link hinzufügen
+          </button>
         </div>
       </div>
 

@@ -151,3 +151,32 @@ export function articleParagraphs(content: unknown): string[] {
   }
   return [];
 }
+
+// HTML-Inhalt eines Artikels. Neue Artikel speichern formatiertes HTML;
+// ältere (nur Absätze) werden hier in <p>-Blöcke umgewandelt.
+export function articleHtml(content: unknown): string {
+  if (
+    content &&
+    typeof content === "object" &&
+    "html" in content &&
+    typeof (content as { html: unknown }).html === "string"
+  ) {
+    return (content as { html: string }).html;
+  }
+  return articleParagraphs(content)
+    .map((paragraph) => `<p>${paragraph}</p>`)
+    .join("");
+}
+
+// Optionales Titelbild eines Artikels (im content-JSON hinterlegt).
+export function articleImage(content: unknown): string {
+  if (
+    content &&
+    typeof content === "object" &&
+    "image" in content &&
+    typeof (content as { image: unknown }).image === "string"
+  ) {
+    return (content as { image: string }).image;
+  }
+  return "";
+}

@@ -6,6 +6,7 @@ import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import { AdminCard } from "@/components/admin/admin-ui";
 import { ArticleForm } from "@/components/admin/article-form";
+import { articleHtml, articleImage } from "@/server/content";
 import { getTranslationSettings } from "@/server/site-settings";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,14 @@ export default async function EditArticlePage({
   );
   if (!article) notFound();
 
+  const { sourceLocale } = await getTranslationSettings();
+  const sourceTranslation =
+    article.translations.find((entry) => entry.locale === sourceLocale) ??
+    article.translations.find((entry) => entry.locale === "de") ??
+    article.translations[0];
+  const initialHtml = articleHtml(sourceTranslation?.content);
+  const initialImage = articleImage(sourceTranslation?.content);
+
   return (
     <div className="space-y-6">
       <div>
@@ -46,7 +55,9 @@ export default async function EditArticlePage({
       <AdminCard>
         <ArticleForm
           article={article}
-          sourceLocale={(await getTranslationSettings()).sourceLocale}
+          sourceLocale={sourceLocale}
+          initialHtml={initialHtml}
+          initialImage={initialImage}
         />
       </AdminCard>
     </div>

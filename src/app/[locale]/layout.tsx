@@ -7,6 +7,7 @@ import {
   getAnalyticsSettings,
   getGeneralSettings
 } from "@/server/site-settings";
+import { getNavigation } from "@/server/navigation";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CookieConsent } from "@/components/consent/cookie-consent";
@@ -55,6 +56,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const general = await getGeneralSettings();
   const analytics = await getAnalyticsSettings();
+  const navItems = await getNavigation(locale as Locale);
 
   return (
     <html lang={locale}>
@@ -64,6 +66,7 @@ export default async function LocaleLayout({
             locale={locale as Locale}
             siteName={general.siteName}
             slogan={general.slogan}
+            navItems={navItems}
           />
           <main id="content">{children}</main>
           <Footer locale={locale as Locale} />
