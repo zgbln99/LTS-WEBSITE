@@ -35,17 +35,27 @@ function generateReference(prefix: string) {
 }
 
 function isHoneypotFilled(formData: FormData) {
-  return Boolean((formData.get("website") as string | null)?.trim());
+  const filled = Boolean((formData.get("website") as string | null)?.trim());
+  if (filled) console.warn("Bot-Schutz: Honeypot ausgefüllt, Eingang verworfen.");
+  return filled;
 }
 
 // Zeitfalle: Ein echter Mensch braucht zum Ausfüllen länger als ein Bot.
 // Das Feld "renderedAt" wird per JavaScript beim Laden des Formulars gesetzt.
-// Fehlt es (kein JavaScript), wird nicht blockiert.
+// Fehlt es (kein JavaScript), wird nicht blockiert. Negative oder unplausible
+// Werte entstehen durch Uhren-Differenzen zwischen Browser und Server und
+// dürfen echte Nutzer NICHT blockieren.
 const MIN_FILL_MS = 2500;
 function isSubmittedTooFast(formData: FormData) {
   const renderedAt = Number(formData.get("renderedAt"));
   if (!renderedAt || Number.isNaN(renderedAt)) return false;
-  return Date.now() - renderedAt < MIN_FILL_MS;
+  const elapsed = Date.now() - renderedAt;
+  if (elapsed < 0) return false; // Browser-Uhr vor Server-Uhr -> kein Bot
+  const tooFast = elapsed < MIN_FILL_MS;
+  if (tooFast) {
+    console.warn(`Bot-Schutz: Formular in ${elapsed} ms gesendet, verworfen.`);
+  }
+  return tooFast;
 }
 
 async function sendConfirmation(
