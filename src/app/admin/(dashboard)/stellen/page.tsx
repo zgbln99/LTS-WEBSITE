@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import {
   AlertTriangle,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   Copy,
   Eye,
@@ -61,9 +63,23 @@ function expiryHint(validThrough: Date | null) {
   return null;
 }
 
-export default async function JobsAdminPage() {
+const PAGE_SIZE = 20;
+
+export default async function JobsAdminPage({
+  searchParams
+}: {
+  searchParams: Promise<{ seite?: string }>;
+}) {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
   if (!session) redirect("/admin");
+
+  const params = await searchParams;
+  const requestedPage = Math.max(1, Number(params.seite) || 1);
+
+  const total = await safeQuery(() => prisma.jobPosting.count());
+  const totalCount = total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const page = Math.min(requestedPage, totalPages);
 
   const jobs = await safeQuery(() =>
     prisma.jobPosting.findMany({
@@ -72,7 +88,9 @@ export default async function JobsAdminPage() {
         translations: { where: { locale: "de" } },
         category: true,
         _count: { select: { applications: true } }
-      }
+      },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE
     })
   );
 
@@ -119,7 +137,7 @@ export default async function JobsAdminPage() {
                         <input type="hidden" name="direction" value="up" />
                         <button
                           type="submit"
-                          disabled={index === 0}
+                          disabled={(page - 1) * PAGE_SIZE + index === 0}
                           className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
                           title="Nach oben"
                         >
@@ -131,7 +149,9 @@ export default async function JobsAdminPage() {
                         <input type="hidden" name="direction" value="down" />
                         <button
                           type="submit"
-                          disabled={index === jobs.length - 1}
+                          disabled={
+                            (page - 1) * PAGE_SIZE + index === totalCount - 1
+                          }
                           className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
                           title="Nach unten"
                         >
@@ -222,6 +242,44 @@ export default async function JobsAdminPage() {
           </table>
         </div>
       )}
+
+      {jobs && totalPages > 1 ? (
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm text-mist-500">
+            Seite {page} von {totalPages} · {totalCount} Anzeigen
+          </p>
+          <div className="flex items-center gap-2">
+            {page > 1 ? (
+              <Link
+                href={`/admin/stellen?seite=${page - 1}`}
+                className="flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-sm font-medium text-night-900 hover:border-night-900"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Zurück
+              </Link>
+            ) : (
+              <span className="flex items-center gap-1.5 rounded-full border border-mist-200 px-4 py-2 text-sm font-medium text-mist-300">
+                <ChevronLeft className="h-4 w-4" />
+                Zurück
+              </span>
+            )}
+            {page < totalPages ? (
+              <Link
+                href={`/admin/stellen?seite=${page + 1}`}
+                className="flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-sm font-medium text-night-900 hover:border-night-900"
+              >
+                Weiter
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <span className="flex items-center gap-1.5 rounded-full border border-mist-200 px-4 py-2 text-sm font-medium text-mist-300">
+                Weiter
+                <ChevronRight className="h-4 w-4" />
+              </span>
+            )}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
