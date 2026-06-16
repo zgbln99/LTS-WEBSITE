@@ -11,7 +11,7 @@ import { getJobBySlug } from "@/server/content";
 import { getGeneralSettings } from "@/server/site-settings";
 import { localizedUrl, pageMetadata, SITE_URL } from "@/lib/seo";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/richtext";
-import { JsonLdScript } from "@/lib/schema";
+import { JsonLdScript, breadcrumbSchema } from "@/lib/schema";
 import { company } from "@/data/company";
 import type { jobCategoryKeys } from "@/lib/forms";
 
@@ -39,6 +39,7 @@ export default async function JobDetailPage({ params }: Props) {
   if (!job) notFound();
 
   const t = await getTranslations("career");
+  const tCommon = await getTranslations("common");
   const general = await getGeneralSettings();
   const employmentLabel = t(`jobs.employmentTypes.${job.employmentType}`);
 
@@ -72,13 +73,46 @@ export default async function JobDetailPage({ params }: Props) {
         } EUR ${job.salaryNote}`
       : null;
 
+  // URL, Datumswerte und eine vollständige HTML-Beschreibung für Google for
+  // Jobs zusammenstellen. Google zeigt das description-Feld an, daher werden
+  // Profil, Anforderungen und Benefits mit hineingenommen.
+  const jobUrl = localizedUrl(locale, {
+    pathname: "/karriere/stelle/[slug]",
+    params: { slug }
+  });
+  const datePosted = job.publishedAt ?? job.createdAt;
+  // Ohne Ablaufdatum bleibt die Anzeige 90 Tage gültig (sonst droht Google,
+  // sie als abgelaufen zu entfernen).
+  const validThrough =
+    job.validThrough ??
+    new Date(datePosted.getTime() + 90 * 24 * 60 * 60 * 1000);
+
+  const escapeText = (value: string) =>
+    value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const listSection = (heading: string, items: string[]) =>
+    items.length
+      ? `<h3>${escapeText(heading)}</h3><ul>${items
+          .map((item) => `<li>${escapeText(item)}</li>`)
+          .join("")}</ul>`
+      : "";
+  const schemaDescription = [
+    job.translation.description,
+    listSection(t("jobs.profileTitle"), profile),
+    listSection(t("jobs.requirementsTitle"), requirements),
+    listSection(t("benefitsTitle"), benefits)
+  ]
+    .filter(Boolean)
+    .join("");
+  const qualifications = [...profile, ...requirements];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: job.translation.title,
-    description: job.translation.description,
-    datePosted: job.publishedAt?.toISOString(),
-    validThrough: job.validThrough?.toISOString(),
+    description: schemaDescription,
+    url: jobUrl,
+    datePosted: datePosted.toISOString(),
+    validThrough: validThrough.toISOString(),
     employmentType: googleEmploymentType,
     directApply: true,
     identifier: {
@@ -87,10 +121,18 @@ export default async function JobDetailPage({ params }: Props) {
       value: job.id
     },
     industry: "Logistik und Transport",
+    ...(qualifications.length
+      ? { qualifications: qualifications.join(" · ") }
+      : {}),
+    ...(benefits.length ? { jobBenefits: benefits.join(" · ") } : {}),
+    ...(job.licenseCategory
+      ? { skills: `Führerscheinklasse ${job.licenseCategory}` }
+      : {}),
     hiringOrganization: {
       "@type": "Organization",
       name: company.legalName,
       sameAs: localizedUrl(locale, "/"),
+      url: localizedUrl(locale, "/"),
       logo: `${SITE_URL}/logo.png`
     },
     jobLocation: {
@@ -99,7 +141,7 @@ export default async function JobDetailPage({ params }: Props) {
         "@type": "PostalAddress",
         addressLocality: job.locationCity,
         ...(job.locationRegion ? { addressRegion: job.locationRegion } : {}),
-        addressCountry: "DE"
+        addressCountry: job.country === "Deutschland" ? "DE" : job.country
       }
     },
     ...(job.salaryMin
@@ -118,11 +160,21 @@ export default async function JobDetailPage({ params }: Props) {
       : {})
   };
 
+  const breadcrumb = breadcrumbSchema([
+    { name: general.siteName || "LTS Logistik", url: localizedUrl(locale, "/") },
+    { name: tCommon("nav.career"), url: localizedUrl(locale, "/karriere") },
+    { name: job.translation.title, url: jobUrl }
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JsonLdScript(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JsonLdScript(breadcrumb) }}
       />
 
       <PageHero
