@@ -26,6 +26,7 @@
       "legal": "Yasal",
       "imprint": "Künye",
       "privacy": "Gizlilik",
+      "cookies": "Çerez Politikası",
       "headquarters": "Merkez Berlin",
       "rights": "Tüm hakları saklıdır."
     },
@@ -581,6 +582,7 @@
     "acceptAll": "Tümünü kabul et",
     "necessaryOnly": "Yalnızca gerekli",
     "privacy": "gizlilik politikası.",
+    "cookies": "Çerez Politikası.",
     "customize": "Ayarlar",
     "savePreferences": "Seçimi kaydet",
     "necessaryLabel": "Gerekli",

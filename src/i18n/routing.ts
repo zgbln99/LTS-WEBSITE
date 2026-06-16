@@ -107,6 +107,13 @@ export const routing = defineRouting({
       pl: "/polityka-prywatnosci",
       tr: "/gizlilik",
       uk: "/konfidentsiynist"
+    },
+    "/cookie-richtlinie": {
+      de: "/cookie-richtlinie",
+      en: "/cookie-policy",
+      pl: "/polityka-cookies",
+      tr: "/cerez-politikasi",
+      uk: "/polityka-cookie"
     }
   }
 });

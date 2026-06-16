@@ -26,6 +26,7 @@
       "legal": "Правова інформація",
       "imprint": "Імпресум",
       "privacy": "Конфіденційність",
+      "cookies": "Політика cookie",
       "headquarters": "Головний офіс Берлін",
       "rights": "Усі права захищено."
     },
@@ -581,6 +582,7 @@
     "acceptAll": "Прийняти всі",
     "necessaryOnly": "Лише необхідні",
     "privacy": "політиці конфіденційності.",
+    "cookies": "Політика cookie.",
     "customize": "Налаштування",
     "savePreferences": "Зберегти вибір",
     "necessaryLabel": "Необхідні",

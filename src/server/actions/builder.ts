@@ -26,7 +26,8 @@ const PAGE_PATHS: Record<string, string[]> = {
   wissen: ["/wissen"],
   leistungen: ["/leistungen"],
   impressum: ["/impressum"],
-  datenschutz: ["/datenschutz"]
+  datenschutz: ["/datenschutz"],
+  "cookie-richtlinie": ["/cookie-richtlinie"]
 };
 
 function pathsFor(key: string) {

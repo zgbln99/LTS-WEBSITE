@@ -69,7 +69,8 @@ export default async function FooterAdminPage({
 
   const defaultLegalLinks = [
     { label: t("footer.imprint"), href: getPathname({ locale, href: "/impressum" }) },
-    { label: t("footer.privacy"), href: getPathname({ locale, href: "/datenschutz" }) }
+    { label: t("footer.privacy"), href: getPathname({ locale, href: "/datenschutz" }) },
+    { label: t("footer.cookies"), href: getPathname({ locale, href: "/cookie-richtlinie" }) }
   ];
 
   const initialLocale = {

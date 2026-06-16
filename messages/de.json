@@ -26,6 +26,7 @@
       "legal": "Rechtliches",
       "imprint": "Impressum",
       "privacy": "Datenschutz",
+      "cookies": "Cookie-Richtlinie",
       "headquarters": "Hauptsitz Berlin",
       "rights": "Alle Rechte vorbehalten."
     },
@@ -581,6 +582,7 @@
     "acceptAll": "Alle akzeptieren",
     "necessaryOnly": "Nur notwendige",
     "privacy": "Datenschutzerklärung.",
+    "cookies": "Cookie-Richtlinie.",
     "customize": "Einstellungen",
     "savePreferences": "Auswahl speichern",
     "necessaryLabel": "Notwendig",

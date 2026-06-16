@@ -79,6 +79,10 @@ export async function Footer({ locale }: { locale: Locale }) {
           {
             label: t("footer.privacy"),
             href: getPathname({ locale, href: "/datenschutz" })
+          },
+          {
+            label: t("footer.cookies"),
+            href: getPathname({ locale, href: "/cookie-richtlinie" })
           }
         ];
 

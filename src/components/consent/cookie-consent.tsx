@@ -115,6 +115,12 @@ export function CookieConsent() {
           {t("text")}{" "}
           <Link href="/datenschutz" className="underline hover:text-white">
             {t("privacy")}
+          </Link>{" "}
+          <Link
+            href="/cookie-richtlinie"
+            className="underline hover:text-white"
+          >
+            {t("cookies")}
           </Link>
         </p>
 

@@ -26,6 +26,7 @@
       "legal": "Legal",
       "imprint": "Imprint",
       "privacy": "Privacy",
+      "cookies": "Cookie Policy",
       "headquarters": "Headquarters Berlin",
       "rights": "All rights reserved."
     },
@@ -581,6 +582,7 @@
     "acceptAll": "Accept all",
     "necessaryOnly": "Necessary only",
     "privacy": "privacy policy.",
+    "cookies": "Cookie Policy.",
     "customize": "Settings",
     "savePreferences": "Save selection",
     "necessaryLabel": "Necessary",

@@ -26,6 +26,7 @@
       "legal": "Informacje prawne",
       "imprint": "Impressum",
       "privacy": "Polityka prywatności",
+      "cookies": "Polityka cookies",
       "headquarters": "Centrala Berlin",
       "rights": "Wszelkie prawa zastrzeżone."
     },
@@ -581,6 +582,7 @@
     "acceptAll": "Akceptuję wszystkie",
     "necessaryOnly": "Tylko niezbędne",
     "privacy": "polityce prywatności.",
+    "cookies": "Polityce cookies.",
     "customize": "Ustawienia",
     "savePreferences": "Zapisz wybór",
     "necessaryLabel": "Niezbędne",

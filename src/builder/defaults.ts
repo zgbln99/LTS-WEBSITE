@@ -50,6 +50,11 @@ export const BUILDER_PAGES: Record<string, BuilderPageDef> = {
     label: "Datenschutzerklärung",
     route: "/datenschutz",
     group: "rechtliches"
+  },
+  "cookie-richtlinie": {
+    label: "Cookie-Richtlinie (EU)",
+    route: "/cookie-richtlinie",
+    group: "rechtliches"
   }
 } as const;
 
@@ -651,6 +656,30 @@ export function generateDefaultData(
           `<h2>4. Bewerbungen</h2><p>Bewerbungsunterlagen verarbeiten wir ausschließlich zum Zweck des Bewerbungsverfahrens auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO und § 26 BDSG. Unterlagen nicht berücksichtigter Bewerbungen werden spätestens sechs Monate nach Abschluss des Verfahrens gelöscht, sofern keine Einwilligung zur längeren Speicherung vorliegt.</p>` +
           `<h2>5. Ihre Rechte</h2><p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) sowie Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Außerdem besteht ein Beschwerderecht bei der zuständigen Datenschutzaufsichtsbehörde.</p>` +
           `<h2>6. Cookies und Analysedienste</h2><p>Analyse- und Marketingdienste werden ausschließlich nach Ihrer ausdrücklichen Einwilligung über das Consent-Banner geladen (Art. 6 Abs. 1 lit. a DSGVO, § 25 TDDDG). Ihre Auswahl können Sie jederzeit über das Löschen der Cookies widerrufen.</p>`
+      })
+    );
+  }
+
+  if (key === "cookie-richtlinie") {
+    content.push(
+      block("Seitenkopf", {
+        eyebrow: "Rechtliches",
+        title: "Cookie-Richtlinie (EU)",
+        description:
+          "Informationen über den Einsatz von Cookies und ähnlichen Technologien auf dieser Website.",
+        image: ""
+      }),
+      block("Text", {
+        theme: "light",
+        width: "normal",
+        html:
+          `<h2>1. Was sind Cookies?</h2><p>Cookies sind kleine Textdateien, die beim Besuch einer Website auf Ihrem Endgerät gespeichert werden. Sie ermöglichen es, Ihr Gerät bei einem erneuten Besuch wiederzuerkennen, und dienen unter anderem der Funktionsfähigkeit, Sicherheit und Reichweitenmessung der Website. Vergleichbare Technologien sind etwa Local Storage oder Zählpixel; im Folgenden werden sie einheitlich als „Cookies" bezeichnet.</p>` +
+          `<h2>2. Rechtsgrundlage</h2><p>Das Speichern von und der Zugriff auf nicht zwingend erforderliche Cookies erfolgt ausschließlich auf Grundlage Ihrer Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO in Verbindung mit § 25 Abs. 1 TDDDG. Technisch notwendige Cookies werden gemäß § 25 Abs. 2 TDDDG sowie auf Grundlage unseres berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO) eingesetzt und sind einwilligungsfrei.</p>` +
+          `<h2>3. Kategorien von Cookies</h2><p><strong>Notwendige Cookies</strong> sind für den Betrieb der Website unerlässlich, etwa zur Speicherung Ihrer Cookie-Auswahl oder zur Absicherung von Formularen. Sie können nicht deaktiviert werden.</p><p><strong>Statistik-/Analyse-Cookies</strong> helfen uns, die Nutzung der Website anonymisiert auszuwerten und sie zu verbessern. Sie werden nur mit Ihrer Einwilligung gesetzt.</p><p><strong>Marketing-Cookies</strong> dienen dazu, Inhalte und Kampagnen auf Ihre Interessen abzustimmen und deren Erfolg zu messen. Sie werden nur mit Ihrer Einwilligung gesetzt.</p>` +
+          `<h2>4. Eingesetzte Cookies und Dienste</h2><p>Sofern Analyse- oder Marketingdienste aktiv sind, werden diese erst nach Ihrer ausdrücklichen Einwilligung über das Consent-Banner geladen. Welche Dienste konkret eingebunden sind, hängt von Ihrer Auswahl ab; eine technisch notwendige Cookie speichert ausschließlich Ihre Consent-Entscheidung für bis zu 180 Tage.</p>` +
+          `<h2>5. Speicherdauer</h2><p>Die Speicherdauer einzelner Cookies variiert. Session-Cookies werden nach dem Schließen des Browsers gelöscht; persistente Cookies bleiben bis zu ihrem festgelegten Ablaufdatum oder bis zu ihrer manuellen Löschung gespeichert.</p>` +
+          `<h2>6. Einwilligung widerrufen und Cookies verwalten</h2><p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen oder anpassen, indem Sie die in Ihrem Browser gespeicherten Cookies löschen. Darüber hinaus können Sie in den Einstellungen Ihres Browsers das Setzen von Cookies generell einschränken oder unterbinden; dadurch kann die Funktionsfähigkeit der Website eingeschränkt werden.</p>` +
+          `<h2>7. Weitere Informationen</h2><p>Einzelheiten zur Verarbeitung personenbezogener Daten, zu Empfängern und zu Ihren Betroffenenrechten entnehmen Sie unserer Datenschutzerklärung. Verantwortlich im Sinne der DSGVO ist die ${company.legalName}, ${company.address.street}, ${company.address.zip} ${company.address.city}, ${company.address.district}, E-Mail: ${company.email}, Telefon: ${company.phone}.</p>`
       })
     );
   }
