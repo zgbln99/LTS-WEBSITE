@@ -24,10 +24,17 @@ export async function verifyCaptcha(
       })
     });
     if (!response.ok) {
-      console.error("Cap-Verify HTTP-Fehler:", response.status);
+      console.error(
+        "Cap-Verify HTTP-Fehler:",
+        response.status,
+        await response.text().catch(() => "")
+      );
       return false;
     }
     const data = (await response.json()) as { success?: boolean };
+    if (!data?.success) {
+      console.warn("Cap-Verify abgelehnt, Antwort:", JSON.stringify(data));
+    }
     return Boolean(data?.success);
   } catch (error) {
     console.error("Cap-Verify fehlgeschlagen:", error);
