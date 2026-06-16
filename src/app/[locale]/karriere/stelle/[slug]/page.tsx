@@ -141,6 +141,7 @@ export default async function JobDetailPage({ params }: Props) {
         "@type": "PostalAddress",
         addressLocality: job.locationCity,
         ...(job.locationRegion ? { addressRegion: job.locationRegion } : {}),
+        ...(job.postalCode ? { postalCode: job.postalCode } : {}),
         addressCountry: job.country === "Deutschland" ? "DE" : job.country
       }
     },

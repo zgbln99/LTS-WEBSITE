@@ -228,6 +228,7 @@ model JobPosting {
   category        JobCategory    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   locationCity    String
   locationRegion  String?
+  postalCode      String?
   country         String         @default("Deutschland")
   workSystem      String? // z.B. "2/1 oder ohne System", "Tägliche Heimkehr"
   licenseCategory String? // z.B. "C+E", "C1", "ADR"

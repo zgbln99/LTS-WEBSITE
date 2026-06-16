@@ -71,6 +71,7 @@ export async function GET() {
     <company>${cdata(company.legalName)}</company>
     <city>${cdata(job.locationCity)}</city>
     <state>${cdata(job.locationRegion ?? "")}</state>
+    <postalcode>${cdata(job.postalCode ?? "")}</postalcode>
     <country>${cdata("DE")}</country>
     <description>${cdata(description)}</description>
     <jobtype>${cdata(jobTypeMap[job.employmentType] ?? "fulltime")}</jobtype>

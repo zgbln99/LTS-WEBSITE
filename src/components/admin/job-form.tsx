@@ -2,6 +2,7 @@ import { Languages } from "lucide-react";
 import type { JobPosting, JobPostingTranslation } from "@prisma/client";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { HtmlField } from "@/components/admin/html-field";
+import { JobLocationFields } from "@/components/admin/job-location-fields";
 import { saveJobPosting } from "@/server/actions/content";
 import { toRichHtml } from "@/lib/richtext";
 
@@ -100,22 +101,6 @@ export function JobForm({
             ))}
           </Select>
         </Field>
-        <Field label="Standort" htmlFor="job-location" required>
-          <Input
-            id="job-location"
-            name="locationCity"
-            required
-            defaultValue={job?.locationCity}
-            placeholder="Schönefeld (Berlin)"
-          />
-        </Field>
-        <Field label="Land" htmlFor="job-country">
-          <Input
-            id="job-country"
-            name="country"
-            defaultValue={job?.country ?? "Deutschland"}
-          />
-        </Field>
         <Field label="Führerscheinkategorie (z.B. C+E)" htmlFor="job-license">
           <Input
             id="job-license"
@@ -212,6 +197,22 @@ export function JobForm({
             defaultValue={job?.sortOrder ?? 0}
           />
         </Field>
+      </div>
+
+      <div className="rounded-2xl border border-mist-200 p-4">
+        <p className="mb-3 text-sm font-semibold text-night-900">
+          Standort
+        </p>
+        <JobLocationFields
+          initialCity={job?.locationCity}
+          initialRegion={job?.locationRegion ?? ""}
+          initialPostalCode={job?.postalCode ?? ""}
+          initialCountry={job?.country ?? "Deutschland"}
+        />
+        <p className="mt-2 text-xs text-mist-400">
+          Stadt eingeben und „KI" drücken - Postleitzahl und Bundesland werden
+          automatisch ergänzt (wichtig für Google for Jobs).
+        </p>
       </div>
 
       <div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireRole } from "@/auth";
@@ -10,6 +11,7 @@ import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
 import { sanitizeRichText } from "@/server/builder";
+import { lookupGermanLocation } from "@/server/geo";
 import { notifyJobAlerts } from "@/server/job-alerts";
 import { getTranslationSettings } from "@/server/site-settings";
 import { translateBatch } from "@/server/translate";
@@ -38,10 +40,19 @@ const optionalInt = (value: unknown) => {
 // Stellenanzeigen
 // ---------------------------------------------------------------------------
 
+// Ergänzt per OpenAI Postleitzahl, Bundesland und Land zu einer Ortsangabe.
+export async function lookupJobLocationAction(place: string) {
+  const session = await requireRole(JOB_ROLES);
+  if (!session) return null;
+  return lookupGermanLocation(place);
+}
+
 const jobSchema = z.object({
   id: z.string().optional(),
   categoryKey: z.string().min(1),
   locationCity: z.string().trim().min(2).max(120),
+  locationRegion: z.string().trim().max(120).optional(),
+  postalCode: z.string().trim().max(20).optional(),
   country: z.string().trim().max(80).optional(),
   licenseCategory: z.string().trim().max(40).optional(),
   workSystem: z.string().trim().max(160).optional(),
@@ -62,6 +73,8 @@ export async function saveJobPosting(formData: FormData) {
     id: formData.get("id") || undefined,
     categoryKey: formData.get("categoryKey"),
     locationCity: formData.get("locationCity"),
+    locationRegion: formData.get("locationRegion") || undefined,
+    postalCode: formData.get("postalCode") || undefined,
     country: formData.get("country") || undefined,
     licenseCategory: formData.get("licenseCategory") || undefined,
     workSystem: formData.get("workSystem") || undefined,
@@ -97,6 +110,8 @@ export async function saveJobPosting(formData: FormData) {
   const base = {
     categoryId: category.id,
     locationCity: data.locationCity,
+    locationRegion: data.locationRegion ?? null,
+    postalCode: data.postalCode ?? null,
     country: data.country ?? "Deutschland",
     licenseCategory: data.licenseCategory ?? null,
     workSystem: data.workSystem ?? null,
@@ -155,54 +170,71 @@ export async function saveJobPosting(formData: FormData) {
     jobId = created.id;
   }
 
-  // Automatische Übersetzung der Stelle in die übrigen Sprachen.
-  if (trSettings.autoTranslate && trSettings.openaiKey) {
-    const suffix = jobId.slice(-5);
-    const targets = locales.filter((locale) => locale !== sourceLocale);
-    for (const locale of targets) {
-      const payload = [
-        data.title,
-        description,
-        ...requirements,
-        ...benefits,
-        ...profile
-      ];
-      const out = await translateBatch(payload, locale, sourceLocale);
-      if (!out) continue;
-      const tTitle = out[0];
-      const tDescription = sanitizeRichText(out[1] ?? description);
-      const reqStart = 2;
-      const benStart = reqStart + requirements.length;
-      const profStart = benStart + benefits.length;
-      const tRequirements = out.slice(reqStart, benStart);
-      const tBenefits = out.slice(benStart, profStart);
-      const tProfile = out.slice(profStart, profStart + profile.length);
-      const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;
-      const translated = {
-        title: tTitle,
-        slug: localeSlug,
-        description: tDescription,
-        requirements: tRequirements,
-        benefits: tBenefits,
-        profile: tProfile
-      };
-      await prisma.jobPostingTranslation.upsert({
-        where: { jobPostingId_locale: { jobPostingId: jobId, locale } },
-        update: translated,
-        create: { jobPostingId: jobId, locale, ...translated }
-      });
-    }
-  }
-
   await writeAuditLog({
     userId: session.user.id,
     action: data.id ? "UPDATE" : "CREATE",
     entityType: "JobPosting",
     entityId: jobId
   });
-  if (data.status === "PUBLISHED") {
-    await notifyJobAlerts(jobId);
-  }
+
+  // Die Anzeige ist jetzt gespeichert. Übersetzung in alle Sprachen und
+  // Job-Benachrichtigungen laufen NACH der Antwort im Hintergrund weiter,
+  // damit das Speichern sofort abgeschlossen ist.
+  const finalJobId = jobId;
+  const shouldTranslate =
+    trSettings.autoTranslate && Boolean(trSettings.openaiKey);
+  const willPublish = data.status === "PUBLISHED";
+  after(async () => {
+    try {
+      if (shouldTranslate) {
+        const suffix = finalJobId.slice(-5);
+        const targets = locales.filter((locale) => locale !== sourceLocale);
+        for (const locale of targets) {
+          const payload = [
+            data.title,
+            description,
+            ...requirements,
+            ...benefits,
+            ...profile
+          ];
+          const out = await translateBatch(payload, locale, sourceLocale);
+          if (!out) continue;
+          const tTitle = out[0];
+          const tDescription = sanitizeRichText(out[1] ?? description);
+          const reqStart = 2;
+          const benStart = reqStart + requirements.length;
+          const profStart = benStart + benefits.length;
+          const tRequirements = out.slice(reqStart, benStart);
+          const tBenefits = out.slice(benStart, profStart);
+          const tProfile = out.slice(profStart, profStart + profile.length);
+          const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;
+          const translated = {
+            title: tTitle,
+            slug: localeSlug,
+            description: tDescription,
+            requirements: tRequirements,
+            benefits: tBenefits,
+            profile: tProfile
+          };
+          await prisma.jobPostingTranslation.upsert({
+            where: { jobPostingId_locale: { jobPostingId: finalJobId, locale } },
+            update: translated,
+            create: { jobPostingId: finalJobId, locale, ...translated }
+          });
+        }
+        revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
+      }
+      if (willPublish) {
+        await notifyJobAlerts(finalJobId);
+      }
+    } catch (error) {
+      console.error(
+        "Hintergrund-Verarbeitung der Stelle fehlgeschlagen:",
+        error
+      );
+    }
+  });
+
   revalidatePath("/admin/stellen");
   revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
   redirect("/admin/stellen");
