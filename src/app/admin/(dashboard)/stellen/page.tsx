@@ -1,12 +1,22 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AlertTriangle, Copy, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  Eye,
+  EyeOff,
+  Plus,
+  Trash2
+} from "lucide-react";
 import { requireRole } from "@/auth";
 import { prisma } from "@/server/db";
 import { safeQuery } from "@/server/safe";
 import {
   deleteJobPosting,
   duplicateJobPosting,
+  moveJobPosting,
   toggleJobStatus
 } from "@/server/actions/content";
 import {
@@ -57,7 +67,7 @@ export default async function JobsAdminPage() {
 
   const jobs = await safeQuery(() =>
     prisma.jobPosting.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       include: {
         translations: { where: { locale: "de" } },
         category: true,
@@ -90,6 +100,7 @@ export default async function JobsAdminPage() {
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead>
               <tr className="border-b border-mist-100 text-xs uppercase tracking-wide text-mist-400">
+                <th className="px-3 py-3.5 font-semibold">Reihenfolge</th>
                 <th className="px-5 py-3.5 font-semibold">Titel</th>
                 <th className="px-5 py-3.5 font-semibold">Standort</th>
                 <th className="px-5 py-3.5 font-semibold">Bewerbungen</th>
@@ -99,8 +110,36 @@ export default async function JobsAdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-mist-100">
-              {jobs.map((job) => (
+              {jobs.map((job, index) => (
                 <tr key={job.id} className="hover:bg-mist-50">
+                  <td className="px-3 py-3">
+                    <div className="flex items-center gap-0.5">
+                      <form action={moveJobPosting} className="inline">
+                        <input type="hidden" name="id" value={job.id} />
+                        <input type="hidden" name="direction" value="up" />
+                        <button
+                          type="submit"
+                          disabled={index === 0}
+                          className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                          title="Nach oben"
+                        >
+                          <ChevronUp className="h-4 w-4" />
+                        </button>
+                      </form>
+                      <form action={moveJobPosting} className="inline">
+                        <input type="hidden" name="id" value={job.id} />
+                        <input type="hidden" name="direction" value="down" />
+                        <button
+                          type="submit"
+                          disabled={index === jobs.length - 1}
+                          className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                          title="Nach unten"
+                        >
+                          <ChevronDown className="h-4 w-4" />
+                        </button>
+                      </form>
+                    </div>
+                  </td>
                   <td className="px-5 py-3">
                     <Link
                       href={`/admin/stellen/${job.id}`}

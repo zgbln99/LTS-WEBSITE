@@ -31,7 +31,8 @@ export default async function EditJobPage({
   );
   if (!job) notFound();
 
-  const { sourceLocale } = await getTranslationSettings();
+  const { sourceLocale, autoTranslate, openaiKey } =
+    await getTranslationSettings();
 
   const deSlug = job.translations.find(
     (translation) => translation.locale === routing.defaultLocale
@@ -58,7 +59,11 @@ export default async function EditJobPage({
         </h1>
       </div>
       <AdminCard>
-        <JobForm job={job} sourceLocale={sourceLocale} />
+        <JobForm
+          job={job}
+          sourceLocale={sourceLocale}
+          autoTranslate={autoTranslate && Boolean(openaiKey)}
+        />
       </AdminCard>
 
       <AdminCard title="QR-Code">

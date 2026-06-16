@@ -237,6 +237,7 @@ model JobPosting {
   salaryCurrency  String         @default("EUR")
   salaryPeriod    String         @default("MONTH")
   salaryNote      String         @default("Netto") // Netto | Brutto
+  sortOrder       Int            @default(0) // Anzeigereihenfolge (kleiner = weiter oben)
   status         PublishStatus  @default(DRAFT)
   publishedAt    DateTime?
   validThrough   DateTime?

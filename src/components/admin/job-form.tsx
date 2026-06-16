@@ -1,6 +1,15 @@
+import { Languages } from "lucide-react";
 import type { JobPosting, JobPostingTranslation } from "@prisma/client";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { saveJobPosting } from "@/server/actions/content";
+
+const localeNames: Record<string, string> = {
+  de: "Deutsch",
+  en: "Englisch",
+  pl: "Polnisch",
+  tr: "Türkisch",
+  uk: "Ukrainisch"
+};
 
 const categoryOptions = [
   { value: "drivers", label: "Fahrer" },
@@ -29,9 +38,14 @@ interface JobFormProps {
     category: { key: string };
   };
   sourceLocale?: string;
+  autoTranslate?: boolean;
 }
 
-export function JobForm({ job, sourceLocale = "de" }: JobFormProps) {
+export function JobForm({
+  job,
+  sourceLocale = "de",
+  autoTranslate = false
+}: JobFormProps) {
   // Inhalte in der Ausgangssprache laden (Fallback Deutsch / erste Sprache).
   const translation =
     job?.translations.find((entry) => entry.locale === sourceLocale) ??
@@ -43,6 +57,18 @@ export function JobForm({ job, sourceLocale = "de" }: JobFormProps) {
   return (
     <form action={saveJobPosting} className="space-y-5">
       {job ? <input type="hidden" name="id" value={job.id} /> : null}
+
+      {autoTranslate ? (
+        <div className="flex items-start gap-3 rounded-2xl border border-accent-500/20 bg-accent-500/5 p-4 text-sm text-night-800">
+          <Languages className="mt-0.5 h-5 w-5 shrink-0 text-accent-600" />
+          <p>
+            Inhalte in{" "}
+            <strong>{localeNames[sourceLocale] ?? sourceLocale}</strong>{" "}
+            eingeben. Beim Speichern wird die Stelle automatisch in alle
+            anderen Sprachen übersetzt.
+          </p>
+        </div>
+      ) : null}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Titel" htmlFor="job-title" required>
@@ -171,6 +197,17 @@ export function JobForm({ job, sourceLocale = "de" }: JobFormProps) {
                 ? job.validThrough.toISOString().slice(0, 10)
                 : ""
             }
+          />
+        </Field>
+        <Field
+          label="Reihenfolge (kleiner = weiter oben)"
+          htmlFor="job-sort-order"
+        >
+          <Input
+            id="job-sort-order"
+            name="sortOrder"
+            type="number"
+            defaultValue={job?.sortOrder ?? 0}
           />
         </Field>
       </div>

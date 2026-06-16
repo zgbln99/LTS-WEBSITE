@@ -52,7 +52,7 @@ export async function getPublishedJobs(locale: string) {
         status: "PUBLISHED",
         OR: [{ validThrough: null }, { validThrough: { gte: new Date() } }]
       },
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ sortOrder: "asc" }, { publishedAt: "desc" }],
       include: { translations: true, category: true }
     })
   );

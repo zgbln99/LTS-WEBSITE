@@ -50,7 +50,8 @@ const jobSchema = z.object({
   status: z.nativeEnum(PublishStatus),
   title: z.string().trim().min(3).max(180),
   description: z.string().trim().min(10),
-  validThrough: z.string().optional()
+  validThrough: z.string().optional(),
+  sortOrder: z.coerce.number().int().optional()
 });
 
 export async function saveJobPosting(formData: FormData) {
@@ -69,7 +70,8 @@ export async function saveJobPosting(formData: FormData) {
     status: formData.get("status"),
     title: formData.get("title"),
     description: formData.get("description"),
-    validThrough: formData.get("validThrough") || undefined
+    validThrough: formData.get("validThrough") || undefined,
+    sortOrder: formData.get("sortOrder") || undefined
   });
   if (!parsed.success) redirect("/admin/stellen?fehler=validierung");
 
@@ -100,7 +102,8 @@ export async function saveJobPosting(formData: FormData) {
     salaryMin,
     salaryMax,
     status: data.status,
-    validThrough: data.validThrough ? new Date(data.validThrough) : null
+    validThrough: data.validThrough ? new Date(data.validThrough) : null,
+    ...(data.sortOrder !== undefined ? { sortOrder: data.sortOrder } : {})
   };
 
   const translation = {
@@ -202,6 +205,48 @@ export async function deleteJobPosting(formData: FormData) {
     action: "DELETE",
     entityType: "JobPosting",
     entityId: id
+  });
+  revalidatePath("/admin/stellen");
+  revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
+}
+
+// Anzeigereihenfolge einer Stelle um eine Position nach oben/unten verschieben.
+export async function moveJobPosting(formData: FormData) {
+  const session = await requireRole(JOB_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  const direction = formData.get("direction") === "up" ? -1 : 1;
+  if (!id) return;
+
+  const jobs = await prisma.jobPosting.findMany({
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+    select: { id: true }
+  });
+  const index = jobs.findIndex((job) => job.id === id);
+  const target = index + direction;
+  if (index === -1 || target < 0 || target >= jobs.length) {
+    revalidatePath("/admin/stellen");
+    return;
+  }
+
+  // Position tauschen und die Reihenfolge fortlaufend neu durchnummerieren.
+  [jobs[index], jobs[target]] = [jobs[target], jobs[index]];
+  await prisma.$transaction(
+    jobs.map((job, position) =>
+      prisma.jobPosting.update({
+        where: { id: job.id },
+        data: { sortOrder: position }
+      })
+    )
+  );
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "UPDATE",
+    entityType: "JobPosting",
+    entityId: id,
+    payload: { move: direction === -1 ? "up" : "down" }
   });
   revalidatePath("/admin/stellen");
   revalidatePublic(["/karriere", "/karriere/stelle/[slug]"]);
