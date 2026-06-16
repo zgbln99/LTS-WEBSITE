@@ -5,6 +5,13 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Bewerbungs- und Upload-Formulare senden Dateien über Server Actions.
+  // Standardlimit ist 1 MB - hier angehoben (mehrere Dokumente à bis 10 MB).
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "40mb"
+    }
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     // Bilder im Seiten-Editor können beliebige Quellen haben (Uploads sind
