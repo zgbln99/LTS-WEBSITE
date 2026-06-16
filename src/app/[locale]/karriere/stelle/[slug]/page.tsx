@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
-  Check,
   Euro,
   Mail,
   MapPin,
@@ -19,7 +18,7 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { getJobBySlug } from "@/server/content";
 import { getGeneralSettings } from "@/server/site-settings";
 import { localizedUrl, pageMetadata, SITE_URL } from "@/lib/seo";
-import { htmlToPlainText, looksLikeHtml } from "@/lib/richtext";
+import { htmlToPlainText, listToHtml, looksLikeHtml } from "@/lib/richtext";
 import { formatSalaryRange } from "@/lib/salary";
 import { JsonLdScript, breadcrumbSchema } from "@/lib/schema";
 import { company } from "@/data/company";
@@ -28,6 +27,29 @@ import type { jobCategoryKeys } from "@/lib/forms";
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
+
+// Formatierte Liste (Anforderungen/Profil/Benefits) mit Häkchen-Markern.
+// Unterstützt Fettung und Links aus dem Editor.
+function RichList({
+  html,
+  variant
+}: {
+  html: string;
+  variant: "light" | "dark";
+}) {
+  const marker =
+    variant === "dark"
+      ? "[&_li]:before:bg-mint-400/15 [&_li]:before:text-mint-400"
+      : "[&_li]:before:bg-accent-500/10 [&_li]:before:text-accent-600";
+  return (
+    <div
+      className={`mt-5 text-base ${marker} ${
+        variant === "dark" ? "text-mist-200" : "text-night-800"
+      } [&_a]:underline [&_li]:relative [&_li]:pl-9 [&_li]:leading-relaxed [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-0.5 [&_li]:before:flex [&_li]:before:h-6 [&_li]:before:w-6 [&_li]:before:items-center [&_li]:before:justify-center [&_li]:before:rounded-full [&_li]:before:text-[11px] [&_li]:before:font-bold [&_li]:before:content-['✓'] [&_ol]:list-none [&_ol]:space-y-3 [&_p]:mt-3 [&_strong]:font-bold [&_ul]:list-none [&_ul]:space-y-3`}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -71,14 +93,22 @@ export default async function JobDetailPage({ params }: Props) {
       MINI_JOB: "PART_TIME",
       APPRENTICESHIP: "OTHER"
     }[job.employmentType] ?? "FULL_TIME";
-  const requirements = (job.translation.requirements as string[]) ?? [];
-  const benefits = (job.translation.benefits as string[]) ?? [];
-  const profile = (job.translation.profile as string[] | null) ?? [];
+  const requirementsHtml = listToHtml(job.translation.requirements);
+  const benefitsHtml = listToHtml(job.translation.benefits);
+  const profileHtml = listToHtml(job.translation.profile);
   const salaryRange = formatSalaryRange(job.salaryMin, job.salaryMax, {
     from: t("jobs.salaryFrom"),
     to: t("jobs.salaryTo")
   });
   const salary = salaryRange ? `${salaryRange} ${job.salaryNote}` : null;
+  // Vollständige Ortsangabe: PLZ Stadt, Bundesland, Land (leere Teile entfallen).
+  const locationLabel = [
+    [job.postalCode, job.locationCity].filter(Boolean).join(" "),
+    job.locationRegion,
+    job.country
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   // URL, Datumswerte und eine vollständige HTML-Beschreibung für Google for
   // Jobs zusammenstellen. Google zeigt das description-Feld an, daher werden
@@ -94,23 +124,20 @@ export default async function JobDetailPage({ params }: Props) {
     job.validThrough ??
     new Date(datePosted.getTime() + 90 * 24 * 60 * 60 * 1000);
 
-  const escapeText = (value: string) =>
-    value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const listSection = (heading: string, items: string[]) =>
-    items.length
-      ? `<h3>${escapeText(heading)}</h3><ul>${items
-          .map((item) => `<li>${escapeText(item)}</li>`)
-          .join("")}</ul>`
-      : "";
+  const htmlSection = (heading: string, html: string) =>
+    html ? `<h3>${heading}</h3>${html}` : "";
   const schemaDescription = [
     job.translation.description,
-    listSection(t("jobs.profileTitle"), profile),
-    listSection(t("jobs.requirementsTitle"), requirements),
-    listSection(t("benefitsTitle"), benefits)
+    htmlSection(t("jobs.profileTitle"), profileHtml),
+    htmlSection(t("jobs.requirementsTitle"), requirementsHtml),
+    htmlSection(t("benefitsTitle"), benefitsHtml)
   ]
     .filter(Boolean)
     .join("");
-  const qualifications = [...profile, ...requirements];
+  const qualifications = htmlToPlainText(
+    `${profileHtml} ${requirementsHtml}`
+  ).trim();
+  const jobBenefitsText = htmlToPlainText(benefitsHtml).trim();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -128,10 +155,8 @@ export default async function JobDetailPage({ params }: Props) {
       value: job.id
     },
     industry: "Logistik und Transport",
-    ...(qualifications.length
-      ? { qualifications: qualifications.join(" · ") }
-      : {}),
-    ...(benefits.length ? { jobBenefits: benefits.join(" · ") } : {}),
+    ...(qualifications ? { qualifications } : {}),
+    ...(jobBenefitsText ? { jobBenefits: jobBenefitsText } : {}),
     ...(job.licenseCategory
       ? { skills: `Führerscheinklasse ${job.licenseCategory}` }
       : {}),
@@ -203,7 +228,7 @@ export default async function JobDetailPage({ params }: Props) {
           ) : null}
           <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5">
             <MapPin className="h-4 w-4 text-accent-400" />
-            {job.locationCity}, {job.country}
+            {locationLabel}
           </span>
           <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5">
             <Clock className="h-4 w-4 text-accent-400" />
@@ -267,62 +292,35 @@ export default async function JobDetailPage({ params }: Props) {
                 </div>
               </Reveal>
 
-              {requirements.length > 0 ? (
+              {requirementsHtml ? (
                 <Reveal>
                   <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
                     <h2 className="font-display text-xl font-bold text-night-900">
                       {t("jobs.requirementsTitle")}
                     </h2>
-                    <ul className="mt-5 space-y-3">
-                      {requirements.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-base text-night-800">
-                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-500/10">
-                            <Check className="h-3.5 w-3.5 text-accent-600" />
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    <RichList html={requirementsHtml} variant="light" />
                   </div>
                 </Reveal>
               ) : null}
 
-              {profile.length > 0 ? (
+              {profileHtml ? (
                 <Reveal>
                   <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
                     <h2 className="font-display text-xl font-bold text-night-900">
                       {t("jobs.profileTitle")}
                     </h2>
-                    <ul className="mt-5 space-y-3">
-                      {profile.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-base text-night-800">
-                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-500/10">
-                            <Check className="h-3.5 w-3.5 text-accent-600" />
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    <RichList html={profileHtml} variant="light" />
                   </div>
                 </Reveal>
               ) : null}
 
-              {benefits.length > 0 ? (
+              {benefitsHtml ? (
                 <Reveal>
                   <div className="rounded-3xl bg-night-950 p-7 sm:p-10">
                     <h2 className="font-display text-xl font-bold text-white">
                       {t("benefitsTitle")}
                     </h2>
-                    <ul className="mt-5 space-y-3">
-                      {benefits.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-base text-mist-200">
-                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mint-400/15">
-                            <Check className="h-3.5 w-3.5 text-mint-400" />
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    <RichList html={benefitsHtml} variant="dark" />
                   </div>
                 </Reveal>
               ) : null}

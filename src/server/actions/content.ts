@@ -10,6 +10,7 @@ import { writeAuditLog } from "@/server/audit";
 import { EmploymentType, PublishStatus, type Role } from "@prisma/client";
 
 import { slugify } from "@/lib/slug";
+import { htmlToPlainText } from "@/lib/richtext";
 import { sanitizeRichText } from "@/server/builder";
 import { lookupGermanLocation } from "@/server/geo";
 import { notifyJobAlerts } from "@/server/job-alerts";
@@ -91,9 +92,15 @@ export async function saveJobPosting(formData: FormData) {
   const data = parsed.data;
   const salaryMin = optionalInt(formData.get("salaryMin"));
   const salaryMax = optionalInt(formData.get("salaryMax"));
-  const requirements = lines(formData.get("requirements"));
-  const benefits = lines(formData.get("benefits"));
-  const profile = lines(formData.get("profile"));
+  // Anforderungen, Benefits und Profil sind formatierter HTML-Text (Listen mit
+  // optionaler Fettung). Leere Editoren werden als "" gespeichert.
+  const toCleanHtml = (value: FormDataEntryValue | null) => {
+    const html = sanitizeRichText(String(value ?? ""));
+    return htmlToPlainText(html).trim() ? html : "";
+  };
+  const requirements = toCleanHtml(formData.get("requirements"));
+  const benefits = toCleanHtml(formData.get("benefits"));
+  const profile = toCleanHtml(formData.get("profile"));
   const slug = slugify(String(formData.get("slug") || data.title));
   // Beschreibung ist formatiertes HTML aus dem Editor (XSS-Schutz).
   const description = sanitizeRichText(data.description);
@@ -195,28 +202,21 @@ export async function saveJobPosting(formData: FormData) {
           const payload = [
             data.title,
             description,
-            ...requirements,
-            ...benefits,
-            ...profile
+            requirements,
+            benefits,
+            profile
           ];
           const out = await translateBatch(payload, locale, sourceLocale);
           if (!out) continue;
           const tTitle = out[0];
-          const tDescription = sanitizeRichText(out[1] ?? description);
-          const reqStart = 2;
-          const benStart = reqStart + requirements.length;
-          const profStart = benStart + benefits.length;
-          const tRequirements = out.slice(reqStart, benStart);
-          const tBenefits = out.slice(benStart, profStart);
-          const tProfile = out.slice(profStart, profStart + profile.length);
           const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;
           const translated = {
             title: tTitle,
             slug: localeSlug,
-            description: tDescription,
-            requirements: tRequirements,
-            benefits: tBenefits,
-            profile: tProfile
+            description: sanitizeRichText(out[1] ?? description),
+            requirements: sanitizeRichText(out[2] ?? requirements),
+            benefits: sanitizeRichText(out[3] ?? benefits),
+            profile: sanitizeRichText(out[4] ?? profile)
           };
           await prisma.jobPostingTranslation.upsert({
             where: { jobPostingId_locale: { jobPostingId: finalJobId, locale } },

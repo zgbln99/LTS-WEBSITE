@@ -35,6 +35,24 @@ export function htmlToPlainText(value: string): string {
     .trim();
 }
 
+// Wandelt eine Liste (altes Format: string[]) oder einen bereits formatierten
+// HTML-String in HTML um. Leere Eingaben ergeben einen leeren String.
+export function listToHtml(value: unknown): string {
+  if (Array.isArray(value)) {
+    const items = value.filter(
+      (entry): entry is string => typeof entry === "string" && entry.trim() !== ""
+    );
+    if (items.length === 0) return "";
+    return `<ul>${items.map((entry) => `<li>${escapeHtml(entry)}</li>`).join("")}</ul>`;
+  }
+  if (typeof value === "string" && value.trim()) {
+    return looksLikeHtml(value)
+      ? value
+      : `<ul><li>${escapeHtml(value)}</li></ul>`;
+  }
+  return "";
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")

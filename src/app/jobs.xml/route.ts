@@ -1,6 +1,7 @@
 import { getPublishedJobs } from "@/server/content";
 import { localizedUrl, SITE_URL } from "@/lib/seo";
 import { formatSalaryRange } from "@/lib/salary";
+import { listToHtml } from "@/lib/richtext";
 import { company } from "@/data/company";
 import { routing } from "@/i18n/routing";
 
@@ -41,15 +42,11 @@ export async function GET() {
 
       // Vollständige Beschreibung inkl. Profil, Anforderungen und Benefits,
       // damit Jobbörsen die komplette Anzeige übernehmen.
-      const profile = (job.translation.profile as string[] | null) ?? [];
-      const requirements = (job.translation.requirements as string[]) ?? [];
-      const benefits = (job.translation.benefits as string[]) ?? [];
-      const section = (heading: string, items: string[]) =>
-        items.length
-          ? `<h3>${heading}</h3><ul>${items
-              .map((item) => `<li>${item}</li>`)
-              .join("")}</ul>`
-          : "";
+      const profile = listToHtml(job.translation.profile);
+      const requirements = listToHtml(job.translation.requirements);
+      const benefits = listToHtml(job.translation.benefits);
+      const section = (heading: string, html: string) =>
+        html ? `<h3>${heading}</h3>${html}` : "";
       const description = [
         job.translation.description,
         section("Dein Profil", profile),

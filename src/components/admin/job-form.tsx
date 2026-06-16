@@ -1,10 +1,10 @@
 import { Languages } from "lucide-react";
 import type { JobPosting, JobPostingTranslation } from "@prisma/client";
-import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { Field, Input, Select } from "@/components/ui/field";
 import { HtmlField } from "@/components/admin/html-field";
 import { JobLocationFields } from "@/components/admin/job-location-fields";
 import { saveJobPosting } from "@/server/actions/content";
-import { toRichHtml } from "@/lib/richtext";
+import { listToHtml, toRichHtml } from "@/lib/richtext";
 
 const localeNames: Record<string, string> = {
   de: "Deutsch",
@@ -54,8 +54,6 @@ export function JobForm({
     job?.translations.find((entry) => entry.locale === sourceLocale) ??
     job?.translations.find((entry) => entry.locale === "de") ??
     job?.translations[0];
-  const toLines = (value: unknown) =>
-    Array.isArray(value) ? value.join("\n") : "";
 
   return (
     <form action={saveJobPosting} className="space-y-5">
@@ -230,38 +228,41 @@ export function JobForm({
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field
-          label="Anforderungen (eine pro Zeile, optional)"
-          htmlFor="job-requirements"
-        >
-          <Textarea
-            id="job-requirements"
+        <div>
+          <span className="mb-1.5 block text-sm font-medium text-night-900">
+            Anforderungen (optional)
+          </span>
+          <HtmlField
             name="requirements"
-            className="min-h-32"
-            defaultValue={toLines(translation?.requirements)}
+            initialValue={listToHtml(translation?.requirements)}
           />
-        </Field>
-        <Field label="Benefits (einer pro Zeile)" htmlFor="job-benefits">
-          <Textarea
-            id="job-benefits"
+        </div>
+        <div>
+          <span className="mb-1.5 block text-sm font-medium text-night-900">
+            Benefits
+          </span>
+          <HtmlField
             name="benefits"
-            className="min-h-32"
-            defaultValue={toLines(translation?.benefits)}
+            initialValue={listToHtml(translation?.benefits)}
           />
-        </Field>
+        </div>
       </div>
 
-      <Field label="Dein Profil (eine Anforderung pro Zeile)" htmlFor="job-profile">
-        <Textarea
-          id="job-profile"
+      <div>
+        <span className="mb-1.5 block text-sm font-medium text-night-900">
+          Dein Profil
+        </span>
+        <HtmlField
           name="profile"
-          className="min-h-32"
-          defaultValue={toLines(
+          initialValue={listToHtml(
             (translation as { profile?: unknown } | undefined)?.profile
           )}
-          placeholder={"Fahrerlaubnisklasse ab CE\nBerufskraftfahrerqualifizierung (Code 95)\nErfahrung im Umgang mit einem Lkw"}
         />
-      </Field>
+        <p className="mt-1.5 text-xs text-mist-400">
+          Als Aufzählung anlegen (Listen-Symbol) - Teile lassen sich fett
+          markieren.
+        </p>
+      </div>
 
       <button
         type="submit"
