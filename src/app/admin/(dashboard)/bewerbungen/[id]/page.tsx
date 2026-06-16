@@ -11,6 +11,7 @@ import {
 } from "@/server/actions/admin";
 import { StatusSelect } from "@/components/admin/status-select";
 import { AnonymizeButton } from "@/components/admin/anonymize-button";
+import { DeleteApplicationButton } from "@/components/admin/delete-application-button";
 import {
   AdminCard,
   applicationStatusLabels,
@@ -156,6 +157,7 @@ export default async function ApplicationDetailPage({
               ) : (
                 <AnonymizeButton id={application.id} />
               )}
+              <DeleteApplicationButton id={application.id} />
             </div>
           </AdminCard>
 

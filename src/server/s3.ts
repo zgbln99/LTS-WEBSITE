@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
@@ -44,6 +45,21 @@ export async function uploadApplicationFile(
     })
   );
   return key;
+}
+
+// Löscht Bewerbungsdateien aus dem Anwendungs-Bucket (Best-Effort).
+export async function deleteApplicationFiles(keys: string[]) {
+  if (!isS3Configured() || keys.length === 0) return;
+  const bucket = process.env.S3_BUCKET_APPLICATIONS ?? "lts-applications";
+  await Promise.all(
+    keys.map((key) =>
+      getClient()
+        .send(new DeleteObjectCommand({ Bucket: bucket, Key: key }))
+        .catch((error) =>
+          console.error("S3-Datei konnte nicht gelöscht werden:", key, error)
+        )
+    )
+  );
 }
 
 // Generischer Upload (z.B. für Datenbank-Backups) in denselben Bucket.

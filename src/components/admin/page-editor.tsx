@@ -105,13 +105,15 @@ export function PageEditor({
 
   const reset = () =>
     startTransition(async () => {
-      if (
-        !window.confirm(
-          "Diese Sprachversion auf das Standard-Layout zurücksetzen? Eigene Änderungen gehen verloren."
-        )
-      ) {
-        return;
-      }
+      // Bewusst hohe Hürde: tippen statt klicken, damit keine Seite versehentlich
+      // gelöscht wird (das Zurücksetzen entfernt die gespeicherte Version!).
+      const answer = window.prompt(
+        `ACHTUNG: Dies LÖSCHT die gespeicherte Version von "${pageLabel}" (${(
+          localeLabels[locale] ?? locale
+        )}) und stellt das Standard-Layout wieder her. Eigene Inhalte gehen ` +
+          `unwiderruflich verloren.\n\nZum Bestätigen ZURÜCKSETZEN eingeben:`
+      );
+      if (answer?.trim().toUpperCase() !== "ZURÜCKSETZEN") return;
       await resetPageAction(pageKey, locale);
       window.location.reload();
     });

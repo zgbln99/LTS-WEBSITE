@@ -7,6 +7,7 @@ import { z } from "zod";
 import { requireRole, signIn, signOut } from "@/auth";
 import { prisma } from "@/server/db";
 import { writeAuditLog } from "@/server/audit";
+import { deleteApplicationFiles } from "@/server/s3";
 import {
   ApplicationStatus,
   RequestStatus,
@@ -221,4 +222,31 @@ export async function anonymizeApplication(formData: FormData) {
   });
   revalidatePath("/admin/bewerbungen");
   revalidatePath(`/admin/bewerbungen/${id}`);
+}
+
+// Kandidat endgültig löschen: Dateien aus S3 entfernen und den Datensatz samt
+// Dateien/Notizen/Aktivitäten (Cascade) aus der Datenbank löschen.
+export async function deleteApplication(formData: FormData) {
+  const session = await requireRole(APPLICATION_ROLES);
+  if (!session) redirect("/admin/login");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const files = await prisma.applicationFile.findMany({
+    where: { applicationId: id },
+    select: { s3Key: true }
+  });
+  await deleteApplicationFiles(files.map((file) => file.s3Key));
+
+  await prisma.application.delete({ where: { id } });
+
+  await writeAuditLog({
+    userId: session.user.id,
+    action: "DELETE",
+    entityType: "Application",
+    entityId: id
+  });
+  revalidatePath("/admin/bewerbungen");
+  redirect("/admin/bewerbungen");
 }
