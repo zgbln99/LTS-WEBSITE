@@ -18,6 +18,7 @@ import { getPathname } from "@/i18n/navigation";
 import { isTranslationConfigured } from "@/server/translate";
 import { getServices } from "@/data/services";
 import { formatSalaryRange } from "@/lib/salary";
+import { formatLongDate } from "@/lib/format-date";
 import { locales, type Locale } from "@/i18n/routing";
 import { company } from "@/data/company";
 
@@ -68,7 +69,7 @@ export default async function PageEditorPage({
     getPublishedTestimonials(locale),
     getPublishedArticles(locale)
   ]);
-  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const dateFormatter = { format: (d: Date) => formatLongDate(d, locale) };
   const articles = publishedArticles.map((article) => ({
     href: getPathname({
       locale,

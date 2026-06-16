@@ -11,6 +11,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { PageHero } from "@/components/sections/page-hero";
 import { seoMetadata } from "@/server/seo";
 import { getPublishedArticles, articleImage } from "@/server/content";
+import { formatLongDate } from "@/lib/format-date";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 
@@ -40,9 +41,7 @@ export default async function KnowledgePage({ params }: Props) {
   const categories = t.raw("categories") as { name: string; text: string }[];
   const articles = await getPublishedArticles(locale);
 
-  const dateFormatter = new Intl.DateTimeFormat(locale, {
-    dateStyle: "long"
-  });
+  const dateFormatter = { format: (d: Date) => formatLongDate(d, locale) };
 
   return (
     <>

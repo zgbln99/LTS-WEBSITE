@@ -52,10 +52,18 @@ export function StatusBadge({
 
 export function formatDateTime(date: Date | null | undefined) {
   if (!date) return "";
-  return new Intl.DateTimeFormat("de-DE", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  }).format(date);
+  try {
+    return new Intl.DateTimeFormat("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(date);
+  } catch {
+    const pad = (value: number) => String(value).padStart(2, "0");
+    return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  }
 }
 
 export function AdminCard({

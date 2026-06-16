@@ -4,6 +4,7 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/auth";
 import { writeAuditLog } from "@/server/audit";
+import { formatDateTimeDe } from "@/lib/format-date";
 import {
   getMailConfigSummary,
   notificationHtml,
@@ -57,10 +58,7 @@ export async function testSmtpAction(recipient: string): Promise<SmtpTestResult>
   }
 
   // 2) Testmail senden
-  const now = new Date().toLocaleString("de-DE", {
-    dateStyle: "long",
-    timeStyle: "short"
-  });
+  const now = formatDateTimeDe(new Date());
   const rows: [string, string][] = [
     ["Server", `${summary.host}:${summary.port}`],
     ["Verschlüsselung", summary.secure ? "SSL/TLS (secure)" : "STARTTLS"],

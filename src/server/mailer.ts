@@ -1,6 +1,7 @@
 import nodemailer, { type Transporter } from "nodemailer";
 import { getSmtpSettings } from "@/server/site-settings";
 import { brandedEmail } from "@/lib/email-frame";
+import { formatDateTimeDe } from "@/lib/format-date";
 
 export interface MailAttachment {
   filename: string;
@@ -96,10 +97,7 @@ export function notificationHtml(title: string, rows: [string, string][]) {
 
   const content = `<h1 style="margin:0 0 6px;font-size:20px;line-height:1.3;color:#0b0f1a;font-weight:700">${escapeHtml(title)}</h1>
     <p style="margin:0 0 20px;font-size:13px;color:#6b7585">Eingegangen am ${escapeHtml(
-      new Date().toLocaleString("de-DE", {
-        dateStyle: "long",
-        timeStyle: "short"
-      })
+      formatDateTimeDe(new Date())
     )} Uhr</p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%">${body}</table>`;
   return brandedEmail(content);

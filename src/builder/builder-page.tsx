@@ -10,6 +10,7 @@ import {
 } from "@/server/content";
 import { getPathname } from "@/i18n/navigation";
 import { formatSalaryRange } from "@/lib/salary";
+import { formatLongDate } from "@/lib/format-date";
 import type { Locale } from "@/i18n/routing";
 
 // Serverseitiger Wrapper: lädt die dynamischen Daten (Stellen, Einsatzorte,
@@ -29,7 +30,7 @@ export async function BuilderPage({
     getPublishedArticles(locale)
   ]);
 
-  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const dateFormatter = { format: (d: Date) => formatLongDate(d, locale) };
   const articles = publishedArticles.map((article) => ({
     href: getPathname({
       locale: locale as Locale,

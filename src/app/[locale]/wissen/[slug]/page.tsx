@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/sections/page-hero";
 import { articleHtml, articleImage, getArticleBySlug } from "@/server/content";
 import { localizedUrl, pageMetadata } from "@/lib/seo";
+import { formatLongDate } from "@/lib/format-date";
 import { JsonLdScript } from "@/lib/schema";
 import { company } from "@/data/company";
 
@@ -37,7 +38,7 @@ export default async function ArticlePage({ params }: Props) {
   const t = await getTranslations("knowledge");
   const html = articleHtml(article.translation.content);
   const coverImage = articleImage(article.translation.content);
-  const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
+  const dateFormatter = { format: (d: Date) => formatLongDate(d, locale) };
 
   const jsonLd = {
     "@context": "https://schema.org",
