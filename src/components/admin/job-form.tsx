@@ -1,7 +1,9 @@
 import { Languages } from "lucide-react";
 import type { JobPosting, JobPostingTranslation } from "@prisma/client";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { HtmlField } from "@/components/admin/html-field";
 import { saveJobPosting } from "@/server/actions/content";
+import { toRichHtml } from "@/lib/richtext";
 
 const localeNames: Record<string, string> = {
   de: "Deutsch",
@@ -212,20 +214,23 @@ export function JobForm({
         </Field>
       </div>
 
-      <Field label="Beschreibung" htmlFor="job-description" required>
-        <Textarea
-          id="job-description"
+      <div>
+        <span className="mb-1.5 block text-sm font-medium text-night-900">
+          Beschreibung <span className="text-accent-600">*</span>
+        </span>
+        <HtmlField
           name="description"
-          required
-          minLength={10}
-          className="min-h-36"
-          defaultValue={translation?.description}
+          initialValue={toRichHtml(translation?.description)}
         />
-      </Field>
+        <p className="mt-1.5 text-xs text-mist-400">
+          Mit Überschriften, Fettungen und Aufzählungen formatierbar - ideal für
+          Abschnitte wie „Deine Benefits", „Deine Aufgaben" und „Dein Profil".
+        </p>
+      </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
-          label="Anforderungen (eine pro Zeile)"
+          label="Anforderungen (eine pro Zeile, optional)"
           htmlFor="job-requirements"
         >
           <Textarea

@@ -81,6 +81,8 @@ export async function saveJobPosting(formData: FormData) {
   const requirements = lines(formData.get("requirements"));
   const benefits = lines(formData.get("benefits"));
   const slug = slugify(String(formData.get("slug") || data.title));
+  // Beschreibung ist formatiertes HTML aus dem Editor (XSS-Schutz).
+  const description = sanitizeRichText(data.description);
 
   const trSettings = await getTranslationSettings();
   const sourceLocale = trSettings.sourceLocale;
@@ -110,7 +112,7 @@ export async function saveJobPosting(formData: FormData) {
     locale: sourceLocale,
     title: data.title,
     slug,
-    description: data.description,
+    description,
     requirements,
     benefits
   };
@@ -156,11 +158,11 @@ export async function saveJobPosting(formData: FormData) {
     const suffix = jobId.slice(-5);
     const targets = locales.filter((locale) => locale !== sourceLocale);
     for (const locale of targets) {
-      const payload = [data.title, data.description, ...requirements, ...benefits];
+      const payload = [data.title, description, ...requirements, ...benefits];
       const out = await translateBatch(payload, locale, sourceLocale);
       if (!out) continue;
       const tTitle = out[0];
-      const tDescription = out[1];
+      const tDescription = sanitizeRichText(out[1] ?? description);
       const tRequirements = out.slice(2, 2 + requirements.length);
       const tBenefits = out.slice(2 + requirements.length);
       const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;

@@ -10,6 +10,7 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { getJobBySlug } from "@/server/content";
 import { getGeneralSettings } from "@/server/site-settings";
 import { localizedUrl, pageMetadata, SITE_URL } from "@/lib/seo";
+import { htmlToPlainText, looksLikeHtml } from "@/lib/richtext";
 import { JsonLdScript } from "@/lib/schema";
 import { company } from "@/data/company";
 import type { jobCategoryKeys } from "@/lib/forms";
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     { pathname: "/karriere/stelle/[slug]", params: { slug } },
     `${job.translation.title} in ${job.locationCity}`,
-    job.translation.description.slice(0, 155)
+    htmlToPlainText(job.translation.description).slice(0, 155)
   );
 }
 
@@ -185,9 +186,18 @@ export default async function JobDetailPage({ params }: Props) {
             <div className="space-y-6 lg:col-span-3">
               <Reveal>
                 <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
-                  <div className="whitespace-pre-wrap text-base leading-relaxed text-night-800 sm:text-lg">
-                    {job.translation.description}
-                  </div>
+                  {looksLikeHtml(job.translation.description) ? (
+                    <div
+                      className="text-base leading-relaxed text-night-800 sm:text-lg [&_a]:text-accent-600 [&_a:hover]:underline [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-night-900 [&_h2:first-child]:mt-0 [&_h3]:mt-6 [&_h3]:font-display [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-night-900 [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:mt-4 [&_p:first-child]:mt-0 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6"
+                      dangerouslySetInnerHTML={{
+                        __html: job.translation.description
+                      }}
+                    />
+                  ) : (
+                    <div className="whitespace-pre-wrap text-base leading-relaxed text-night-800 sm:text-lg">
+                      {job.translation.description}
+                    </div>
+                  )}
                 </div>
               </Reveal>
 
