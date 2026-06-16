@@ -382,6 +382,7 @@ export default async function JobDetailPage({ params }: Props) {
                     presetCategory={
                       job.category.key as (typeof jobCategoryKeys)[number]
                     }
+                    jobId={job.id}
                   />
                 </div>
 

@@ -573,6 +573,31 @@ export async function submitApplication(
     }
   }
 
+  // Bewerbung der konkreten Stelle zuordnen (nur wenn die ID gültig ist,
+  // sonst würde der Fremdschlüssel den Speichern-Vorgang scheitern lassen).
+  let jobPostingId: string | null = null;
+  let jobLabel = "";
+  const jobIdRaw = String(formData.get("jobId") ?? "").trim();
+  if (jobIdRaw) {
+    const job = await prisma.jobPosting.findUnique({
+      where: { id: jobIdRaw },
+      select: {
+        id: true,
+        translations: {
+          where: { locale: { in: [data.locale, "de"] } },
+          select: { locale: true, title: true }
+        }
+      }
+    });
+    if (job) {
+      jobPostingId = job.id;
+      jobLabel =
+        job.translations.find((t) => t.locale === data.locale)?.title ??
+        job.translations[0]?.title ??
+        "";
+    }
+  }
+
   let stored = false;
   try {
     const category = await prisma.jobCategory.upsert({
@@ -582,6 +607,7 @@ export async function submitApplication(
     });
     await prisma.application.create({
       data: {
+        jobPostingId,
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
@@ -607,6 +633,7 @@ export async function submitApplication(
 
   const rows: [string, string][] = [
     ["Referenz", reference],
+    ["Stelle", jobLabel],
     ["Bereich", data.category],
     ["Name", `${data.firstName} ${data.lastName}`],
     ["E-Mail", data.email],

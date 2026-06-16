@@ -22,9 +22,11 @@ import { idleFormState, jobCategoryKeys } from "@/lib/forms";
 const licenseClasses = ["", "B", "C1", "C", "CE"] as const;
 
 export function ApplicationForm({
-  presetCategory
+  presetCategory,
+  jobId
 }: {
   presetCategory?: (typeof jobCategoryKeys)[number];
+  jobId?: string;
 }) {
   const t = useTranslations("forms");
   const tCareer = useTranslations("career");
@@ -53,6 +55,7 @@ export function ApplicationForm({
       <TimeTrapField />
       <SourceField />
       <input type="hidden" name="locale" value={locale} />
+      {jobId ? <input type="hidden" name="jobId" value={jobId} /> : null}
 
       {presetCategory ? (
         <input type="hidden" name="category" value={presetCategory} />
