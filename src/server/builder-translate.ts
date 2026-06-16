@@ -1,5 +1,7 @@
 import type { Data } from "@measured/puck";
 import { translateBatch } from "@/server/translate";
+import { relocalizeHref } from "@/server/builder-links";
+import type { Locale } from "@/i18n/routing";
 
 // Feldnamen, die im Page-Builder menschlichen Text enthalten (und daher
 // übersetzt werden). Bild-/Link-/Layout-Felder sind bewusst nicht enthalten.
@@ -19,6 +21,9 @@ const TEXT_KEYS = new Set([
   "label",
   "alt"
 ]);
+
+// Linkfelder werden nicht übersetzt, sondern auf die Zielsprache umgerechnet.
+const LINK_KEYS = new Set(["href", "primaryHref", "secondaryHref"]);
 
 function hasLetters(value: string) {
   return /\p{L}/u.test(value);
@@ -50,6 +55,9 @@ export async function translatePageData(
             setters.push((v) => {
               record[key] = v;
             });
+          } else if (LINK_KEYS.has(key) && value.trim()) {
+            // Interne Links auf die Zielsprache umrechnen (nicht übersetzen).
+            record[key] = relocalizeHref(value, targetLocale as Locale);
           }
         } else {
           walk(value);

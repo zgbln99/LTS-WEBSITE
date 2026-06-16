@@ -10,8 +10,9 @@ import { writeAuditLog } from "@/server/audit";
 import { revalidatePublic } from "@/server/revalidate-public";
 import { sanitizeBuilderData } from "@/server/builder";
 import { translatePageData } from "@/server/builder-translate";
+import { relocalizePageLinks } from "@/server/builder-links";
 import { getTranslationSettings } from "@/server/site-settings";
-import { locales } from "@/i18n/routing";
+import { locales, type Locale } from "@/i18n/routing";
 import { BUILDER_PAGES, isBuilderPageKey } from "@/builder/defaults";
 
 const BUILDER_ROLES: Role[] = ["SUPER_ADMIN", "MARKETING", "EDITOR"];
@@ -90,7 +91,12 @@ export async function publishPageAction(
   if (!session) redirect("/admin/login");
   if (!isBuilderPageKey(key)) return { ok: false };
 
-  const clean = sanitizeBuilderData(data) as unknown as Prisma.InputJsonValue;
+  // Interne Links der bearbeiteten Sprache anpassen (z.B. falls noch Links
+  // einer anderen Sprache im Inhalt stecken).
+  const localizedData = relocalizePageLinks(data, locale as Locale);
+  const clean = sanitizeBuilderData(
+    localizedData
+  ) as unknown as Prisma.InputJsonValue;
   const page = await ensureTranslation(key, locale);
   await prisma.pageTranslation.update({
     where: { pageId_locale: { pageId: page.id, locale } },
@@ -149,9 +155,9 @@ export async function translatePageAction(
   }
 
   const page = await ensureTranslation(key, sourceLocale);
-  // Ausgangssprache als veröffentlichten Stand sichern.
+  // Ausgangssprache als veröffentlichten Stand sichern (Links angleichen).
   const cleanSource = sanitizeBuilderData(
-    data
+    relocalizePageLinks(data, sourceLocale as Locale)
   ) as unknown as Prisma.InputJsonValue;
   await prisma.pageTranslation.update({
     where: { pageId_locale: { pageId: page.id, locale: sourceLocale } },
