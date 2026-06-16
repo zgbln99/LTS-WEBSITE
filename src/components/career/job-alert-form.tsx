@@ -6,6 +6,7 @@ import { BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HoneypotField, Input } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
+import { CapWidget } from "@/components/ui/cap-widget";
 import { submitJobAlert } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 
@@ -76,6 +77,7 @@ export function JobAlertForm({ defaultRegion }: { defaultRegion?: string }) {
             {tForms(`errors.${state.code ?? "generic"}`)}
           </p>
         ) : null}
+        <CapWidget />
         <Button type="submit" disabled={pending} className="w-full sm:w-auto">
           {pending ? tForms("labels.sending") : t("submit")}
         </Button>

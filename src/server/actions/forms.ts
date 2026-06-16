@@ -27,6 +27,7 @@ import {
   type FormActionState
 } from "@/lib/forms";
 import { sendJobAlertConfirmation } from "@/server/job-alerts";
+import { isCaptchaConfigured, verifyCaptcha } from "@/server/captcha";
 
 function generateReference(prefix: string) {
   const random = Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -56,6 +57,23 @@ function isSubmittedTooFast(formData: FormData) {
     console.warn(`Bot-Schutz: Formular in ${elapsed} ms gesendet, verworfen.`);
   }
   return tooFast;
+}
+
+// Zentraler Bot-Schutz pro Formular:
+// - Honeypot greift immer (stille "success"-Antwort, um Bots nicht zu warnen).
+// - Ist Cap-CAPTCHA konfiguriert, wird das Token geprüft (ersetzt die Zeitfalle).
+// - Sonst greift die (uhren-tolerante) Zeitfalle.
+// Rückgabe: FormActionState zum sofortigen Beenden, oder null zum Fortfahren.
+async function botRejection(
+  formData: FormData
+): Promise<FormActionState | null> {
+  if (isHoneypotFilled(formData)) return { status: "success" };
+  if (isCaptchaConfigured()) {
+    const ok = await verifyCaptcha(formData.get("cap-token") as string | null);
+    return ok ? null : { status: "error", code: "captcha" };
+  }
+  if (isSubmittedTooFast(formData)) return { status: "success" };
+  return null;
 }
 
 async function sendConfirmation(
@@ -106,9 +124,8 @@ export async function submitTransportRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success", reference: generateReference("LTS") };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("transport", ipHash)) {
@@ -217,9 +234,8 @@ export async function submitContactRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success" };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("contact", ipHash)) {
@@ -290,9 +306,8 @@ export async function submitCallbackRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success" };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("callback", ipHash)) {
@@ -352,9 +367,8 @@ export async function submitJobAlert(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success" };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("jobalert", ipHash)) {
@@ -396,9 +410,8 @@ export async function submitAppointmentRequest(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success" };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("appointment", ipHash)) {
@@ -476,9 +489,8 @@ export async function submitApplication(
   _prev: FormActionState,
   formData: FormData
 ): Promise<FormActionState> {
-  if (isHoneypotFilled(formData) || isSubmittedTooFast(formData)) {
-    return { status: "success" };
-  }
+  const rejected = await botRejection(formData);
+  if (rejected) return rejected;
 
   const ipHash = await getClientIpHash();
   if (isRateLimited("application", ipHash)) {

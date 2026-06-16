@@ -474,7 +474,8 @@
       "generic": "Podczas wysyłania wystąpił błąd. Spróbuj ponownie lub zadzwoń do nas.",
       "validation": "Sprawdź wprowadzone dane i spróbuj ponownie.",
       "rateLimit": "Zbyt wiele zapytań. Odczekaj kilka minut i spróbuj ponownie.",
-      "file": "Plik jest za duży lub ma nieobsługiwany format. Dozwolone: PDF, JPG i PNG do 10 MB."
+      "file": "Plik jest za duży lub ma nieobsługiwany format. Dozwolone: PDF, JPG i PNG do 10 MB.",
+      "captcha": "Potwierdź, że nie jesteś robotem, i wyślij ponownie."
     },
     "inquiry": {
       "steps": {

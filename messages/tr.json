@@ -474,7 +474,8 @@
       "generic": "Gönderim sırasında bir hata oluştu. Lütfen tekrar deneyin veya bizi arayın.",
       "validation": "Lütfen girdiğiniz bilgileri kontrol edip tekrar deneyin.",
       "rateLimit": "Çok fazla istek. Lütfen birkaç dakika bekleyip tekrar deneyin.",
-      "file": "Bir dosya çok büyük veya desteklenmeyen formatta. İzin verilenler: 10 MB'a kadar PDF, JPG ve PNG."
+      "file": "Bir dosya çok büyük veya desteklenmeyen formatta. İzin verilenler: 10 MB'a kadar PDF, JPG ve PNG.",
+      "captcha": "Lütfen robot olmadığınızı onaylayın ve tekrar gönderin."
     },
     "inquiry": {
       "steps": {

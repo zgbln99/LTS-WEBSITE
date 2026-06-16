@@ -118,7 +118,7 @@ export const MAX_TOTAL_SIZE = 25 * 1024 * 1024; // 25 MB pro Bewerbung
 
 export type FormActionState = {
   status: "idle" | "success" | "error";
-  code?: "validation" | "rateLimit" | "file" | "generic";
+  code?: "validation" | "rateLimit" | "file" | "generic" | "captcha";
   reference?: string;
 };
 
