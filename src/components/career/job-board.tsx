@@ -1,10 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Clock, MapPin, Search } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  Search
+} from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Input, Select } from "@/components/ui/field";
+
+const PAGE_SIZE = 10;
 
 export interface BoardJob {
   id: string;
@@ -48,6 +57,12 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
   const [country, setCountry] = useState("");
+  const [page, setPage] = useState(1);
+
+  // Bei jeder Filteränderung zurück auf die erste Seite.
+  useEffect(() => {
+    setPage(1);
+  }, [query, category, country]);
 
   const categories = useMemo(
     () => [...new Set(jobs.map((job) => job.licenseCategory).filter(Boolean))],
@@ -66,6 +81,13 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
     if (country && job.country !== country) return false;
     return true;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const paged = filtered.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE
+  );
 
   return (
     <div>
@@ -131,7 +153,7 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
           </p>
         ) : (
           <ul className="divide-y divide-mist-100">
-            {filtered.map((job) => (
+            {paged.map((job) => (
               <li key={job.id}>
                 <Link
                   href={{
@@ -181,6 +203,47 @@ export function JobBoard({ jobs }: { jobs: BoardJob[] }) {
           </ul>
         )}
       </div>
+
+      {/* Seitennavigation */}
+      {totalPages > 1 ? (
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.max(1, value - 1))}
+            disabled={safePage === 1}
+            aria-label={t("prevPage")}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-mist-200 bg-white text-night-900 transition-colors hover:border-night-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-mist-200"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (number) => (
+              <button
+                key={number}
+                type="button"
+                onClick={() => setPage(number)}
+                aria-current={number === safePage ? "page" : undefined}
+                className={
+                  number === safePage
+                    ? "h-10 min-w-10 rounded-full bg-night-950 px-3 text-sm font-semibold text-white"
+                    : "h-10 min-w-10 rounded-full border border-mist-200 bg-white px-3 text-sm font-semibold text-night-700 transition-colors hover:border-night-900"
+                }
+              >
+                {number}
+              </button>
+            )
+          )}
+          <button
+            type="button"
+            onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+            disabled={safePage === totalPages}
+            aria-label={t("nextPage")}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-mist-200 bg-white text-night-900 transition-colors hover:border-night-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-mist-200"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -301,7 +301,9 @@
       "colSystem": "System",
       "colSalary": "Wynagrodzenie",
       "categoryPrefix": "Kat.",
-      "noResults": "Brak pasujących ofert. Skorzystaj z szybkiego kontaktu poniżej, odezwiemy się."
+      "noResults": "Brak pasujących ofert. Skorzystaj z szybkiego kontaktu poniżej, odezwiemy się.",
+      "prevPage": "Poprzednia strona",
+      "nextPage": "Następna strona"
     },
     "callback": {
       "eyebrow": "Szybki kontakt",

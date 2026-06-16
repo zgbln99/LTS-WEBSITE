@@ -301,7 +301,9 @@
       "colSystem": "Sistem",
       "colSalary": "Kazanç",
       "categoryPrefix": "Kat.",
-      "noResults": "Uygun ilan bulunamadı. Aşağıdaki hızlı iletişimi kullanın, size dönelim."
+      "noResults": "Uygun ilan bulunamadı. Aşağıdaki hızlı iletişimi kullanın, size dönelim.",
+      "prevPage": "Önceki sayfa",
+      "nextPage": "Sonraki sayfa"
     },
     "callback": {
       "eyebrow": "Hızlı iletişim",

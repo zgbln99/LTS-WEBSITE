@@ -301,7 +301,9 @@
       "colSystem": "System",
       "colSalary": "Salary",
       "categoryPrefix": "Cat.",
-      "noResults": "No matching offers. Use the quick contact below and we will get back to you."
+      "noResults": "No matching offers. Use the quick contact below and we will get back to you.",
+      "prevPage": "Previous page",
+      "nextPage": "Next page"
     },
     "callback": {
       "eyebrow": "Quick contact",

@@ -301,7 +301,9 @@
       "colSystem": "System",
       "colSalary": "Verdienst",
       "categoryPrefix": "Kat.",
-      "noResults": "Keine passenden Angebote gefunden. Nutzen Sie den schnellen Kontakt unten, wir melden uns."
+      "noResults": "Keine passenden Angebote gefunden. Nutzen Sie den schnellen Kontakt unten, wir melden uns.",
+      "prevPage": "Vorherige Seite",
+      "nextPage": "Nächste Seite"
     },
     "callback": {
       "eyebrow": "Schneller Kontakt",
