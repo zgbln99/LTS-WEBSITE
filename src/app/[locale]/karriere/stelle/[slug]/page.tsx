@@ -62,6 +62,7 @@ export default async function JobDetailPage({ params }: Props) {
     }[job.employmentType] ?? "FULL_TIME";
   const requirements = (job.translation.requirements as string[]) ?? [];
   const benefits = (job.translation.benefits as string[]) ?? [];
+  const profile = (job.translation.profile as string[] | null) ?? [];
   const salary =
     job.salaryMin || job.salaryMax
       ? `${
@@ -209,6 +210,26 @@ export default async function JobDetailPage({ params }: Props) {
                     </h2>
                     <ul className="mt-5 space-y-3">
                       {requirements.map((item) => (
+                        <li key={item} className="flex items-start gap-3 text-base text-night-800">
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-500/10">
+                            <Check className="h-3.5 w-3.5 text-accent-600" />
+                          </span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              ) : null}
+
+              {profile.length > 0 ? (
+                <Reveal>
+                  <div className="rounded-3xl bg-white p-7 shadow-card sm:p-10">
+                    <h2 className="font-display text-xl font-bold text-night-900">
+                      {t("jobs.profileTitle")}
+                    </h2>
+                    <ul className="mt-5 space-y-3">
+                      {profile.map((item) => (
                         <li key={item} className="flex items-start gap-3 text-base text-night-800">
                           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-500/10">
                             <Check className="h-3.5 w-3.5 text-accent-600" />

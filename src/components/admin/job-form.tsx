@@ -250,6 +250,18 @@ export function JobForm({
         </Field>
       </div>
 
+      <Field label="Dein Profil (eine Anforderung pro Zeile)" htmlFor="job-profile">
+        <Textarea
+          id="job-profile"
+          name="profile"
+          className="min-h-32"
+          defaultValue={toLines(
+            (translation as { profile?: unknown } | undefined)?.profile
+          )}
+          placeholder={"Fahrerlaubnisklasse ab CE\nBerufskraftfahrerqualifizierung (Code 95)\nErfahrung im Umgang mit einem Lkw"}
+        />
+      </Field>
+
       <button
         type="submit"
         className="rounded-full bg-accent-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-accent-600"

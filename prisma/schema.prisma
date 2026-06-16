@@ -259,6 +259,7 @@ model JobPostingTranslation {
   description    String     @db.Text
   requirements   Json // string[]
   benefits       Json // string[]
+  profile        Json? // string[] - "Dein Profil"
   seoTitle       String?
   seoDescription String?
 

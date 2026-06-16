@@ -80,6 +80,7 @@ export async function saveJobPosting(formData: FormData) {
   const salaryMax = optionalInt(formData.get("salaryMax"));
   const requirements = lines(formData.get("requirements"));
   const benefits = lines(formData.get("benefits"));
+  const profile = lines(formData.get("profile"));
   const slug = slugify(String(formData.get("slug") || data.title));
   // Beschreibung ist formatiertes HTML aus dem Editor (XSS-Schutz).
   const description = sanitizeRichText(data.description);
@@ -114,7 +115,8 @@ export async function saveJobPosting(formData: FormData) {
     slug,
     description,
     requirements,
-    benefits
+    benefits,
+    profile
   };
 
   let jobId = data.id;
@@ -158,20 +160,31 @@ export async function saveJobPosting(formData: FormData) {
     const suffix = jobId.slice(-5);
     const targets = locales.filter((locale) => locale !== sourceLocale);
     for (const locale of targets) {
-      const payload = [data.title, description, ...requirements, ...benefits];
+      const payload = [
+        data.title,
+        description,
+        ...requirements,
+        ...benefits,
+        ...profile
+      ];
       const out = await translateBatch(payload, locale, sourceLocale);
       if (!out) continue;
       const tTitle = out[0];
       const tDescription = sanitizeRichText(out[1] ?? description);
-      const tRequirements = out.slice(2, 2 + requirements.length);
-      const tBenefits = out.slice(2 + requirements.length);
+      const reqStart = 2;
+      const benStart = reqStart + requirements.length;
+      const profStart = benStart + benefits.length;
+      const tRequirements = out.slice(reqStart, benStart);
+      const tBenefits = out.slice(benStart, profStart);
+      const tProfile = out.slice(profStart, profStart + profile.length);
       const localeSlug = `${slugify(tTitle) || slug}-${suffix}`;
       const translated = {
         title: tTitle,
         slug: localeSlug,
         description: tDescription,
         requirements: tRequirements,
-        benefits: tBenefits
+        benefits: tBenefits,
+        profile: tProfile
       };
       await prisma.jobPostingTranslation.upsert({
         where: { jobPostingId_locale: { jobPostingId: jobId, locale } },
@@ -329,6 +342,7 @@ export async function duplicateJobPosting(formData: FormData) {
           description: tr.description,
           requirements: tr.requirements ?? [],
           benefits: tr.benefits ?? [],
+          profile: tr.profile ?? [],
           seoTitle: tr.seoTitle,
           seoDescription: tr.seoDescription
         }))
