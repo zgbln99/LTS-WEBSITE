@@ -484,6 +484,7 @@ export function generateDefaultData(
   }
 
   if (key === "leistungen") {
+    const services = getServices(locale);
     content.push(
       block("Seitenkopf", {
         eyebrow: m.servicesPage.hero.eyebrow,
@@ -491,7 +492,20 @@ export function generateDefaultData(
         description: m.servicesPage.hero.description,
         image: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=2400&auto=format&fit=crop"
       }),
-      block("Leistungen", { ctaLabel: m.common.cta.learnMore }),
+      // Bearbeitbares Karten-Raster (jede Leistung als Karte editierbar)
+      // statt eines festen, dynamischen Blocks.
+      block("Karten", {
+        theme: "light",
+        columns: "4",
+        style: "photo",
+        items: services.map((service) => ({
+          title: service.name,
+          specs: "",
+          text: service.excerpt,
+          image: service.image,
+          href: href("/leistungen/[slug]", { slug: service.slug })
+        }))
+      }),
       block("CTABanner", {
         title: m.servicesPage.cta.title,
         description: m.servicesPage.cta.description,
