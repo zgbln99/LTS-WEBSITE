@@ -280,6 +280,7 @@
       "title": "Open positions",
       "cta": "Details and application",
       "salaryTo": "to",
+      "salaryFrom": "from",
       "requirementsTitle": "What you bring",
       "profileTitle": "Your Profile",
       "employmentTypes": {

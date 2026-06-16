@@ -17,6 +17,7 @@ import {
 import { getPathname } from "@/i18n/navigation";
 import { isTranslationConfigured } from "@/server/translate";
 import { getServices } from "@/data/services";
+import { formatSalaryRange } from "@/lib/salary";
 import { locales, type Locale } from "@/i18n/routing";
 import { company } from "@/data/company";
 
@@ -24,12 +25,12 @@ export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Seiten-Editor" };
 
-function formatSalary(min: number | null, max: number | null) {
-  if (min && max && min !== max) {
-    return `${min.toLocaleString("de-DE")}-${max.toLocaleString("de-DE")} EUR`;
-  }
-  if (min || max) return `${(min ?? max)!.toLocaleString("de-DE")} EUR`;
-  return "";
+function formatSalary(
+  min: number | null,
+  max: number | null,
+  labels: { from: string; to: string }
+) {
+  return formatSalaryRange(min, max, labels);
 }
 
 export default async function PageEditorPage({
@@ -121,7 +122,10 @@ export default async function PageEditorPage({
       country: job.country,
       system:
         job.workSystem ?? t(`jobs.employmentTypes.${job.employmentType}`),
-      salary: formatSalary(job.salaryMin, job.salaryMax),
+      salary: formatSalary(job.salaryMin, job.salaryMax, {
+        from: t("jobs.salaryFrom"),
+        to: t("jobs.salaryTo")
+      }),
       salaryNote: job.salaryNote,
       licenseCategory: job.licenseCategory ?? ""
     })),

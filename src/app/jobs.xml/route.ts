@@ -1,5 +1,6 @@
 import { getPublishedJobs } from "@/server/content";
 import { localizedUrl, SITE_URL } from "@/lib/seo";
+import { formatSalaryRange } from "@/lib/salary";
 import { company } from "@/data/company";
 import { routing } from "@/i18n/routing";
 
@@ -27,14 +28,10 @@ export async function GET() {
         pathname: "/karriere/stelle/[slug]",
         params: { slug: job.translation.slug }
       });
-      const salary =
-        job.salaryMin || job.salaryMax
-          ? `${
-              job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
-                ? `${job.salaryMin}-${job.salaryMax}`
-                : (job.salaryMin ?? job.salaryMax)
-            } ${job.salaryCurrency} ${job.salaryNote}`
-          : "";
+      const salaryRange = formatSalaryRange(job.salaryMin, job.salaryMax);
+      const salary = salaryRange
+        ? `${salaryRange.replace(/ EUR/g, ` ${job.salaryCurrency}`)} ${job.salaryNote}`
+        : "";
       const datePosted = job.publishedAt ?? job.createdAt;
       const date = datePosted.toUTCString();
       const expires = (

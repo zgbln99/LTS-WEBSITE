@@ -15,6 +15,7 @@ import { getPublishedJobs, getServiceCities } from "@/server/content";
 import { buildAlternates, localizedUrl } from "@/lib/seo";
 import { JsonLdScript } from "@/lib/schema";
 import { slugify } from "@/lib/slug";
+import { formatSalaryRange } from "@/lib/salary";
 
 export const dynamic = "force-dynamic";
 
@@ -68,13 +69,11 @@ export default async function CityLandingPage({ params }: Props) {
   // Bei fehlenden Stellen direkt vor Ort alle offenen Stellen zeigen.
   const jobs = cityJobs.length > 0 ? cityJobs : allJobs;
 
-  const formatSalary = (min: number | null, max: number | null) => {
-    if (min && max && min !== max) {
-      return `${min.toLocaleString("de-DE")}-${max.toLocaleString("de-DE")} EUR`;
-    }
-    if (min || max) return `${(min ?? max)!.toLocaleString("de-DE")} EUR`;
-    return "";
-  };
+  const formatSalary = (min: number | null, max: number | null) =>
+    formatSalaryRange(min, max, {
+      from: tCareer("jobs.salaryFrom"),
+      to: tCareer("jobs.salaryTo")
+    });
 
   const boardJobs = jobs.map((job) => ({
     id: job.id,

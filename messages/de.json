@@ -280,6 +280,7 @@
       "title": "Offene Stellen",
       "cta": "Details und Bewerbung",
       "salaryTo": "bis",
+      "salaryFrom": "ab",
       "requirementsTitle": "Das bringen Sie mit",
       "profileTitle": "Dein Profil",
       "employmentTypes": {

@@ -280,6 +280,7 @@
       "title": "Aktualne oferty pracy",
       "cta": "Szczegóły i aplikacja",
       "salaryTo": "do",
+      "salaryFrom": "od",
       "requirementsTitle": "Czego oczekujemy",
       "profileTitle": "Twój profil",
       "employmentTypes": {

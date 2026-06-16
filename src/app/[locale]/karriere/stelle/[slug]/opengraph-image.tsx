@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import type { Locale } from "@/i18n/routing";
 import { getJobBySlug } from "@/server/content";
+import { formatSalaryRange } from "@/lib/salary";
 
 export const dynamic = "force-dynamic";
 export const size = { width: 1200, height: 630 };
@@ -23,14 +24,10 @@ export default async function Image({
     : "Deutschland und Europa";
   const category = job?.licenseCategory ?? "C+E";
   const system = job?.workSystem ?? "";
-  const salary =
-    job && (job.salaryMin || job.salaryMax)
-      ? `${
-          job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
-            ? `${job.salaryMin.toLocaleString("de-DE")}-${job.salaryMax.toLocaleString("de-DE")}`
-            : (job.salaryMin ?? job.salaryMax)!.toLocaleString("de-DE")
-        } EUR ${job.salaryNote}`
-      : "";
+  const salaryRange = job
+    ? formatSalaryRange(job.salaryMin, job.salaryMax)
+    : "";
+  const salary = salaryRange ? `${salaryRange} ${job!.salaryNote}` : "";
 
   return new ImageResponse(
     (

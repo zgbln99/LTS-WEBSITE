@@ -28,6 +28,7 @@ import { CallbackPanel } from "@/components/career/callback-form";
 import { getPublishedJobs } from "@/server/content";
 import { seoMetadata } from "@/server/seo";
 import { company } from "@/data/company";
+import { formatSalaryRange } from "@/lib/salary";
 import { cn } from "@/lib/utils";
 
 // Stellenangebote kommen aus der Datenbank: Seite wird bei jedem Aufruf
@@ -70,13 +71,11 @@ export default async function CareerPage({ params }: Props) {
   const benefits = t.raw("benefits") as string[];
   const jobs = await getPublishedJobs(locale);
 
-  const formatSalary = (min: number | null, max: number | null) => {
-    if (min && max && min !== max) {
-      return `${min.toLocaleString("de-DE")}-${max.toLocaleString("de-DE")} EUR`;
-    }
-    if (min || max) return `${(min ?? max)!.toLocaleString("de-DE")} EUR`;
-    return "";
-  };
+  const formatSalary = (min: number | null, max: number | null) =>
+    formatSalaryRange(min, max, {
+      from: t("jobs.salaryFrom"),
+      to: t("jobs.salaryTo")
+    });
 
   const boardJobs = jobs.map((job) => ({
     id: job.id,

@@ -280,6 +280,7 @@
       "title": "Відкриті вакансії",
       "cta": "Деталі та заявка",
       "salaryTo": "до",
+      "salaryFrom": "від",
       "requirementsTitle": "Що від вас потрібно",
       "profileTitle": "Ваш профіль",
       "employmentTypes": {

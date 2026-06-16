@@ -9,15 +9,8 @@ import {
   getServiceCities
 } from "@/server/content";
 import { getPathname } from "@/i18n/navigation";
+import { formatSalaryRange } from "@/lib/salary";
 import type { Locale } from "@/i18n/routing";
-
-function formatSalary(min: number | null, max: number | null) {
-  if (min && max && min !== max) {
-    return `${min.toLocaleString("de-DE")}-${max.toLocaleString("de-DE")} EUR`;
-  }
-  if (min || max) return `${(min ?? max)!.toLocaleString("de-DE")} EUR`;
-  return "";
-}
 
 // Serverseitiger Wrapper: lädt die dynamischen Daten (Stellen, Einsatzorte,
 // Referenzen) und rendert eine im Page-Builder erstellte Seite.
@@ -57,7 +50,10 @@ export async function BuilderPage({
     location: job.locationCity,
     country: job.country,
     system: job.workSystem ?? t(`jobs.employmentTypes.${job.employmentType}`),
-    salary: formatSalary(job.salaryMin, job.salaryMax),
+    salary: formatSalaryRange(job.salaryMin, job.salaryMax, {
+      from: t("jobs.salaryFrom"),
+      to: t("jobs.salaryTo")
+    }),
     salaryNote: job.salaryNote,
     licenseCategory: job.licenseCategory ?? ""
   }));

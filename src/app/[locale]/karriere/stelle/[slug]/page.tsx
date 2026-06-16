@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Check, Euro, MapPin, Clock, MessageCircle, Phone } from "lucide-react";
+import {
+  Check,
+  Euro,
+  Mail,
+  MapPin,
+  Clock,
+  MessageCircle,
+  Phone
+} from "lucide-react";
+import { Logo } from "@/components/layout/logo";
 import type { Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
@@ -11,6 +20,7 @@ import { getJobBySlug } from "@/server/content";
 import { getGeneralSettings } from "@/server/site-settings";
 import { localizedUrl, pageMetadata, SITE_URL } from "@/lib/seo";
 import { htmlToPlainText, looksLikeHtml } from "@/lib/richtext";
+import { formatSalaryRange } from "@/lib/salary";
 import { JsonLdScript, breadcrumbSchema } from "@/lib/schema";
 import { company } from "@/data/company";
 import type { jobCategoryKeys } from "@/lib/forms";
@@ -64,14 +74,11 @@ export default async function JobDetailPage({ params }: Props) {
   const requirements = (job.translation.requirements as string[]) ?? [];
   const benefits = (job.translation.benefits as string[]) ?? [];
   const profile = (job.translation.profile as string[] | null) ?? [];
-  const salary =
-    job.salaryMin || job.salaryMax
-      ? `${
-          job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
-            ? `${job.salaryMin.toLocaleString("de-DE")}-${job.salaryMax.toLocaleString("de-DE")}`
-            : ((job.salaryMin ?? job.salaryMax) as number).toLocaleString("de-DE")
-        } EUR ${job.salaryNote}`
-      : null;
+  const salaryRange = formatSalaryRange(job.salaryMin, job.salaryMax, {
+    from: t("jobs.salaryFrom"),
+    to: t("jobs.salaryTo")
+  });
+  const salary = salaryRange ? `${salaryRange} ${job.salaryNote}` : null;
 
   // URL, Datumswerte und eine vollständige HTML-Beschreibung für Google for
   // Jobs zusammenstellen. Google zeigt das description-Feld an, daher werden
@@ -145,15 +152,20 @@ export default async function JobDetailPage({ params }: Props) {
         addressCountry: job.country === "Deutschland" ? "DE" : job.country
       }
     },
-    ...(job.salaryMin
+    ...(job.salaryMin || job.salaryMax
       ? {
           baseSalary: {
             "@type": "MonetaryAmount",
             currency: job.salaryCurrency,
             value: {
               "@type": "QuantitativeValue",
-              minValue: job.salaryMin,
-              maxValue: job.salaryMax ?? job.salaryMin,
+              // Bei Spanne min/max, bei nur einem Wert "ab"/"bis" als Minimum
+              // bzw. Maximum abbilden.
+              ...(job.salaryMin && job.salaryMax && job.salaryMin !== job.salaryMax
+                ? { minValue: job.salaryMin, maxValue: job.salaryMax }
+                : job.salaryMin
+                  ? { minValue: job.salaryMin }
+                  : { maxValue: job.salaryMax }),
               unitText: job.salaryPeriod
             }
           }
@@ -235,7 +247,7 @@ export default async function JobDetailPage({ params }: Props) {
             </Reveal>
           ) : null}
 
-          <div className="grid items-start gap-6 lg:grid-cols-5">
+          <div className="grid gap-6 lg:grid-cols-5">
             {/* Beschreibung, Anforderungen, Benefits */}
             <div className="space-y-6 lg:col-span-3">
               <Reveal>
@@ -316,9 +328,10 @@ export default async function JobDetailPage({ params }: Props) {
               ) : null}
             </div>
 
-            {/* Direktkontakt und Bewerbungsformular, auf Desktop mitlaufend */}
-            <Reveal delay={0.1} className="lg:col-span-2">
-              <div className="lg:sticky lg:top-28 lg:space-y-5">
+            {/* Direktkontakt, Bewerbungsformular und Firmenangaben.
+                Die Spalte füllt die gleiche Höhe wie die linke Spalte. */}
+            <Reveal delay={0.1} className="h-full lg:col-span-2">
+              <div className="flex h-full flex-col gap-5">
                 {waHref || callHref ? (
                   <div className="rounded-3xl bg-night-950 p-6 sm:p-7">
                     <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-400">
@@ -372,6 +385,37 @@ export default async function JobDetailPage({ params }: Props) {
                       job.category.key as (typeof jobCategoryKeys)[number]
                     }
                   />
+                </div>
+
+                {/* Firmenlogo und Firmenangaben, am unteren Rand verankert */}
+                <div className="mt-auto rounded-3xl bg-night-950 p-6 sm:p-7">
+                  <Logo name={general.siteName} />
+                  <p className="mt-4 font-display text-base font-bold text-white">
+                    {company.legalName}
+                  </p>
+                  <address className="mt-2 space-y-0.5 text-sm not-italic leading-relaxed text-mist-300">
+                    <p>{company.address.street}</p>
+                    <p>
+                      {company.address.zip} {company.address.city}
+                    </p>
+                    <p>{company.address.district}</p>
+                  </address>
+                  <div className="mt-4 space-y-2 text-sm">
+                    <a
+                      href={company.phoneHref}
+                      className="flex items-center gap-2 text-mist-300 transition-colors hover:text-white"
+                    >
+                      <Phone className="h-4 w-4 shrink-0 text-accent-400" />
+                      {company.phone}
+                    </a>
+                    <a
+                      href={`mailto:${company.email}`}
+                      className="flex items-center gap-2 text-mist-300 transition-colors hover:text-white"
+                    >
+                      <Mail className="h-4 w-4 shrink-0 text-accent-400" />
+                      {company.email}
+                    </a>
+                  </div>
                 </div>
               </div>
             </Reveal>
