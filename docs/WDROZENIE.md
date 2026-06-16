@@ -76,28 +76,76 @@ Po każdej zmianie w repozytorium wystarczy:
 cd /opt/lts-website && ./deploy.sh
 ```
 
-## Domena i HTTPS (zalecane po testach)
+## Domena i HTTPS (nginx jako reverse proxy)
 
-Port 2015 jest wygodny do testów. Docelowo warto postawić przed aplikacją reverse proxy
-z certyfikatem TLS, np. Caddy:
+Na tym VPS-ie portami 80/443 zarządza już **host nginx** (przed innym projektem).
+Domena `ltslogistik.de` po wskazaniu na IP trafia do nginx, który **rozróżnia
+aplikacje po `server_name` (nagłówku Host)**. Dlatego trzeba dodać blok nginx
+kierujący domenę do kontenera lts-website na porcie 2015.
+
+1. Sprawdź, że aplikacja działa lokalnie i zobacz istniejące bloki nginx:
 
 ```bash
-apt install -y caddy
-cat > /etc/caddy/Caddyfile <<'EOF'
-ltslogistik.de {
-    reverse_proxy 127.0.0.1:2015
-}
-EOF
-systemctl reload caddy
+docker ps | grep lts-website
+curl -I http://127.0.0.1:2015/de         # oczekiwane HTTP 200
+sudo nginx -T | grep -E "server_name|listen .*default|proxy_pass"
 ```
 
-Następnie ustaw rekord A domeny na IP VPS-a oraz zaktualizuj `AUTH_URL` i
-`NEXT_PUBLIC_SITE_URL` na `https://ltslogistik.de` i uruchom ponownie `./deploy.sh`.
+2. Utwórz blok serwera dla domeny (kieruje na 127.0.0.1:2015):
+
+```bash
+sudo tee /etc/nginx/conf.d/ltslogistik.conf >/dev/null <<'EOF'
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ltslogistik.de www.ltslogistik.de;
+
+    client_max_body_size 64m;
+
+    location / {
+        proxy_pass http://127.0.0.1:2015;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+EOF
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Teraz `http://ltslogistik.de` powinno pokazywać stronę lts-website (nie inną
+aplikację), bo żądanie z tym hostem trafia do nowego bloku, a nie do
+`default_server` innego projektu.
+
+3. HTTPS przez Let's Encrypt (certbot dopisze blok 443 automatycznie):
+
+```bash
+sudo certbot --nginx -d ltslogistik.de -d www.ltslogistik.de
+```
+
+4. Zaktualizuj `.env` i przebuduj:
+
+```
+NEXT_PUBLIC_SITE_URL="https://ltslogistik.de"
+AUTH_URL="https://ltslogistik.de"
+```
+```bash
+cd /opt/lts-website && ./deploy.sh
+```
+
+> Uwaga: jeśli blok innego projektu ma `listen 443 ssl default_server` i
+> przejmuje też `ltslogistik.de`, certbot i nowy `server_name` rozwiążą konflikt,
+> bo nginx dopasuje dokładny `server_name` przed `default_server`.
 
 ## Rozwiązywanie problemów
 
 | Objaw | Przyczyna i rozwiązanie |
 |---|---|
+| domena pokazuje inną aplikację | brak bloku nginx z `server_name ltslogistik.de` -> dodaj plik `/etc/nginx/conf.d/ltslogistik.conf` (patrz wyżej), `nginx -t && systemctl reload nginx` |
 | `P1001: Can't reach database server` | brak IP VPS-a w Remote MySQL lub zły host w `DATABASE_URL` |
 | formularz zwraca błąd ogólny | sprawdź `docker compose logs web`: zwykle baza lub SMTP |
 | brak e-maili | zły port/SSL SMTP (Hostinger: 465 + `SMTP_SECURE=true`), sprawdź też spam |
