@@ -152,7 +152,7 @@ export async function getTranslationSettings(): Promise<TranslationSettings> {
     openaiKey: stored?.openaiKey || process.env.OPENAI_API_KEY || "",
     openaiModel:
       stored?.openaiModel || process.env.OPENAI_MODEL || "gpt-4o-mini",
-    sourceLocale: stored?.sourceLocale || "pl",
+    sourceLocale: stored?.sourceLocale || "de",
     autoTranslate: stored?.autoTranslate ?? true
   };
 }

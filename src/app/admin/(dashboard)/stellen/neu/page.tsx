@@ -14,8 +14,7 @@ export default async function NewJobPage() {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
   if (!session) redirect("/admin");
 
-  const { sourceLocale, autoTranslate, openaiKey } =
-    await getTranslationSettings();
+  const { autoTranslate, openaiKey } = await getTranslationSettings();
 
   return (
     <div className="space-y-6">
@@ -33,7 +32,7 @@ export default async function NewJobPage() {
       </div>
       <AdminCard>
         <JobForm
-          sourceLocale={sourceLocale}
+          sourceLocale="de"
           autoTranslate={autoTranslate && Boolean(openaiKey)}
         />
       </AdminCard>

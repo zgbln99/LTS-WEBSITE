@@ -99,7 +99,9 @@ export async function saveJobPosting(formData: FormData) {
   const description = sanitizeRichText(data.description);
 
   const trSettings = await getTranslationSettings();
-  const sourceLocale = trSettings.sourceLocale;
+  // Stellenanzeigen werden immer auf Deutsch erfasst und von dort in die
+  // anderen Sprachen übersetzt (unabhängig von der globalen Quellsprache).
+  const sourceLocale = "de";
 
   const category = await prisma.jobCategory.upsert({
     where: { key: data.categoryKey },
