@@ -247,7 +247,7 @@ export default async function JobDetailPage({ params }: Props) {
             </Reveal>
           ) : null}
 
-          <div className="grid gap-6 lg:grid-cols-5">
+          <div className="grid items-start gap-6 lg:grid-cols-5">
             {/* Beschreibung, Anforderungen, Benefits */}
             <div className="space-y-6 lg:col-span-3">
               <Reveal>
@@ -329,9 +329,9 @@ export default async function JobDetailPage({ params }: Props) {
             </div>
 
             {/* Direktkontakt, Bewerbungsformular und Firmenangaben.
-                Die Spalte füllt die gleiche Höhe wie die linke Spalte. */}
-            <Reveal delay={0.1} className="h-full lg:col-span-2">
-              <div className="flex h-full flex-col gap-5">
+                Läuft auf dem Desktop mit (sticky), ohne Lücken. */}
+            <Reveal delay={0.1} className="lg:col-span-2">
+              <div className="space-y-5 lg:sticky lg:top-28">
                 {waHref || callHref ? (
                   <div className="rounded-3xl bg-night-950 p-6 sm:p-7">
                     <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-400">
@@ -387,8 +387,8 @@ export default async function JobDetailPage({ params }: Props) {
                   />
                 </div>
 
-                {/* Firmenlogo und Firmenangaben, am unteren Rand verankert */}
-                <div className="mt-auto rounded-3xl bg-night-950 p-6 sm:p-7">
+                {/* Firmenlogo und Firmenangaben */}
+                <div className="rounded-3xl bg-night-950 p-6 sm:p-7">
                   <Logo name={general.siteName} />
                   <p className="mt-4 font-display text-base font-bold text-white">
                     {company.legalName}
