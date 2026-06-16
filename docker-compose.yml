@@ -17,6 +17,10 @@ services:
     ports:
       # Host-Port 2015 -> Container-Port 3000
       - "2015:3000"
+    # Erlaubt dem Container, Host-Dienste (z.B. Cap auf Port 32770) über
+    # host.docker.internal zu erreichen.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file:
       - .env
     volumes:
