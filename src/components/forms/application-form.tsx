@@ -29,14 +29,12 @@ export function ApplicationForm({
   jobId?: string;
 }) {
   const t = useTranslations("forms");
-  const tCareer = useTranslations("career");
   const locale = useLocale();
   const [state, action, pending] = useActionState(
     submitApplication,
     idleFormState
   );
 
-  const categories = tCareer.raw("categories") as { name: string }[];
   const showDriverFields =
     presetCategory === "drivers" || presetCategory === undefined;
 
@@ -57,19 +55,8 @@ export function ApplicationForm({
       <input type="hidden" name="locale" value={locale} />
       {jobId ? <input type="hidden" name="jobId" value={jobId} /> : null}
 
-      {presetCategory ? (
-        <input type="hidden" name="category" value={presetCategory} />
-      ) : (
-        <Field label={t("application.category")} htmlFor="app-category" required>
-          <Select id="app-category" name="category" required defaultValue="drivers">
-            {jobCategoryKeys.map((key, index) => (
-              <option key={key} value={key}>
-                {categories[index]?.name ?? key}
-              </option>
-            ))}
-          </Select>
-        </Field>
-      )}
+      {/* Es werden ausschließlich Fahrer gesucht - keine Bereichsauswahl. */}
+      <input type="hidden" name="category" value={presetCategory ?? "drivers"} />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label={t("labels.firstName")} htmlFor="app-first-name" required>
