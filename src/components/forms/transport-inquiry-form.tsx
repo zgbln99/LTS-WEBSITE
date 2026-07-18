@@ -14,7 +14,7 @@ import {
   Textarea
 } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
-import { CapWidget } from "@/components/ui/cap-widget";
+import { CaptchaWidget } from "@/components/ui/captcha";
 import { submitTransportRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 import { cn } from "@/lib/utils";
@@ -166,7 +166,7 @@ export function TransportInquiryForm() {
           <Textarea id="ti-message" name="message" />
         </Field>
         <ConsentCheckbox label={t("labels.gdpr")} />
-        <CapWidget />
+        <CaptchaWidget />
       </div>
 
       <FormStatusMessage

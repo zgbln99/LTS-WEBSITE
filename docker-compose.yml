@@ -12,6 +12,7 @@ services:
         NEXT_PUBLIC_META_PIXEL_ID: ${NEXT_PUBLIC_META_PIXEL_ID:-}
         NEXT_PUBLIC_CAP_API_ENDPOINT: ${NEXT_PUBLIC_CAP_API_ENDPOINT:-}
         NEXT_PUBLIC_CAP_WIDGET_SRC: ${NEXT_PUBLIC_CAP_WIDGET_SRC:-}
+        NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}
     container_name: lts-website
     restart: unless-stopped
     ports:

@@ -14,7 +14,7 @@ import {
   Textarea
 } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
-import { CapWidget } from "@/components/ui/cap-widget";
+import { CaptchaWidget } from "@/components/ui/captcha";
 import { submitAppointmentRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 
@@ -72,7 +72,7 @@ export function AppointmentForm() {
       </Field>
 
       <ConsentCheckbox label={tForms("labels.gdpr")} />
-      <CapWidget />
+      <CaptchaWidget />
       <FormStatusMessage
         status={state.status}
         errorText={state.code ? tForms(`errors.${state.code}`) : undefined}

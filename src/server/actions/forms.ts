@@ -99,7 +99,7 @@ async function botRejection(
   if (isHoneypotFilled(formData)) return { status: "success" };
   if (looksLikeSpam(formData)) return { status: "success" };
   if (isCaptchaConfigured()) {
-    const ok = await verifyCaptcha(formData.get("cap-token") as string | null);
+    const ok = await verifyCaptcha(formData);
     return ok ? null : { status: "error", code: "captcha" };
   }
   if (isSubmittedTooFast(formData)) return { status: "success" };

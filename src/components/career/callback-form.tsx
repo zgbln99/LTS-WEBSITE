@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { HoneypotField } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
-import { CapWidget } from "@/components/ui/cap-widget";
+import { CaptchaWidget } from "@/components/ui/captcha";
 import { submitCallbackRequest } from "@/server/actions/forms";
 import { idleFormState } from "@/lib/forms";
 
@@ -83,7 +83,7 @@ export function CallbackPanel() {
                 {tForms(`errors.${state.code ?? "generic"}`)}
               </p>
             ) : null}
-            <CapWidget />
+            <CaptchaWidget />
             <Button type="submit" size="lg" disabled={pending} className="w-full">
               {pending ? tForms("labels.sending") : t("submit")}
             </Button>

@@ -14,7 +14,7 @@ import {
   Textarea
 } from "@/components/ui/field";
 import { TimeTrapField } from "@/components/ui/time-trap";
-import { CapWidget } from "@/components/ui/cap-widget";
+import { CaptchaWidget } from "@/components/ui/captcha";
 import { SourceField } from "@/components/ui/source-field";
 import { submitApplication } from "@/server/actions/forms";
 import { idleFormState, jobCategoryKeys } from "@/lib/forms";
@@ -103,7 +103,7 @@ export function ApplicationForm({
       </Field>
 
       <ConsentCheckbox label={t("labels.gdpr")} />
-      <CapWidget />
+      <CaptchaWidget />
       <FormStatusMessage
         status={state.status}
         errorText={state.code ? t(`errors.${state.code}`) : undefined}
