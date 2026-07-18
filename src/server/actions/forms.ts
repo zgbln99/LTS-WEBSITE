@@ -64,10 +64,40 @@ function isSubmittedTooFast(formData: FormData) {
 // - Ist Cap-CAPTCHA konfiguriert, wird das Token geprüft (ersetzt die Zeitfalle).
 // - Sonst greift die (uhren-tolerante) Zeitfalle.
 // Rückgabe: FormActionState zum sofortigen Beenden, oder null zum Fortfahren.
+// Einfache Spam-Heuristik (ergänzt Honeypot/Zeitfalle/CAPTCHA):
+// - Herkunft (src) auf einer Sperrliste (z.B. Bot-Signaturen wie "chatgptcom").
+// - Links in Text-/Namensfeldern (Fahrer schreiben keine URLs).
+// Beides sind starke Bot-Signale mit sehr geringer Falsch-Positiv-Rate.
+const SPAM_SOURCE_BLOCKLIST = (
+  process.env.APPLICATION_SOURCE_BLOCKLIST ??
+  "chatgpt,chatgptcom,openai,gpt,bot,crawler,spam"
+)
+  .split(",")
+  .map((entry) => entry.trim().toLowerCase())
+  .filter(Boolean);
+
+function looksLikeSpam(formData: FormData): boolean {
+  const src = String(formData.get("src") ?? "").toLowerCase();
+  if (src && SPAM_SOURCE_BLOCKLIST.some((bad) => src.includes(bad))) {
+    console.warn("Spam-Schutz: blockierte Herkunft:", src);
+    return true;
+  }
+  const linkPattern = /(https?:\/\/|www\.|\[url|<a\s)/i;
+  const textFields = ["message", "firstName", "lastName", "note"].map((key) =>
+    String(formData.get(key) ?? "")
+  );
+  if (textFields.some((value) => linkPattern.test(value))) {
+    console.warn("Spam-Schutz: Link in einem Formularfeld verworfen.");
+    return true;
+  }
+  return false;
+}
+
 async function botRejection(
   formData: FormData
 ): Promise<FormActionState | null> {
   if (isHoneypotFilled(formData)) return { status: "success" };
+  if (looksLikeSpam(formData)) return { status: "success" };
   if (isCaptchaConfigured()) {
     const ok = await verifyCaptcha(formData.get("cap-token") as string | null);
     return ok ? null : { status: "error", code: "captcha" };
