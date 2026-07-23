@@ -28,6 +28,8 @@ import {
 } from "@/lib/forms";
 import { sendJobAlertConfirmation } from "@/server/job-alerts";
 import { isCaptchaConfigured, verifyCaptcha } from "@/server/captcha";
+import { isPushConfigured, sendPushNotification } from "@/server/push";
+import { SITE_URL } from "@/lib/seo";
 
 function generateReference(prefix: string) {
   const random = Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -699,6 +701,17 @@ export async function submitApplication(
 
   if (!stored && !mailed) {
     return { status: "error", code: "generic" };
+  }
+
+  // Sofort-Push aufs Handy (Telegram/ntfy/WhatsApp/Webhook), best-effort.
+  if (isPushConfigured()) {
+    await sendPushNotification({
+      title: "Neue Bewerbung",
+      message: `${data.firstName} ${data.lastName}${
+        jobLabel ? ` – ${jobLabel}` : ""
+      }\nTel: ${data.phone} · ${data.email}`,
+      url: `${SITE_URL}/admin/bewerbungen`
+    });
   }
 
   await sendConfirmation(
