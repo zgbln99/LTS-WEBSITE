@@ -21,7 +21,15 @@ export default async function ApplicationsBoardPage() {
     prisma.application.findMany({
       orderBy: { createdAt: "desc" },
       take: 300,
-      include: { _count: { select: { files: true, notes: true } } }
+      include: {
+        _count: { select: { files: true, notes: true } },
+        activities: {
+          where: { type: "EMAIL_SENT" },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: { createdAt: true }
+        }
+      }
     })
   );
 
@@ -36,6 +44,7 @@ export default async function ApplicationsBoardPage() {
     );
   }
 
+  const dayAgo = Date.now() - 36 * 60 * 60 * 1000;
   const items: ApplicationCard[] = applications.map((application) => ({
     id: application.id,
     name: `${application.firstName} ${application.lastName}`,
@@ -47,7 +56,13 @@ export default async function ApplicationsBoardPage() {
       .join(" · "),
     dateLabel: formatDateTime(application.createdAt),
     status: application.status,
-    files: application._count.files
+    files: application._count.files,
+    isNew:
+      application.status === "NEW" &&
+      application.createdAt.getTime() > dayAgo,
+    forwardedLabel: application.activities[0]
+      ? formatDateTime(application.activities[0].createdAt)
+      : undefined
   }));
 
   return (

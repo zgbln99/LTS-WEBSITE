@@ -44,6 +44,8 @@ export interface ApplicationCard {
   dateLabel: string;
   status: ApplicationStatus;
   files: number;
+  isNew?: boolean;
+  forwardedLabel?: string;
 }
 
 const columnAccents: Record<ApplicationStatus, string> = {
@@ -112,8 +114,13 @@ export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
                       href={`/admin/bewerbungen/${item.id}`}
                       className="block rounded-xl border border-mist-100 bg-mist-50 p-3 pr-9 transition-colors hover:border-accent-500/40 hover:bg-white"
                     >
-                      <p className="text-sm font-semibold text-night-900">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-night-900">
                         {item.name}
+                        {item.isNew ? (
+                          <span className="rounded-full bg-accent-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                            Neu
+                          </span>
+                        ) : null}
                       </p>
                       {item.meta ? (
                         <p className="mt-0.5 text-xs text-mist-500">
@@ -121,7 +128,7 @@ export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
                         </p>
                       ) : null}
                       <div className="mt-2 flex items-center justify-between text-xs text-mist-400">
-                        <span>{item.dateLabel}</span>
+                        <span>Eingegangen: {item.dateLabel}</span>
                         {item.files > 0 ? (
                           <span className="flex items-center gap-1">
                             <Paperclip className="h-3 w-3" />
@@ -129,6 +136,11 @@ export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
                           </span>
                         ) : null}
                       </div>
+                      {item.forwardedLabel ? (
+                        <p className="mt-1 text-xs font-medium text-blue-600">
+                          Weitergeleitet: {item.forwardedLabel}
+                        </p>
+                      ) : null}
                     </Link>
                     <div className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100">
                       {item.status === "REJECTED" ? (
