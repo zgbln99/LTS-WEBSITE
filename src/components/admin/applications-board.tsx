@@ -9,7 +9,37 @@ import { updateApplicationStatus } from "@/server/actions/admin";
 import { Input } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-// Kleiner Ein-Klick-Statuswechsel direkt auf der Karte.
+export interface ApplicationCard {
+  id: string;
+  name: string;
+  meta: string;
+  dateLabel: string;
+  status: ApplicationStatus;
+  files: number;
+  isNew?: boolean;
+  forwardedLabel?: string;
+}
+
+const statusBadge: Record<ApplicationStatus, string> = {
+  NEW: "bg-accent-500/10 text-accent-600",
+  REVIEWED: "bg-blue-500/10 text-blue-600",
+  INTERVIEW: "bg-violet-500/10 text-violet-600",
+  REJECTED: "bg-mist-100 text-mist-500",
+  HIRED: "bg-mint-400/15 text-mint-600"
+};
+
+// Filter: "alle" = aktive Pipeline (ohne Archiv), sonst nach Status.
+type FilterKey = "alle" | ApplicationStatus;
+const FILTERS: { key: FilterKey; label: string }[] = [
+  { key: "alle", label: "Alle" },
+  { key: "NEW", label: "Neu" },
+  { key: "REVIEWED", label: applicationStatusLabels.REVIEWED },
+  { key: "INTERVIEW", label: applicationStatusLabels.INTERVIEW },
+  { key: "HIRED", label: applicationStatusLabels.HIRED },
+  { key: "REJECTED", label: "Archiv" }
+];
+
+// Ein-Klick-Statuswechsel (versendet KEINE E-Mail).
 function QuickStatus({
   id,
   status,
@@ -29,7 +59,7 @@ function QuickStatus({
         type="submit"
         title={title}
         aria-label={title}
-        className="flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-mist-400 shadow-sm hover:bg-red-50 hover:text-red-600"
+        className="flex h-8 w-8 items-center justify-center rounded-lg text-mist-400 hover:bg-red-50 hover:text-red-600"
       >
         {children}
       </button>
@@ -37,43 +67,62 @@ function QuickStatus({
   );
 }
 
-export interface ApplicationCard {
-  id: string;
-  name: string;
-  meta: string;
-  dateLabel: string;
-  status: ApplicationStatus;
-  files: number;
-  isNew?: boolean;
-  forwardedLabel?: string;
-}
-
-const columnAccents: Record<ApplicationStatus, string> = {
-  NEW: "border-t-accent-500",
-  REVIEWED: "border-t-blue-500",
-  INTERVIEW: "border-t-violet-500",
-  REJECTED: "border-t-red-400",
-  HIRED: "border-t-mint-400"
-};
-
 export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
   const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<FilterKey>("alle");
+
+  const counts = useMemo(() => {
+    const map: Record<string, number> = { alle: 0 };
+    for (const item of items) {
+      if (item.status !== "REJECTED") map.alle += 1;
+      map[item.status] = (map[item.status] ?? 0) + 1;
+    }
+    return map;
+  }, [items]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((item) =>
-      `${item.name} ${item.meta}`.toLowerCase().includes(q)
-    );
-  }, [items, query]);
-
-  const columns = Object.values(ApplicationStatus).map((status) => ({
-    status,
-    items: filtered.filter((item) => item.status === status)
-  }));
+    return items.filter((item) => {
+      if (filter === "alle" ? item.status === "REJECTED" : item.status !== filter) {
+        return false;
+      }
+      if (q && !`${item.name} ${item.meta}`.toLowerCase().includes(q)) {
+        return false;
+      }
+      return true;
+    });
+  }, [items, query, filter]);
 
   return (
     <div className="space-y-4">
+      {/* Filter */}
+      <div className="flex flex-wrap items-center gap-2">
+        {FILTERS.map((option) => (
+          <button
+            key={option.key}
+            type="button"
+            onClick={() => setFilter(option.key)}
+            className={cn(
+              "rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
+              option.key === filter
+                ? "bg-night-950 text-white"
+                : "bg-white text-night-900 shadow-card hover:bg-mist-100"
+            )}
+          >
+            {option.label}
+            <span
+              className={cn(
+                "ml-1.5 text-xs",
+                option.key === filter ? "text-white/70" : "text-mist-400"
+              )}
+            >
+              {counts[option.key] ?? 0}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Suche */}
       <div className="relative max-w-sm">
         <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-mist-400" />
         <Input
@@ -85,89 +134,79 @@ export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {columns.map((column) => (
-          <div
-            key={column.status}
-            className={cn(
-              "rounded-2xl border-t-4 bg-white p-4 shadow-card",
-              columnAccents[column.status]
-            )}
-          >
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="font-display text-sm font-bold text-night-900">
-                {applicationStatusLabels[column.status]}
-              </h2>
-              <span className="rounded-full bg-mist-100 px-2 py-0.5 text-xs font-semibold text-mist-500">
-                {column.items.length}
-              </span>
-            </div>
-            <div className="space-y-2.5">
-              {column.items.length === 0 ? (
-                <p className="rounded-xl border border-dashed border-mist-200 px-3 py-5 text-center text-xs text-mist-400">
-                  Keine Einträge
-                </p>
-              ) : (
-                column.items.map((item) => (
-                  <div key={item.id} className="group relative">
-                    <Link
-                      href={`/admin/bewerbungen/${item.id}`}
-                      className="block rounded-xl border border-mist-100 bg-mist-50 p-3 pr-9 transition-colors hover:border-accent-500/40 hover:bg-white"
-                    >
-                      <p className="flex items-center gap-2 text-sm font-semibold text-night-900">
-                        {item.name}
-                        {item.isNew ? (
-                          <span className="rounded-full bg-accent-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                            Neu
-                          </span>
-                        ) : null}
-                      </p>
-                      {item.meta ? (
-                        <p className="mt-0.5 text-xs text-mist-500">
-                          {item.meta}
-                        </p>
-                      ) : null}
-                      <div className="mt-2 flex items-center justify-between text-xs text-mist-400">
-                        <span>Eingegangen: {item.dateLabel}</span>
-                        {item.files > 0 ? (
-                          <span className="flex items-center gap-1">
-                            <Paperclip className="h-3 w-3" />
-                            {item.files}
-                          </span>
-                        ) : null}
-                      </div>
-                      {item.forwardedLabel ? (
-                        <p className="mt-1 text-xs font-medium text-blue-600">
-                          Weitergeleitet: {item.forwardedLabel}
-                        </p>
-                      ) : null}
-                    </Link>
-                    <div className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100">
-                      {item.status === "REJECTED" ? (
-                        <QuickStatus
-                          id={item.id}
-                          status="NEW"
-                          title="Aus dem Archiv holen"
-                        >
-                          <RotateCcw className="h-3.5 w-3.5" />
-                        </QuickStatus>
-                      ) : (
-                        <QuickStatus
-                          id={item.id}
-                          status="REJECTED"
-                          title="Ablehnen (ins Archiv)"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </QuickStatus>
-                      )}
-                    </div>
+      {/* Liste (neueste zuerst) */}
+      {filtered.length === 0 ? (
+        <p className="rounded-2xl border border-dashed border-mist-200 px-4 py-10 text-center text-sm text-mist-400">
+          Keine Bewerbungen in dieser Ansicht.
+        </p>
+      ) : (
+        <div className="divide-y divide-mist-100 overflow-hidden rounded-2xl bg-white shadow-card">
+          {filtered.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-4 transition-colors hover:bg-mist-50"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/admin/bewerbungen/${item.id}`}
+                    className="truncate font-semibold text-night-900 hover:text-accent-600"
+                  >
+                    {item.name}
+                  </Link>
+                  {item.isNew ? (
+                    <span className="shrink-0 rounded-full bg-accent-500 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                      Neu
+                    </span>
+                  ) : null}
+                </div>
+                {item.meta ? (
+                  <p className="truncate text-xs text-mist-500">{item.meta}</p>
+                ) : null}
+              </div>
+
+              <div className="text-xs text-mist-400">
+                <div>Eingegangen: {item.dateLabel}</div>
+                {item.forwardedLabel ? (
+                  <div className="font-medium text-blue-600">
+                    Weitergeleitet: {item.forwardedLabel}
                   </div>
-                ))
+                ) : null}
+              </div>
+
+              {item.files > 0 ? (
+                <span className="flex items-center gap-1 text-xs text-mist-400">
+                  <Paperclip className="h-3.5 w-3.5" />
+                  {item.files}
+                </span>
+              ) : null}
+
+              <span
+                className={cn(
+                  "rounded-full px-2.5 py-1 text-xs font-semibold",
+                  statusBadge[item.status]
+                )}
+              >
+                {applicationStatusLabels[item.status]}
+              </span>
+
+              {item.status === "REJECTED" ? (
+                <QuickStatus id={item.id} status="NEW" title="Aus dem Archiv holen">
+                  <RotateCcw className="h-4 w-4" />
+                </QuickStatus>
+              ) : (
+                <QuickStatus
+                  id={item.id}
+                  status="REJECTED"
+                  title="Ablehnen (ins Archiv)"
+                >
+                  <X className="h-4 w-4" />
+                </QuickStatus>
               )}
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
