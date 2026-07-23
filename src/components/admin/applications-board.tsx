@@ -2,11 +2,40 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Paperclip, Search } from "lucide-react";
+import { Paperclip, RotateCcw, Search, X } from "lucide-react";
 import { ApplicationStatus } from "@prisma/client";
 import { applicationStatusLabels } from "@/components/admin/admin-ui";
+import { updateApplicationStatus } from "@/server/actions/admin";
 import { Input } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
+
+// Kleiner Ein-Klick-Statuswechsel direkt auf der Karte.
+function QuickStatus({
+  id,
+  status,
+  title,
+  children
+}: {
+  id: string;
+  status: ApplicationStatus;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <form action={updateApplicationStatus} className="inline">
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="status" value={status} />
+      <button
+        type="submit"
+        title={title}
+        aria-label={title}
+        className="flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-mist-400 shadow-sm hover:bg-red-50 hover:text-red-600"
+      >
+        {children}
+      </button>
+    </form>
+  );
+}
 
 export interface ApplicationCard {
   id: string;
@@ -78,27 +107,49 @@ export function ApplicationsBoard({ items }: { items: ApplicationCard[] }) {
                 </p>
               ) : (
                 column.items.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/admin/bewerbungen/${item.id}`}
-                    className="block rounded-xl border border-mist-100 bg-mist-50 p-3 transition-colors hover:border-accent-500/40 hover:bg-white"
-                  >
-                    <p className="text-sm font-semibold text-night-900">
-                      {item.name}
-                    </p>
-                    {item.meta ? (
-                      <p className="mt-0.5 text-xs text-mist-500">{item.meta}</p>
-                    ) : null}
-                    <div className="mt-2 flex items-center justify-between text-xs text-mist-400">
-                      <span>{item.dateLabel}</span>
-                      {item.files > 0 ? (
-                        <span className="flex items-center gap-1">
-                          <Paperclip className="h-3 w-3" />
-                          {item.files}
-                        </span>
+                  <div key={item.id} className="group relative">
+                    <Link
+                      href={`/admin/bewerbungen/${item.id}`}
+                      className="block rounded-xl border border-mist-100 bg-mist-50 p-3 pr-9 transition-colors hover:border-accent-500/40 hover:bg-white"
+                    >
+                      <p className="text-sm font-semibold text-night-900">
+                        {item.name}
+                      </p>
+                      {item.meta ? (
+                        <p className="mt-0.5 text-xs text-mist-500">
+                          {item.meta}
+                        </p>
                       ) : null}
+                      <div className="mt-2 flex items-center justify-between text-xs text-mist-400">
+                        <span>{item.dateLabel}</span>
+                        {item.files > 0 ? (
+                          <span className="flex items-center gap-1">
+                            <Paperclip className="h-3 w-3" />
+                            {item.files}
+                          </span>
+                        ) : null}
+                      </div>
+                    </Link>
+                    <div className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      {item.status === "REJECTED" ? (
+                        <QuickStatus
+                          id={item.id}
+                          status="NEW"
+                          title="Aus dem Archiv holen"
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" />
+                        </QuickStatus>
+                      ) : (
+                        <QuickStatus
+                          id={item.id}
+                          status="REJECTED"
+                          title="Ablehnen (ins Archiv)"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </QuickStatus>
+                      )}
                     </div>
-                  </Link>
+                  </div>
                 ))
               )}
             </div>

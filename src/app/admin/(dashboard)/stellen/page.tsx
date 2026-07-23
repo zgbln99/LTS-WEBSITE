@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Prisma } from "@prisma/client";
 import {
   AlertTriangle,
   ChevronDown,
@@ -65,16 +66,37 @@ function expiryHint(validThrough: Date | null) {
 
 const PAGE_SIZE = 20;
 
+const SORTS = [
+  { key: "manuell", label: "Reihenfolge" },
+  { key: "neu", label: "Neueste" },
+  { key: "bewerbungen", label: "Meiste Bewerbungen" },
+  { key: "status", label: "Status" }
+] as const;
+
+type SortKey = (typeof SORTS)[number]["key"];
+
+const orderByFor = (sort: SortKey): Prisma.JobPostingOrderByWithRelationInput[] => {
+  if (sort === "neu") return [{ createdAt: "desc" }];
+  if (sort === "bewerbungen")
+    return [{ applications: { _count: "desc" } }, { createdAt: "desc" }];
+  if (sort === "status") return [{ status: "asc" }, { createdAt: "desc" }];
+  return [{ sortOrder: "asc" }, { createdAt: "desc" }];
+};
+
 export default async function JobsAdminPage({
   searchParams
 }: {
-  searchParams: Promise<{ seite?: string }>;
+  searchParams: Promise<{ seite?: string; sort?: string }>;
 }) {
   const session = await requireRole(["SUPER_ADMIN", "HR"]);
   if (!session) redirect("/admin");
 
   const params = await searchParams;
   const requestedPage = Math.max(1, Number(params.seite) || 1);
+  const sort: SortKey = SORTS.some((s) => s.key === params.sort)
+    ? (params.sort as SortKey)
+    : "manuell";
+  const manualSort = sort === "manuell";
 
   const total = await safeQuery(() => prisma.jobPosting.count());
   const totalCount = total ?? 0;
@@ -83,7 +105,7 @@ export default async function JobsAdminPage({
 
   const jobs = await safeQuery(() =>
     prisma.jobPosting.findMany({
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      orderBy: orderByFor(sort),
       include: {
         translations: { where: { locale: "de" } },
         category: true,
@@ -109,6 +131,24 @@ export default async function JobsAdminPage({
         </Link>
       </div>
 
+      {/* Sortierung */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-sm text-mist-500">Sortieren:</span>
+        {SORTS.map((option) => (
+          <Link
+            key={option.key}
+            href={`/admin/stellen?sort=${option.key}`}
+            className={
+              option.key === sort
+                ? "rounded-full bg-night-950 px-3.5 py-1.5 text-sm font-medium text-white"
+                : "rounded-full bg-white px-3.5 py-1.5 text-sm font-medium text-night-900 shadow-card hover:bg-mist-100"
+            }
+          >
+            {option.label}
+          </Link>
+        ))}
+      </div>
+
       {!jobs ? (
         <DbErrorBanner />
       ) : jobs.length === 0 ? (
@@ -131,34 +171,43 @@ export default async function JobsAdminPage({
               {jobs.map((job, index) => (
                 <tr key={job.id} className="hover:bg-mist-50">
                   <td className="px-3 py-3">
-                    <div className="flex items-center gap-0.5">
-                      <form action={moveJobPosting} className="inline">
-                        <input type="hidden" name="id" value={job.id} />
-                        <input type="hidden" name="direction" value="up" />
-                        <button
-                          type="submit"
-                          disabled={(page - 1) * PAGE_SIZE + index === 0}
-                          className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
-                          title="Nach oben"
-                        >
-                          <ChevronUp className="h-4 w-4" />
-                        </button>
-                      </form>
-                      <form action={moveJobPosting} className="inline">
-                        <input type="hidden" name="id" value={job.id} />
-                        <input type="hidden" name="direction" value="down" />
-                        <button
-                          type="submit"
-                          disabled={
-                            (page - 1) * PAGE_SIZE + index === totalCount - 1
-                          }
-                          className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
-                          title="Nach unten"
-                        >
-                          <ChevronDown className="h-4 w-4" />
-                        </button>
-                      </form>
-                    </div>
+                    {manualSort ? (
+                      <div className="flex items-center gap-0.5">
+                        <form action={moveJobPosting} className="inline">
+                          <input type="hidden" name="id" value={job.id} />
+                          <input type="hidden" name="direction" value="up" />
+                          <button
+                            type="submit"
+                            disabled={(page - 1) * PAGE_SIZE + index === 0}
+                            className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                            title="Nach oben"
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </button>
+                        </form>
+                        <form action={moveJobPosting} className="inline">
+                          <input type="hidden" name="id" value={job.id} />
+                          <input type="hidden" name="direction" value="down" />
+                          <button
+                            type="submit"
+                            disabled={
+                              (page - 1) * PAGE_SIZE + index === totalCount - 1
+                            }
+                            className="rounded-lg p-1.5 text-mist-400 hover:bg-mist-100 hover:text-night-900 disabled:opacity-30 disabled:hover:bg-transparent"
+                            title="Nach unten"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </button>
+                        </form>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-mist-300"
+                        title="Umsortieren nur bei Sortierung nach Reihenfolge"
+                      >
+                        —
+                      </span>
+                    )}
                   </td>
                   <td className="px-5 py-3">
                     <Link
@@ -251,7 +300,7 @@ export default async function JobsAdminPage({
           <div className="flex items-center gap-2">
             {page > 1 ? (
               <Link
-                href={`/admin/stellen?seite=${page - 1}`}
+                href={`/admin/stellen?seite=${page - 1}&sort=${sort}`}
                 className="flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-sm font-medium text-night-900 hover:border-night-900"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -265,7 +314,7 @@ export default async function JobsAdminPage({
             )}
             {page < totalPages ? (
               <Link
-                href={`/admin/stellen?seite=${page + 1}`}
+                href={`/admin/stellen?seite=${page + 1}&sort=${sort}`}
                 className="flex items-center gap-1.5 rounded-full border border-mist-300 px-4 py-2 text-sm font-medium text-night-900 hover:border-night-900"
               >
                 Weiter

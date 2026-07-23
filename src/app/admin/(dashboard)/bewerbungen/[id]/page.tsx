@@ -12,6 +12,7 @@ import {
 import { StatusSelect } from "@/components/admin/status-select";
 import { AnonymizeButton } from "@/components/admin/anonymize-button";
 import { DeleteApplicationButton } from "@/components/admin/delete-application-button";
+import { ForwardApplication } from "@/components/admin/forward-application";
 import {
   AdminCard,
   applicationStatusLabels,
@@ -150,6 +151,7 @@ export default async function ApplicationDetailPage({
                 <Download className="h-4 w-4" />
                 Auskunft (JSON)
               </a>
+              <ForwardApplication id={application.id} />
               {application.anonymizedAt ? (
                 <span className="text-sm text-mist-400">
                   Anonymisiert am {formatDateTime(application.anonymizedAt)}
